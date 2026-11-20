@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>19-Station Assembly Line Monitor</title>
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: #0f172a;
+      color: #f8fafc;
+      margin: 0;
+      padding: 16px;
+    }
+    h1 {
+      font-size: 20px;
+      margin: 0 0 12px 0;
+    }
+    .topbar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      background: #1e293b;
+      padding: 12px 16px;
+      border-radius: 8px;
+      border: 1px solid #334155;
+      margin-bottom: 14px;
+    }
+    .status-box {
+      background: #172554;
+      border: 1px solid #3b82f6;
+      color: #dbeafe;
+      padding: 10px 14px;
+      border-radius: 8px;
+      margin-bottom: 14px;
+      font-size: 13px;
+    }
+    .main-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .form-panel {
+      width: 310px;
+      max-width: 100%;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 14px;
+    }
+    .line-panel {
+      flex: 1;
+      min-width: 300px;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 14px;
+    }
+    .field {
+      margin-bottom: 10px;
+    }
+    .field label {
+      display: block;
+      font-size: 12px;
+      color: #cbd5e1;
+      margin-bottom: 4px;
+    }
+    .field input,
+    .field select {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #475569;
+      background: #0f172a;
+      color: #f8fafc;
+      font-size: 13px;
+    }
+    button {
+      padding: 9px 12px;
+      border-radius: 6px;
+      border: none;
+      font-weight: bold;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .btn-add {
+      width: 100%;
+      background: #38bdf8;
+      color: #082f49;
+      margin-top: 4px;
+    }
+    .btn-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .btn-gray {
+      flex: 1;
+      background: #475569;
+      color: #f8fafc;
+    }
+    .btn-red {
+      background: #dc2626;
+      color: #ffffff;
+    }
+    .err {
+      color: #fca5a5;
+      font-size: 12px;
+      margin-top: 8px;
+      min-height: 16px;
+    }
+    .flow-note {
+      font-size: 12px;
+      color: #94a3b8;
+      margin-bottom: 12px;
+    }
+    .stack-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px dashed #334155;
+    }
+    .stack-row:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+    .station-box {
+      width: 130px;
+      min-height: 126px;
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .station-box.has-car {
+      border-color: #38bdf8;
+      background: #132238;
+    }
+    .station-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+    .st-badge {
+      background: #1e293b;
+      color: #38bdf8;
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid #334155;
+    }
+    .arrow-txt {
+      color: #94a3b8;
+    }
+    .bay-empty {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px dashed #334155;
+      border-radius: 6px;
+      color: #64748b;
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+    .car-box {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 6px;
+      padding: 6px;
+      font-size: 11px;
+    }
+    .car-head {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+    .car-vin {
+      font-weight: bold;
+      font-family: monospace;
+      color: #f8fafc;
+      word-break: break-all;
+    }
+    .car-model {
+      color: #cbd5e1;
+      margin-bottom: 4px;
+    }
+    
+    .car-meta {
+      color: #94a3b8;
+      margin-bottom: 2px;
+    }
+    .car-time {
+      margin-top: 4px;
+      padding: 2px 5px;
+      background: #052e16;
+      color: #86efac;
+      border: 1px solid #166534;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 10px;
+    }
+    .history-panel {
+      margin-top: 16px;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 14px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    th, td {
+      text-align: left;
+      padding: 8px;
+      border-bottom: 1px solid #334155;
+    }
+    th {
+      background: #0f172a;
+      color: #94a3b8;
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <h1>Automotive Assembly Shop Line Monitoring (19 Stations)</h1>
+    <div>
+      <strong>Active Cars:</strong> <span id="activeCount">0 / 19</span> &nbsp;|&nbsp;
+      <strong>Exited (FIFO):</strong> <span id="exitedCount">0</span>
+    </div>
+  </div>
+
+  <div id="statusBox" class="status-box">
+    System ready. Add a vehicle to place it in <strong>ST-01</strong> and shift existing cars forward.
+  </div>
+
+  <div class="main-wrap">
+    <div class="form-panel">
+      <h2 style="font-size:15px; margin:0 0 10px 0;">Vehicle Entry (ST-01)</h2>
+      <form id="carForm">
+        <div class="field">
+          <label for="vinField">Vehicle VIN Number</label>
+          <input type="text" id="vinField" placeholder="e.g. VIN1001A" required />
+        </div>
+
+        <div class="field">
+          <label for="modelField">Model / Variant</label>
+          <input type="text" id="modelField" placeholder="e.g. J5" required />
+        </div>
+
+        <div class="field">
+          <label for="exteriorField">Exterior Color</label>
+          <input type="text" id="exteriorField" placeholder="e.g. NKW" required />
+        </div>
+
+        <div class="field">
+          <label for="interiorField">Interior Color</label>
+          <input type="text" id="interiorField" placeholder="e.g. Black" required />
+        </div>
+
+        <button type="submit" class="btn-add">Enter Vehicle &amp; Move Line</button>
+        <div class="btn-row">
+          <button type="button" id="sampleBtn" class="btn-gray">Sample</button>
+          <button type="button" id="demo5Btn" class="btn-gray">Add 5 Cars</button>
+        </div>
+        <div id="errBox" class="err"></div>
+      </form>
+    </div>
+
+    <div class="line-panel">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+        <h2 style="font-size:15px; margin:0;">Station Line View</h2>
+        <button type="button" id="resetBtn" class="btn-red">Reset</button>
+      </div>
+      <div class="flow-note">
+        Vehicles enter at ST-01 and advance toward ST-19 (FIFO exit).
+      </div>
+      <div id="stationsContainer"></div>
+    </div>
+  </div>
+
+  <div class="history-panel">
+    <h2 style="font-size:15px; margin:0 0 10px 0;">Vehicle Exit History</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>FIFO #</th>
+          <th>VIN Number</th>
+          <th>Model / Variant</th>
+          <th>Exterior Color</th>
+          <th>Interior Color</th>
+        </tr>
+      </thead>
+      <tbody id="historyBody">
+        <tr>
+          <td colspan="5" style="text-align:center; color:#94a3b8;">No vehicles exited yet.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    (function () {
+      var NUM_STATIONS = 19;
+      var PER_ROW = 5;
+      var line = new Array(NUM_STATIONS).fill(null);
+      var exitedList = [];
+      var seq = 1001;
+
+      var carForm = document.getElementById("carForm");
+      var vinField = document.getElementById("vinField");
+      var modelField = document.getElementById("modelField");
+      var exteriorField = document.getElementById("exteriorField");
+      var interiorField = document.getElementById("interiorField");
+      var errBox = document.getElementById("errBox");
+      var statusBox = document.getElementById("statusBox");
+      var stationsContainer = document.getElementById("stationsContainer");
+      var historyBody = document.getElementById("historyBody");
+      var activeCount = document.getElementById("activeCount");
+      var exitedCount = document.getElementById("exitedCount");
+      var sampleBtn = document.getElementById("sampleBtn");
+      var demo5Btn = document.getElementById("demo5Btn");
+      var resetBtn = document.getElementById("resetBtn");
+
+      var COLOR_MAP = {
+        blue: "#2563eb",
+        red: "#dc2626",
+        green: "#16a34a",
+        white: "#f8fafc",
+        nkw: "#f8fafc",
+        gold: "#eab308",
+        slate: "#334155",
+        tan: "#78350f",
+        black: "#111827",
+        grey: "#9ca3af",
+        gray: "#9ca3af",
+        silver: "#cbd5e1"
+      };
+
+      function resolveColorHex(label, fallbackHex) {
+        if (!label) {
+          return fallbackHex;
+        }
+        var trimmed = label.trim();
+        if (/^#[0-9a-fA-F]{3,8}$/.test(trimmed)) {
+          return trimmed;
+        }
+        var key = trimmed.toLowerCase();
+        return COLOR_MAP[key] || fallbackHex;
+      }
+
+      function currentTimeText() {
+        var d = new Date();
+        var hh = String(d.getHours()).padStart(2, "0");
+        var mm = String(d.getMinutes()).padStart(2, "0");
+        var ss = String(d.getSeconds()).padStart(2, "0");
+        return hh + ":" + mm + ":" + ss;
+      }
+
+      function vinExists(vin) {
+        var target = vin.trim().toUpperCase();
+        var i;
+        for (i = 0; i < line.length; i++) {
+          if (line[i] && line[i].vin.toUpperCase() === target) {
+            return true;
+          }
+        }
+        for (i = 0; i < exitedList.length; i++) {
+          if (exitedList[i].vin.toUpperCase() === target) {
+            return true;
+          }
+        }
+        return false;
+      }
+
+      function makeCarSvg(extHex, intHex) {
+        return (
+          '<svg width="42" height="22" viewBox="0 0 80 42">' +
+          '<path d="M18 22 L26 9 L52 9 L62 22 Z" fill="' + intHex + '" stroke="#e2e8f0" stroke-width="2" />' +
+          '<rect x="6" y="20" width="68" height="13" rx="5" fill="' + extHex + '" stroke="#ffffff" stroke-width="2" />' +
+          '<circle cx="22" cy="34" r="6" fill="#0f172a" stroke="#e2e8f0" stroke-width="2" />' +
+          '<circle cx="58" cy="34" r="6" fill="#0f172a" stroke="#e2e8f0" stroke-width="2" />' +
+          "</svg>"
+        );
+      }
+
+      function pushVehicleToLine(data) {
+        var nowTime = currentTimeText();
+        var lastCar = line[NUM_STATIONS - 1];
+
+        // Exit station 19 in FIFO order without recording time
+        if (lastCar) {
+          exitedList.push({
+            vin: lastCar.vin,
+            model: lastCar.model,
+            extHex: lastCar.extHex,
+            extLabel: lastCar.extLabel,
+            intHex: lastCar.intHex,
+            intLabel: lastCar.intLabel
+          });
+        }
+
+        // Shift stations 18..1 forward and reset station timestamp on move
+        var idx;
+        for (idx = NUM_STATIONS - 1; idx >= 1; idx--) {
+          if (line[idx - 1]) {
+            line[idx] = {
+              vin: line[idx - 1].vin,
+              model: line[idx - 1].model,
+              extHex: line[idx - 1].extHex,
+              extLabel: line[idx - 1].extLabel,
+              intHex: line[idx - 1].intHex,
+              intLabel: line[idx - 1].intLabel,
+              stationTime: nowTime
+            };
+          } else {
+            line[idx] = null;
+          }
+        }
+
+        // Place new car at Station 1
+        line[0] = {
+          vin: data.vin,
+          model: data.model,
+          extHex: data.extHex,
+          extLabel: data.extLabel,
+          intHex: data.intHex,
+          intLabel: data.intLabel,
+          stationTime: nowTime
+        };
+
+        if (lastCar) {
+          statusBox.innerHTML =
+            "Entered <strong>" + data.vin + "</strong> at <strong>ST-01</strong> (" + nowTime +
+            ") and exited <strong>" + lastCar.vin + "</strong> (FIFO #" + exitedList.length + ") from <strong>ST-19</strong>.";
+        } else {
+          statusBox.innerHTML =
+            "Entered <strong>" + data.vin + "</strong> at <strong>ST-01</strong> (" + nowTime + ") and shifted active vehicles forward.";
+        }
+
+        renderAll();
+      }
+
+      function renderStations() {
+        stationsContainer.innerHTML = "";
+        var totalRows = Math.ceil(NUM_STATIONS / PER_ROW);
+        var r;
+
+        for (r = 0; r < totalRows; r++) {
+          var start = r * PER_ROW;
+          var end = Math.min(start + PER_ROW, NUM_STATIONS);
+          var reverse = (r % 2 === 1);
+          var indices = [];
+          var k;
+
+          for (k = start; k < end; k++) {
+            indices.push(k);
+          }
+          if (reverse) {
+            indices.reverse();
+          }
+
+          var rowDiv = document.createElement("div");
+          rowDiv.className = "stack-row";
+
+          for (k = 0; k < indices.length; k++) {
+            var stIdx = indices[k];
+            var stNum = stIdx + 1;
+            var car = line[stIdx];
+            var dirText = "";
+
+            if (stNum === NUM_STATIONS) {
+              dirText = "EXIT";
+            } else if (!reverse) {
+              dirText = k < indices.length - 1 ? "->" : "v";
+            } else {
+              dirText = k > 0 ? "<-" : "v";
+            }
+
+            var box = document.createElement("div");
+            box.className = "station-box" + (car ? " has-car" : "");
+
+            var labelNum = (stNum < 10 ? "0" : "") + stNum;
+            var inner =
+              '<div class="station-top">' +
+              '<span class="st-badge">ST-' + labelNum + "</span>" +
+              '<span class="arrow-txt">' + dirText + "</span>" +
+              "</div>";
+
+            if (car) {
+              inner +=
+                '<div class="car-box">' +
+                '<div class="car-head">' +
+                makeCarSvg(car.extHex, car.intHex) +
+                '<div class="car-vin">' + car.vin + "</div>" +
+                "</div>" +
+                '<div class="car-model">' + car.model + "</div>" +
+                '<div class="car-meta"><span class="color-chip" style="background:' + car.extHex + '"></span>Ext: ' + car.extLabel + "</div>" +
+                '<div class="car-meta"><span class="color-chip" style="background:' + car.intHex + '"></span>Int: ' + car.intLabel + "</div>" +
+                '<div class="car-time">Time: ' + car.stationTime + "</div>" +
+                "</div>";
+            } else {
+              inner += '<div class="bay-empty">Empty Bay</div>';
+            }
+
+            box.innerHTML = inner;
+            rowDiv.appendChild(box);
+          }
+
+          stationsContainer.appendChild(rowDiv);
+        }
+      }
+
+      function renderHistory() {
+        if (exitedList.length === 0) {
+          historyBody.innerHTML =
+            '<tr><td colspan="5" style="text-align:center; color:#94a3b8;">No vehicles exited yet.</td></tr>';
+          return;
+        }
+
+        var html = "";
+        var i;
+        for (i = 0; i < exitedList.length; i++) {
+          var item = exitedList[i];
+          html +=
+            "<tr>" +
+            "<td>#" + (i + 1) + "</td>" +
+            '<td style="font-family:monospace; font-weight:bold;">' + item.vin + "</td>" +
+            "<td>" + item.model + "</td>" +
+            '<td><span class="color-chip" style="background:' + item.extHex + '"></span>' + item.extLabel + "</td>" +
+            '<td><span class="color-chip" style="background:' + item.intHex + '"></span>' + item.intLabel + "</td>" +
+            "</tr>";
+        }
+        historyBody.innerHTML = html;
+      }
+
+      function renderStats() {
+        var count = 0;
+        var i;
+        for (i = 0; i < line.length; i++) {
+          if (line[i]) {
+            count++;
+          }
+        }
+        activeCount.textContent = count + " / " + NUM_STATIONS;
+        exitedCount.textContent = String(exitedList.length);
+      }
+
+      function renderAll() {
+        renderStations();
+        renderHistory();
+        renderStats();
+      }
+
+      function randomVehicle() {
+        var models = ["Sedan - Standard", "Sedan - Turbo", "SUV - AWD", "SUV - Hybrid", "EV Crossover - Long Range"];
+        var exts = [
+          { hex: "#2563eb", name: "Blue" },
+          { hex: "#dc2626", name: "Red" },
+          { hex: "#16a34a", name: "Green" },
+          { hex: "#f8fafc", name: "White" },
+          { hex: "#eab308", name: "Gold" }
+        ];
+        var ints = [
+          { hex: "#334155", name: "Slate" },
+          { hex: "#78350f", name: "Tan" },
+          { hex: "#111827", name: "Black" },
+          { hex: "#d6d3d1", name: "Grey" }
+        ];
+
+        var candidate = "VIN" + (seq++) + "M3";
+        while (vinExists(candidate)) {
+          candidate = "VIN" + (seq++) + "M3";
+        }
+
+        var ext = exts[Math.floor(Math.random() * exts.length)];
+        var intColor = ints[Math.floor(Math.random() * ints.length)];
+        var mdl = models[Math.floor(Math.random() * models.length)];
+
+        return {
+          vin: candidate,
+          model: mdl,
+          extHex: ext.hex,
+          extLabel: ext.name,
+          intHex: intColor.hex,
+          intLabel: intColor.name
+        };
+      }
+
+      carForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        errBox.textContent = "";
+
+        var vin = vinField.value.trim().toUpperCase();
+        var model = modelField.value.trim();
+        var extLabel = exteriorField.value.trim();
+        var intLabel = interiorField.value.trim();
+
+        if (!vin) {
+          errBox.textContent = "Please enter a VIN number.";
+          return;
+        }
+        if (vinExists(vin)) {
+          errBox.textContent = "VIN already exists on the line or in exit history.";
+          return;
+        }
+
+        pushVehicleToLine({
+          vin: vin,
+          model: model,
+          extHex: resolveColorHex(extLabel, "#38bdf8"),
+          extLabel: extLabel,
+          intHex: resolveColorHex(intLabel, "#334155"),
+          intLabel: intLabel
+        });
+
+        vinField.value = "";
+        vinField.focus();
+      });
+
+      sampleBtn.addEventListener("click", function () {
+        var s = randomVehicle();
+        vinField.value = s.vin;
+        modelField.value = s.model;
+        exteriorField.value = s.extLabel;
+        interiorField.value = s.intLabel;
+        errBox.textContent = "";
+      });
+
+      demo5Btn.addEventListener("click", function () {
+        errBox.textContent = "";
+        var i;
+        for (i = 0; i < 5; i++) {
+          pushVehicleToLine(randomVehicle());
+        }
+      });
+
+      resetBtn.addEventListener("click", function () {
+        line = new Array(NUM_STATIONS).fill(null);
+        exitedList = [];
+        errBox.textContent = "";
+        statusBox.textContent = "Line reset. All 19 stations are empty.";
+        renderAll();
+      });
+
+      renderAll();
+    })();
+  </script>
+</body>
+</html>

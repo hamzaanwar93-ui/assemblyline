@@ -26,29 +26,6 @@
       border: 1px solid #334155;
       margin-bottom: 14px;
     }
-    .gate-box {
-      max-width: 420px;
-      margin: 40px auto;
-      background: #1e293b;
-      border: 1px solid #334155;
-      border-radius: 8px;
-      padding: 20px;
-    }
-    .gate-box h2 {
-      font-size: 17px;
-      margin: 0 0 8px 0;
-    }
-    .gate-box p {
-      font-size: 13px;
-      color: #94a3b8;
-      margin: 0 0 14px 0;
-    }
-    .gate-actions {
-      display: flex;
-      gap: 8px;
-      margin-top: 10px;
-      flex-wrap: wrap;
-    }
     .status-box {
       background: #172554;
       border: 1px solid #3b82f6;
@@ -95,11 +72,6 @@
       font-size: 13px;
       cursor: pointer;
     }
-    button:disabled {
-      opacity: 0.45;
-      cursor: not-allowed;
-    }
-    .btn-green { background: #22c55e; color: #052e16; }
     .btn-add { width: 100%; background: #38bdf8; color: #082f49; margin-top: 4px; }
     .btn-row { display: flex; gap: 8px; margin-top: 8px; }
     .btn-gray { flex: 1; background: #475569; color: #f8fafc; }
@@ -116,8 +88,8 @@
     }
     .stack-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
     .station-box {
-      width: 130px;
-      min-height: 126px;
+      width: 135px;
+      min-height: 140px;
       background: #0f172a;
       border: 1px solid #334155;
       border-radius: 8px;
@@ -175,13 +147,14 @@
     }
     .car-time {
       margin-top: 4px;
-      padding: 2px 5px;
+      padding: 3px 5px;
       background: #052e16;
       color: #86efac;
       border: 1px solid #166534;
       border-radius: 4px;
       font-family: monospace;
       font-size: 10px;
+      line-height: 1.3;
     }
     .history-panel {
       margin-top: 16px;
@@ -193,111 +166,81 @@
     table { width: 100%; border-collapse: collapse; font-size: 13px; }
     th, td { text-align: left; padding: 8px; border-bottom: 1px solid #334155; }
     th { background: #0f172a; color: #94a3b8; font-size: 11px; text-transform: uppercase; }
-    .badge {
-      font-size: 12px;
-      padding: 4px 8px;
-      border-radius: 4px;
-      background: #334155;
-      color: #f8fafc;
-    }
   </style>
 </head>
 <body>
   <div class="topbar">
     <h1>Automotive Assembly Shop Line Monitoring (19 Stations)</h1>
-    <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
-      <span id="roleBadge" class="badge">Login Required</span>
-      <span id="statsWrap" style="display:none;">
-        <strong>Active Cars:</strong> <span id="activeCount">0 / 19</span>  | 
-        <strong>Exited (FIFO):</strong> <span id="exitedCount">0</span>
-      </span>
-      <button type="button" id="logoutBtn" class="btn-gray" style="display:none; padding:6px 10px;">Sign Out / Switch</button>
+    <div>
+      <strong>Active Cars:</strong> <span id="activeCount">0 / 19</span>  | 
+      <strong>Exited (FIFO):</strong> <span id="exitedCount">0</span>
     </div>
   </div>
 
-  <div id="loginGate" class="gate-box">
-    <h2>Sign In to Assembly Line Monitor</h2>
-    <p>Sign in with an operator account to edit and sync data, or continue as Guest to view live updates in read-only mode.</p>
-    <div class="field">
-      <label for="authEmail">Operator Email</label>
-      <input type="email" id="authEmail" placeholder="operator@example.com" />
-    </div>
-    <div class="field">
-      <label for="authPass">Password</label>
-      <input type="password" id="authPass" placeholder="Password" />
-    </div>
-    <div class="gate-actions">
-      <button type="button" id="loginBtn" class="btn-green">Sign In (Operator)</button>
-      <button type="button" id="guestBtn" class="btn-gray">Login As Guest</button>
-    </div>
-    <div id="gateErr" class="err"></div>
+  <div id="statusBox" class="status-box">
+    System ready. Add a vehicle to place it in <strong>Trim 01</strong> and shift existing cars forward.
   </div>
 
-  <div id="appContent" style="display:none;">
-    <div id="statusBox" class="status-box">
-      System ready. Add a vehicle to place it in <strong>Trim 1</strong> and shift existing cars forward.
-    </div>
-
-    <div class="main-wrap">
-      <div class="form-panel">
-        <h2 style="font-size:15px; margin:0 0 10px 0;">Vehicle Entry (Trim 1)</h2>
-        <form id="carForm">
-          <div class="field">
-            <label for="vinField">Vehicle VIN Number</label>
-            <input type="text" id="vinField" placeholder="e.g. VIN1001A" required />
-          </div>
-          <div class="field">
-            <label for="modelField">Model / Variant</label>
-            <input type="text" id="modelField" placeholder="e.g. J5" required />
-          </div>
-          <div class="field">
-            <label for="exteriorField">Exterior Color</label>
-            <input type="text" id="exteriorField" placeholder="e.g. NKW" required />
-          </div>
-          <div class="field">
-            <label for="interiorField">Interior Color</label>
-            <input type="text" id="interiorField" placeholder="e.g. Black" required />
-          </div>
-          <button type="submit" id="submitCarBtn" class="btn-add">Enter Vehicle & Move Line</button>
-          <div class="btn-row">
-            <button type="button" id="sampleBtn" class="btn-gray">Sample</button>
-            <button type="button" id="demo5Btn" class="btn-gray">Add 5 Cars</button>
-          </div>
-          <div id="errBox" class="err"></div>
-        </form>
-      </div>
-
-      <div class="line-panel">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-          <h2 style="font-size:15px; margin:0;">Station Line View</h2>
-          <button type="button" id="resetBtn" class="btn-red">Reset</button>
+  <div class="main-wrap">
+    <div class="form-panel">
+      <h2 style="font-size:15px; margin:0 0 10px 0;">Vehicle Entry (Trim 01)</h2>
+      <form id="carForm">
+        <div class="field">
+          <label for="vinField">Vehicle VIN Number</label>
+          <input type="text" id="vinField" placeholder="e.g. VIN1001A" required />
         </div>
-        <div class="flow-note">
-          Vehicles enter at Trim 1 and advance through Chassis stations toward Final 3 (FIFO exit).
+        <div class="field">
+          <label for="modelField">Model / Variant</label>
+          <input type="text" id="modelField" placeholder="e.g. J5" required />
         </div>
-        <div id="stationsContainer"></div>
-      </div>
+        <div class="field">
+          <label for="exteriorField">Exterior Color</label>
+          <input type="text" id="exteriorField" placeholder="e.g. NKW" required />
+        </div>
+        <div class="field">
+          <label for="interiorField">Interior Color</label>
+          <input type="text" id="interiorField" placeholder="e.g. Black" required />
+        </div>
+        <button type="submit" class="btn-add">Enter Vehicle & Move Line</button>
+        <div class="btn-row">
+          <button type="button" id="sampleBtn" class="btn-gray">Sample</button>
+          <button type="button" id="demo5Btn" class="btn-gray">Add 5 Cars</button>
+        </div>
+        <div id="errBox" class="err"></div>
+      </form>
     </div>
 
-    <div class="history-panel">
-      <h2 style="font-size:15px; margin:0 0 10px 0;">Vehicle Exit History</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>FIFO #</th>
-            <th>VIN Number</th>
-            <th>Model / Variant</th>
-            <th>Exterior Color</th>
-            <th>Interior Color</th>
-          </tr>
-        </thead>
-        <tbody id="historyBody">
-          <tr>
-            <td colspan="5" style="text-align:center; color:#94a3b8;">No vehicles exited yet.</td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="line-panel">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+        <h2 style="font-size:15px; margin:0;">Station Line View</h2>
+        <button type="button" id="resetBtn" class="btn-red">Reset</button>
+      </div>
+      <div class="flow-note">
+        Vehicles enter at Trim 01 and advance sequentially through Trim 19 (FIFO exit).
+      </div>
+      <div id="stationsContainer"></div>
     </div>
+  </div>
+
+  <div class="history-panel">
+    <h2 style="font-size:15px; margin:0 0 10px 0;">Vehicle Exit History</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>FIFO #</th>
+          <th>VIN Number</th>
+          <th>Model / Variant</th>
+          <th>Exterior Color</th>
+          <th>Interior Color</th>
+          <th>Entry Date & Time</th>
+        </tr>
+      </thead>
+      <tbody id="historyBody">
+        <tr>
+          <td colspan="6" style="text-align:center; color:#94a3b8;">No vehicles exited yet.</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 
   <script>
@@ -311,30 +254,14 @@
       var line = new Array(NUM_STATIONS).fill(null);
       var exitedList = [];
       var seq = 1001;
-      var statusHtml = "System ready. Add a vehicle to place it in <strong>Trim 1</strong> and shift existing cars forward.";
+      var statusHtml = "System ready. Add a vehicle to place it in <strong>Trim 01</strong> and shift existing cars forward.";
       var formInputs = { vin: "", model: "", exterior: "", interior: "" };
-
-      var canWrite = false;
-      var guestMode = false;
-      var syncStarted = false;
-
-      var loginGate = document.getElementById("loginGate");
-      var appContent = document.getElementById("appContent");
-      var statsWrap = document.getElementById("statsWrap");
-      var roleBadge = document.getElementById("roleBadge");
-      var authEmail = document.getElementById("authEmail");
-      var authPass = document.getElementById("authPass");
-      var loginBtn = document.getElementById("loginBtn");
-      var guestBtn = document.getElementById("guestBtn");
-      var logoutBtn = document.getElementById("logoutBtn");
-      var gateErr = document.getElementById("gateErr");
 
       var carForm = document.getElementById("carForm");
       var vinField = document.getElementById("vinField");
       var modelField = document.getElementById("modelField");
       var exteriorField = document.getElementById("exteriorField");
       var interiorField = document.getElementById("interiorField");
-      var submitCarBtn = document.getElementById("submitCarBtn");
       var errBox = document.getElementById("errBox");
       var statusBox = document.getElementById("statusBox");
       var stationsContainer = document.getElementById("stationsContainer");
@@ -355,49 +282,11 @@
       if (window.supabase && typeof window.supabase.createClient === "function") {
         db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
       } else {
-        gateErr.textContent = "Supabase client library failed to load.";
-      }
-
-      function setEditControlsEnabled(enabled) {
-        [vinField, modelField, exteriorField, interiorField, submitCarBtn, sampleBtn, demo5Btn, resetBtn].forEach(function (el) {
-          if (el) el.disabled = !enabled;
-        });
-      }
-
-      function updateAccessUI(isAuthenticated) {
-        var allowedIntoView = Boolean(isAuthenticated || guestMode);
-        canWrite = Boolean(isAuthenticated);
-
-        loginGate.style.display = allowedIntoView ? "none" : "block";
-        appContent.style.display = allowedIntoView ? "block" : "none";
-        statsWrap.style.display = allowedIntoView ? "inline" : "none";
-        logoutBtn.style.display = allowedIntoView ? "inline-block" : "none";
-
-        if (isAuthenticated) {
-          roleBadge.textContent = "Operator (Can Update)";
-          roleBadge.style.background = "#166534";
-          errBox.textContent = "";
-        } else if (guestMode) {
-          roleBadge.textContent = "Guest (Read-Only)";
-          roleBadge.style.background = "#334155";
-          errBox.textContent = "Guest mode: read-only view. Sign in as an operator to update data.";
-        } else {
-          roleBadge.textContent = "Login Required";
-          roleBadge.style.background = "#334155";
-        }
-
-        setEditControlsEnabled(canWrite);
-
-        if (allowedIntoView) {
-          renderAll();
-          startLiveSync();
-        }
+        errBox.textContent = "Supabase client library failed to load.";
       }
 
       function getStationName(stNum) {
-        if (stNum >= 1 && stNum <= 8) return "Trim " + stNum;
-        if (stNum >= 9 && stNum <= 16) return "Chassis " + (stNum - 8);
-        return "Final " + (stNum - 16);
+        return "Trim " + String(stNum).padStart(2, "0");
       }
 
       function resolveColorHex(label, fallbackHex) {
@@ -407,12 +296,18 @@
         return COLOR_MAP[trimmed.toLowerCase()] || fallbackHex;
       }
 
-      function currentTimeText() {
+      function currentDateTime() {
         var d = new Date();
+        var yyyy = d.getFullYear();
+        var mon = String(d.getMonth() + 1).padStart(2, "0");
+        var dd = String(d.getDate()).padStart(2, "0");
         var hh = String(d.getHours()).padStart(2, "0");
         var mm = String(d.getMinutes()).padStart(2, "0");
         var ss = String(d.getSeconds()).padStart(2, "0");
-        return hh + ":" + mm + ":" + ss;
+        return {
+          date: yyyy + "-" + mon + "-" + dd,
+          time: hh + ":" + mm + ":" + ss
+        };
       }
 
       function vinExists(vin) {
@@ -438,7 +333,7 @@
       }
 
       function pushVehicleToLine(data) {
-        var entryTime = currentTimeText();
+        var stamp = currentDateTime();
         var lastCar = line[NUM_STATIONS - 1];
         var firstStationName = getStationName(1);
         var lastStationName = getStationName(NUM_STATIONS);
@@ -450,7 +345,9 @@
             extHex: lastCar.extHex,
             extLabel: lastCar.extLabel,
             intHex: lastCar.intHex,
-            intLabel: lastCar.intLabel
+            intLabel: lastCar.intLabel,
+            entryDate: lastCar.entryDate || "",
+            entryTime: lastCar.entryTime || ""
           });
         }
 
@@ -463,6 +360,7 @@
               extLabel: line[idx - 1].extLabel,
               intHex: line[idx - 1].intHex,
               intLabel: line[idx - 1].intLabel,
+              entryDate: line[idx - 1].entryDate,
               entryTime: line[idx - 1].entryTime
             };
           } else {
@@ -477,16 +375,17 @@
           extLabel: data.extLabel,
           intHex: data.intHex,
           intLabel: data.intLabel,
-          entryTime: entryTime
+          entryDate: stamp.date,
+          entryTime: stamp.time
         };
 
         if (lastCar) {
           statusHtml =
-            "Entered <strong>" + data.vin + "</strong> at <strong>" + firstStationName + "</strong> (" + entryTime +
+            "Entered <strong>" + data.vin + "</strong> at <strong>" + firstStationName + "</strong> (" + stamp.date + " " + stamp.time +
             ") and exited <strong>" + lastCar.vin + "</strong> (FIFO #" + exitedList.length + ") from <strong>" + lastStationName + "</strong>.";
         } else {
           statusHtml =
-            "Entered <strong>" + data.vin + "</strong> at <strong>" + firstStationName + "</strong> (" + entryTime + ") and shifted active vehicles forward.";
+            "Entered <strong>" + data.vin + "</strong> at <strong>" + firstStationName + "</strong> (" + stamp.date + " " + stamp.time + ") and shifted active vehicles forward.";
         }
       }
 
@@ -549,6 +448,7 @@
               "</div>";
 
             if (car) {
+              var dateDisplay = car.entryDate ? "Date: " + car.entryDate + "<br>" : "";
               inner +=
                 '<div class="car-box">' +
                 '<div class="car-head">' +
@@ -558,7 +458,7 @@
                 '<div class="car-model">' + car.model + "</div>" +
                 '<div class="car-meta"><span class="color-chip" style="background:' + car.extHex + '"></span>Ext: ' + car.extLabel + "</div>" +
                 '<div class="car-meta"><span class="color-chip" style="background:' + car.intHex + '"></span>Int: ' + car.intLabel + "</div>" +
-                '<div class="car-time">Entry: ' + car.entryTime + "</div>" +
+                '<div class="car-time">' + dateDisplay + "Time: " + car.entryTime + "</div>" +
                 "</div>";
             } else {
               inner += '<div class="bay-empty">Empty Bay</div>';
@@ -575,13 +475,14 @@
       function renderHistory() {
         if (exitedList.length === 0) {
           historyBody.innerHTML =
-            '<tr><td colspan="5" style="text-align:center; color:#94a3b8;">No vehicles exited yet.</td></tr>';
+            '<tr><td colspan="6" style="text-align:center; color:#94a3b8;">No vehicles exited yet.</td></tr>';
           return;
         }
 
         var html = "";
         for (var i = 0; i < exitedList.length; i++) {
           var item = exitedList[i];
+          var stampStr = ((item.entryDate || "") + " " + (item.entryTime || "")).trim() || "-";
           html +=
             "<tr>" +
             "<td>#" + (i + 1) + "</td>" +
@@ -589,6 +490,7 @@
             "<td>" + item.model + "</td>" +
             '<td><span class="color-chip" style="background:' + item.extHex + '"></span>' + item.extLabel + "</td>" +
             '<td><span class="color-chip" style="background:' + item.intHex + '"></span>' + item.intLabel + "</td>" +
+            '<td style="font-family:monospace;">' + stampStr + "</td>" +
             "</tr>";
         }
         historyBody.innerHTML = html;
@@ -647,10 +549,6 @@
       }
 
       async function syncToCloud() {
-        if (!canWrite) {
-          errBox.textContent = "Read-only mode: sign in as an operator to update data.";
-          return;
-        }
         if (!db) return;
         var res = await db.from("live_data").upsert({
           id: ROW_ID,
@@ -688,40 +586,8 @@
         renderAll();
       }
 
-      function startLiveSync() {
-        if (!db || syncStarted) return;
-        syncStarted = true;
-
-        db.from("live_data")
-          .select("state")
-          .eq("id", ROW_ID)
-          .maybeSingle()
-          .then(function (res) {
-            if (res.error) {
-              errBox.textContent = "Supabase load error: " + res.error.message;
-              return;
-            }
-            if (res.data && res.data.state) {
-              applyCloudState(res.data.state);
-            }
-          });
-
-        db.channel("assembly-line-sync")
-          .on(
-            "postgres_changes",
-            { event: "*", schema: "public", table: "live_data", filter: "id=eq." + ROW_ID },
-            function (payload) {
-              if (payload.new && payload.new.state) {
-                applyCloudState(payload.new.state);
-              }
-            }
-          )
-          .subscribe();
-      }
-
       function attachInputSync(inputEl, key) {
         inputEl.addEventListener("input", function () {
-          if (!canWrite) return;
           formInputs[key] = inputEl.value;
           syncToCloud();
         });
@@ -732,41 +598,8 @@
       attachInputSync(exteriorField, "exterior");
       attachInputSync(interiorField, "interior");
 
-      loginBtn.addEventListener("click", async function () {
-        gateErr.textContent = "";
-        if (!db) return;
-        var out = await db.auth.signInWithPassword({
-          email: authEmail.value.trim(),
-          password: authPass.value
-        });
-        if (out.error) {
-          gateErr.textContent = "Login failed: " + out.error.message;
-        } else {
-          guestMode = false;
-          authPass.value = "";
-        }
-      });
-
-      guestBtn.addEventListener("click", function () {
-        gateErr.textContent = "";
-        guestMode = true;
-        updateAccessUI(false);
-      });
-
-      logoutBtn.addEventListener("click", async function () {
-        guestMode = false;
-        if (db) {
-          await db.auth.signOut();
-        }
-        updateAccessUI(false);
-      });
-
       carForm.addEventListener("submit", function (e) {
         e.preventDefault();
-        if (!canWrite) {
-          errBox.textContent = "Read-only mode: sign in as an operator to update data.";
-          return;
-        }
         errBox.textContent = "";
 
         var vin = vinField.value.trim().toUpperCase();
@@ -803,7 +636,6 @@
       });
 
       sampleBtn.addEventListener("click", function () {
-        if (!canWrite) return;
         var s = randomVehicle();
         formInputs = {
           vin: s.vin,
@@ -821,7 +653,6 @@
       });
 
       demo5Btn.addEventListener("click", function () {
-        if (!canWrite) return;
         errBox.textContent = "";
         for (var i = 0; i < 5; i++) {
           pushVehicleToLine(randomVehicle());
@@ -831,7 +662,6 @@
       });
 
       resetBtn.addEventListener("click", function () {
-        if (!canWrite) return;
         line = new Array(NUM_STATIONS).fill(null);
         exitedList = [];
         formInputs = { vin: "", model: "", exterior: "", interior: "" };
@@ -845,16 +675,36 @@
         syncToCloud();
       });
 
-      if (db) {
-        db.auth.getSession().then(function (res) {
-          updateAccessUI(Boolean(res.data && res.data.session));
-        });
+      // Render UI immediately
+      renderAll();
 
-        db.auth.onAuthStateChange(function (_event, session) {
-          updateAccessUI(Boolean(session));
-        });
-      } else {
-        updateAccessUI(false);
+      // Load initial state and subscribe to live updates
+      if (db) {
+        db.from("live_data")
+          .select("state")
+          .eq("id", ROW_ID)
+          .maybeSingle()
+          .then(function (res) {
+            if (res.error) {
+              errBox.textContent = "Supabase load error: " + res.error.message;
+              return;
+            }
+            if (res.data && res.data.state) {
+              applyCloudState(res.data.state);
+            }
+          });
+
+        db.channel("assembly-line-sync")
+          .on(
+            "postgres_changes",
+            { event: "*", schema: "public", table: "live_data", filter: "id=eq." + ROW_ID },
+            function (payload) {
+              if (payload.new && payload.new.state) {
+                applyCloudState(payload.new.state);
+              }
+            }
+          )
+          .subscribe();
       }
     })();
   </script>

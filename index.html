@@ -345,9 +345,28 @@
             <input type="text" id="vinField" placeholder="e.g. VIN1001A" required />
           </div>
           <div class="field">
-            <label for="modelField">Model / Variant</label>
-            <input type="text" id="modelField" placeholder="e.g. J5" required />
-          </div>
+  <label for="modelField">Model / Variant</label>
+  <select id="modelField" required>
+    <option value="" disabled selected>Select Model / Variant</option>
+    <option value="AD">AD</option>
+    <option value="CN7">CN7</option>
+    <option value="DN8 2.0">DN8 2.0</option>
+    <option value="DN8 2.5">DN8 2.5</option>
+    <option value="DN8 FL">DN8 FL</option>
+    <option value="TM S3">TM S3</option>
+    <option value="TM S5">TM S5</option>
+    <option value="TM S6">TM S6</option>
+    <option value="NX4 S1">NX4 S1</option>
+    <option value="NX4 S2">NX4 S2</option>
+    <option value="LX3 HEV S1 (Smart)">LX3 HEV S1 (Smart)</option>
+    <option value="LX3 HEV S2 (Caligrpahy)">LX3 HEV S2 (Caligrpahy)</option>
+    <option value="J7 Prem">J7 Prem</option>
+    <option value="J5 Prem">J5 Prem</option>
+    <option value="J5 Comf">J5 Comf</option>
+    <option value="J5 BEV">J5 BEV</option>
+    <option value="O7">O7</option>
+  </select>
+</div>
           <div class="field">
             <label for="exteriorField">Exterior Color</label>
             <input type="text" id="exteriorField" placeholder="e.g. NKW" required />

@@ -26,6 +26,20 @@
       border: 1px solid #334155;
       margin-bottom: 14px;
     }
+    .auth-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+    .auth-badge {
+      font-size: 12px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      background: #0f172a;
+      border: 1px solid #475569;
+      color: #e2e8f0;
+    }
     .status-box {
       background: #172554;
       border: 1px solid #3b82f6;
@@ -34,6 +48,14 @@
       border-radius: 8px;
       margin-bottom: 14px;
       font-size: 13px;
+    }
+    .login-card {
+      max-width: 400px;
+      margin: 36px auto;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 20px;
     }
     .main-wrap { display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start; }
     .form-panel {
@@ -72,10 +94,15 @@
       font-size: 13px;
       cursor: pointer;
     }
+    button:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
     .btn-add { width: 100%; background: #38bdf8; color: #082f49; margin-top: 4px; }
     .btn-row { display: flex; gap: 8px; margin-top: 8px; }
     .btn-gray { flex: 1; background: #475569; color: #f8fafc; }
     .btn-red { background: #dc2626; color: #ffffff; }
+    .btn-guest { background: #334155; color: #f8fafc; border: 1px solid #64748b; }
     .err { color: #fca5a5; font-size: 12px; margin-top: 8px; min-height: 16px; }
     .flow-note { font-size: 12px; color: #94a3b8; margin-bottom: 12px; }
     .stack-row {
@@ -166,81 +193,106 @@
     table { width: 100%; border-collapse: collapse; font-size: 13px; }
     th, td { text-align: left; padding: 8px; border-bottom: 1px solid #334155; }
     th { background: #0f172a; color: #94a3b8; font-size: 11px; text-transform: uppercase; }
+    .hidden { display: none !important; }
   </style>
 </head>
 <body>
-  <div class="topbar">
-    <h1>Automotive Assembly Shop Line Monitoring (19 Stations)</h1>
-    <div>
-      <strong>Active Cars:</strong> <span id="activeCount">0 / 19</span>  | 
-      <strong>Exited (FIFO):</strong> <span id="exitedCount">0</span>
-    </div>
-  </div>
-
-  <div id="statusBox" class="status-box">
-    System ready. Add a vehicle to place it in <strong>Trim 01</strong> and shift existing cars forward.
-  </div>
-
-  <div class="main-wrap">
-    <div class="form-panel">
-      <h2 style="font-size:15px; margin:0 0 10px 0;">Vehicle Entry (Trim 01)</h2>
-      <form id="carForm">
-        <div class="field">
-          <label for="vinField">Vehicle VIN Number</label>
-          <input type="text" id="vinField" placeholder="e.g. VIN1001A" required />
-        </div>
-        <div class="field">
-          <label for="modelField">Model / Variant</label>
-          <input type="text" id="modelField" placeholder="e.g. J5" required />
-        </div>
-        <div class="field">
-          <label for="exteriorField">Exterior Color</label>
-          <input type="text" id="exteriorField" placeholder="e.g. NKW" required />
-        </div>
-        <div class="field">
-          <label for="interiorField">Interior Color</label>
-          <input type="text" id="interiorField" placeholder="e.g. Black" required />
-        </div>
-        <button type="submit" class="btn-add">Enter Vehicle & Move Line</button>
-        <div class="btn-row">
-          <button type="button" id="sampleBtn" class="btn-gray">Sample</button>
-          <button type="button" id="demo5Btn" class="btn-gray">Add 5 Cars</button>
-        </div>
-        <div id="errBox" class="err"></div>
-      </form>
-    </div>
-
-    <div class="line-panel">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-        <h2 style="font-size:15px; margin:0;">Station Line View</h2>
-        <button type="button" id="resetBtn" class="btn-red">Reset</button>
+  <div id="loginScreen" class="login-card">
+    <h1 style="margin-bottom:6px;">Assembly Line Authorization</h1>
+    <div class="flow-note">Sign in as an operator to update the line, or continue as a read-only guest.</div>
+    <form id="loginForm">
+      <div class="field">
+        <label for="emailField">Operator Email</label>
+        <input type="email" id="emailField" placeholder="operator@example.com" required />
       </div>
-      <div class="flow-note">
-        Vehicles enter at Trim 01 and advance sequentially through Trim 19 (FIFO exit).
+      <div class="field">
+        <label for="passwordField">Password</label>
+        <input type="password" id="passwordField" placeholder="Enter password" required />
       </div>
-      <div id="stationsContainer"></div>
-    </div>
+      <button type="submit" id="loginBtn" class="btn-add">Sign In</button>
+      <div class="btn-row">
+        <button type="button" id="guestBtn" class="btn-guest" style="flex:1;">Login As Guest (Read-Only)</button>
+      </div>
+      <div id="authErrBox" class="err"></div>
+    </form>
   </div>
 
-  <div class="history-panel">
-    <h2 style="font-size:15px; margin:0 0 10px 0;">Vehicle Exit History</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>FIFO #</th>
-          <th>VIN Number</th>
-          <th>Model / Variant</th>
-          <th>Exterior Color</th>
-          <th>Interior Color</th>
-          <th>Entry Date & Time</th>
-        </tr>
-      </thead>
-      <tbody id="historyBody">
-        <tr>
-          <td colspan="6" style="text-align:center; color:#94a3b8;">No vehicles exited yet.</td>
-        </tr>
-      </tbody>
-    </table>
+  <div id="appScreen" class="hidden">
+    <div class="topbar">
+      <h1>Automotive Assembly Shop Line Monitoring (19 Stations)</h1>
+      <div class="auth-controls">
+        <strong>Active Cars:</strong> <span id="activeCount">0 / 19</span>  | 
+        <strong>Exited (FIFO):</strong> <span id="exitedCount">0</span>
+        <span id="roleBadge" class="auth-badge">Guest (Read-Only)</span>
+        <button type="button" id="authActionBtn" class="btn-gray" style="flex:none; padding:6px 10px;">Operator Sign In</button>
+      </div>
+    </div>
+
+    <div id="statusBox" class="status-box">
+      System ready. Add a vehicle to place it in <strong>Trim 01</strong> and shift existing cars forward.
+    </div>
+
+    <div class="main-wrap">
+      <div class="form-panel">
+        <h2 style="font-size:15px; margin:0 0 10px 0;">Vehicle Entry (Trim 01)</h2>
+        <form id="carForm">
+          <div class="field">
+            <label for="vinField">Vehicle VIN Number</label>
+            <input type="text" id="vinField" placeholder="e.g. VIN1001A" required />
+          </div>
+          <div class="field">
+            <label for="modelField">Model / Variant</label>
+            <input type="text" id="modelField" placeholder="e.g. J5" required />
+          </div>
+          <div class="field">
+            <label for="exteriorField">Exterior Color</label>
+            <input type="text" id="exteriorField" placeholder="e.g. NKW" required />
+          </div>
+          <div class="field">
+            <label for="interiorField">Interior Color</label>
+            <input type="text" id="interiorField" placeholder="e.g. Black" required />
+          </div>
+          <button type="submit" id="submitCarBtn" class="btn-add">Enter Vehicle & Move Line</button>
+          <div class="btn-row">
+            <button type="button" id="sampleBtn" class="btn-gray">Sample</button>
+            <button type="button" id="demo5Btn" class="btn-gray">Add 5 Cars</button>
+          </div>
+          <div id="errBox" class="err"></div>
+        </form>
+      </div>
+
+      <div class="line-panel">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <h2 style="font-size:15px; margin:0;">Station Line View</h2>
+          <button type="button" id="resetBtn" class="btn-red">Reset</button>
+        </div>
+        <div class="flow-note">
+          Vehicles enter at Trim 01 and advance sequentially through Trim 19 (FIFO exit).
+        </div>
+        <div id="stationsContainer"></div>
+      </div>
+    </div>
+
+    <div class="history-panel">
+      <h2 style="font-size:15px; margin:0 0 10px 0;">Vehicle Exit History</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>FIFO #</th>
+            <th>VIN Number</th>
+            <th>Model / Variant</th>
+            <th>Exterior Color</th>
+            <th>Interior Color</th>
+            <th>Entry Date & Time</th>
+          </tr>
+        </thead>
+        <tbody id="historyBody">
+          <tr>
+            <td colspan="6" style="text-align:center; color:#94a3b8;">No vehicles exited yet.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <script>
@@ -257,11 +309,26 @@
       var statusHtml = "System ready. Add a vehicle to place it in <strong>Trim 01</strong> and shift existing cars forward.";
       var formInputs = { vin: "", model: "", exterior: "", interior: "" };
 
+      var currentUser = null;
+      var isGuestMode = false;
+
+      var loginScreen = document.getElementById("loginScreen");
+      var appScreen = document.getElementById("appScreen");
+      var loginForm = document.getElementById("loginForm");
+      var emailField = document.getElementById("emailField");
+      var passwordField = document.getElementById("passwordField");
+      var loginBtn = document.getElementById("loginBtn");
+      var guestBtn = document.getElementById("guestBtn");
+      var authErrBox = document.getElementById("authErrBox");
+      var roleBadge = document.getElementById("roleBadge");
+      var authActionBtn = document.getElementById("authActionBtn");
+
       var carForm = document.getElementById("carForm");
       var vinField = document.getElementById("vinField");
       var modelField = document.getElementById("modelField");
       var exteriorField = document.getElementById("exteriorField");
       var interiorField = document.getElementById("interiorField");
+      var submitCarBtn = document.getElementById("submitCarBtn");
       var errBox = document.getElementById("errBox");
       var statusBox = document.getElementById("statusBox");
       var stationsContainer = document.getElementById("stationsContainer");
@@ -282,7 +349,43 @@
       if (window.supabase && typeof window.supabase.createClient === "function") {
         db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
       } else {
+        authErrBox.textContent = "Supabase client library failed to load.";
         errBox.textContent = "Supabase client library failed to load.";
+      }
+
+      function canEdit() {
+        return Boolean(currentUser);
+      }
+
+      function updateAuthUI() {
+        var unlocked = Boolean(currentUser) || isGuestMode;
+        if (!unlocked) {
+          loginScreen.classList.remove("hidden");
+          appScreen.classList.add("hidden");
+          return;
+        }
+
+        loginScreen.classList.add("hidden");
+        appScreen.classList.remove("hidden");
+
+        var editable = canEdit();
+        vinField.disabled = !editable;
+        modelField.disabled = !editable;
+        exteriorField.disabled = !editable;
+        interiorField.disabled = !editable;
+        submitCarBtn.disabled = !editable;
+        sampleBtn.disabled = !editable;
+        demo5Btn.disabled = !editable;
+        resetBtn.disabled = !editable;
+
+        if (editable) {
+          roleBadge.textContent = "Operator: " + (currentUser.email || "Signed In");
+          authActionBtn.textContent = "Sign Out";
+        } else {
+          roleBadge.textContent = "Guest (Read-Only)";
+          authActionBtn.textContent = "Operator Sign In";
+          errBox.textContent = "Guest mode is read-only. Sign in as an operator to modify line data.";
+        }
       }
 
       function getStationName(stNum) {
@@ -511,6 +614,7 @@
         renderStations();
         renderHistory();
         renderStats();
+        updateAuthUI();
       }
 
       function randomVehicle() {
@@ -549,7 +653,7 @@
       }
 
       async function syncToCloud() {
-        if (!db) return;
+        if (!db || !canEdit()) return;
         var res = await db.from("live_data").upsert({
           id: ROW_ID,
           state: {
@@ -588,6 +692,7 @@
 
       function attachInputSync(inputEl, key) {
         inputEl.addEventListener("input", function () {
+          if (!canEdit()) return;
           formInputs[key] = inputEl.value;
           syncToCloud();
         });
@@ -598,9 +703,54 @@
       attachInputSync(exteriorField, "exterior");
       attachInputSync(interiorField, "interior");
 
+      loginForm.addEventListener("submit", async function (e) {
+        e.preventDefault();
+        authErrBox.textContent = "";
+        if (!db) {
+          authErrBox.textContent = "Supabase client is not initialized.";
+          return;
+        }
+        loginBtn.disabled = true;
+        var email = emailField.value.trim();
+        var password = passwordField.value;
+        var res = await db.auth.signInWithPassword({ email: email, password: password });
+        loginBtn.disabled = false;
+        if (res.error) {
+          authErrBox.textContent = res.error.message;
+          return;
+        }
+        isGuestMode = false;
+        currentUser = res.data.user || null;
+        passwordField.value = "";
+        updateAuthUI();
+      });
+
+      guestBtn.addEventListener("click", function () {
+        authErrBox.textContent = "";
+        isGuestMode = true;
+        updateAuthUI();
+      });
+
+      authActionBtn.addEventListener("click", async function () {
+        if (currentUser && db) {
+          await db.auth.signOut();
+          currentUser = null;
+          isGuestMode = false;
+          updateAuthUI();
+        } else {
+          isGuestMode = false;
+          authErrBox.textContent = "";
+          updateAuthUI();
+        }
+      });
+
       carForm.addEventListener("submit", function (e) {
         e.preventDefault();
         errBox.textContent = "";
+        if (!canEdit()) {
+          errBox.textContent = "Read-only guest mode: sign in as an operator to add vehicles.";
+          return;
+        }
 
         var vin = vinField.value.trim().toUpperCase();
         var model = modelField.value.trim();
@@ -636,6 +786,7 @@
       });
 
       sampleBtn.addEventListener("click", function () {
+        if (!canEdit()) return;
         var s = randomVehicle();
         formInputs = {
           vin: s.vin,
@@ -653,6 +804,7 @@
       });
 
       demo5Btn.addEventListener("click", function () {
+        if (!canEdit()) return;
         errBox.textContent = "";
         for (var i = 0; i < 5; i++) {
           pushVehicleToLine(randomVehicle());
@@ -662,6 +814,7 @@
       });
 
       resetBtn.addEventListener("click", function () {
+        if (!canEdit()) return;
         line = new Array(NUM_STATIONS).fill(null);
         exitedList = [];
         formInputs = { vin: "", model: "", exterior: "", interior: "" };
@@ -678,8 +831,21 @@
       // Render UI immediately
       renderAll();
 
-      // Load initial state and subscribe to live updates
+      // Load initial session, state, and subscribe to live updates
       if (db) {
+        db.auth.getSession().then(function (sessionRes) {
+          currentUser = (sessionRes.data && sessionRes.data.session && sessionRes.data.session.user) || null;
+          updateAuthUI();
+        });
+
+        db.auth.onAuthStateChange(function (_event, session) {
+          currentUser = (session && session.user) || null;
+          if (currentUser) {
+            isGuestMode = false;
+          }
+          updateAuthUI();
+        });
+
         db.from("live_data")
           .select("state")
           .eq("id", ROW_ID)

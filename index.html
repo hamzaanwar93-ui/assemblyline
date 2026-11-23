@@ -108,60 +108,181 @@
       border-radius: 8px;
       padding: 20px;
     }
-    .main-wrap { display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start; }
+    .main-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      align-items: stretch;
+    }
     .form-panel {
-      width: 196px;
-      max-width: 100%;
+      width: 100%;
+      box-sizing: border-box;
       background: rgba(24, 24, 27, 0.92);
       border: 1px solid #2e2e32;
+      border-radius: 8px;
+      padding: 12px 14px;
+    }
+    .form-panel-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .form-panel-header h2 {
+      font-size: 14px;
+      margin: 0;
+    }
+    .form-panel-header .clock-box {
+      margin-top: 0;
+      padding: 5px 12px;
       border-radius: 6px;
-      padding: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
-    .form-panel h2 {
-      font-size: 12px !important;
-      margin: 0 0 6px 0 !important;
-    }
-    .form-panel .field {
-      margin-bottom: 5px;
-    }
-    .form-panel .field label {
+    .form-panel-header .clock-label {
       font-size: 10px;
-      margin-bottom: 2px;
+      margin-bottom: 0;
     }
-    .form-panel .field input,
-    .form-panel .field select {
-      padding: 4px 5px;
-      font-size: 11px;
+    .form-panel-header .clock-value {
+      font-size: 12px;
+    }
+    .entry-input-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .entry-single-row {
+      display: flex;
+      flex-wrap: nowrap;
+      align-items: flex-start;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+    }
+    .entry-single-row .field {
+      margin-bottom: 0;
+      flex: 1 1 0;
+      min-width: 115px;
+      max-width: none;
+    }
+    .entry-single-row .field-vin,
+    .entry-single-row .field-brand,
+    .entry-single-row .field-model,
+    .entry-single-row .field-variant,
+    .entry-single-row .field-exterior,
+    .entry-single-row .field-interior {
+      flex: 1 1 0;
+      min-width: 115px;
+      max-width: none;
+    }
+    .entry-single-row .horizontal-entry-actions {
+      align-self: center;
+    }
+    .field-sub-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 3px;
+      margin-top: 6px;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    .model-sub-buttons {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      margin-top: 6px;
+      width: 100%;
+    }
+    .model-btn-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 3px;
+      width: 100%;
+    }
+    .touch-select-btn {
+      padding: 4px 6px;
+      min-height: 24px;
       border-radius: 4px;
+      background: #1e1e22;
+      color: #e4e4e7;
+      border: 1px solid #3f3f46;
+      font-size: 10px;
+      font-weight: bold;
+      white-space: nowrap;
+      flex: 0 0 auto;
+      cursor: pointer;
+      transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
     }
-    .form-panel button {
-      padding: 5px 6px;
+    .touch-select-btn:hover:not(:disabled) {
+      background: #27272a;
+      border-color: #60a5fa;
+      color: #ffffff;
+    }
+    .touch-select-btn.active {
+      background: #2563eb;
+      color: #ffffff;
+      border-color: #60a5fa;
+    }
+    .touch-placeholder-note {
       font-size: 11px;
-      border-radius: 4px;
+      color: #a1a1aa;
+      font-style: italic;
     }
-    .form-panel .btn-row {
+    .exterior-input-group {
+      display: flex;
+      align-items: center;
       gap: 4px;
-      margin-top: 4px;
+      width: 100%;
+    }
+    .exterior-input-group select {
+      flex: 1 1 auto;
+      min-width: 0;
+      width: 100%;
+      padding: 6px 6px;
+      font-size: 12px;
+    }
+    .exterior-input-group input {
+      width: 48px;
+      flex: 0 0 48px;
+      min-width: 0;
+      padding: 6px 4px;
+      font-size: 11px;
+      margin-top: 0 !important;
+    }
+    .horizontal-entry-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex: 0 0 auto;
+    }
+    .horizontal-entry-actions .btn-add {
+      width: auto;
+      margin-top: 0;
+      padding: 7px 11px;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .horizontal-entry-actions .btn-gap {
+      flex: none;
+      padding: 7px 10px;
+      font-size: 12px;
+      white-space: nowrap;
     }
     .form-panel .err {
-      font-size: 10px;
       margin-top: 4px;
-      min-height: 12px;
+      min-height: 0;
     }
-    .form-panel .clock-box {
-      margin-top: 6px;
-      padding: 5px 6px;
-      border-radius: 4px;
-    }
-    .form-panel .clock-label {
-      font-size: 9px;
-      margin-bottom: 2px;
-    }
-    .form-panel .clock-value {
-      font-size: 10px;
+    .form-panel .err:empty {
+      display: none;
     }
     .line-panel {
-      flex: 1;
+      width: 100%;
+      box-sizing: border-box;
       min-width: 300px;
       background: rgba(24, 24, 27, 0.92);
       border: 1px solid #2e2e32;
@@ -169,16 +290,16 @@
       padding: 14px;
     }
     .field { margin-bottom: 10px; }
-    .field label { display: block; font-size: 12px; color: #d4d4d8; margin-bottom: 4px; }
+    .field label { display: block; font-size: 11px; color: #d4d4d8; margin-bottom: 3px; white-space: nowrap; }
     .field input, .field select {
       width: 100%;
       box-sizing: border-box;
-      padding: 8px;
+      padding: 6px 8px;
       border-radius: 6px;
       border: 1px solid #3f3f46;
       background: #121212;
       color: #fafafa;
-      font-size: 13px;
+      font-size: 12px;
     }
     .field input:focus {
       outline: none;
@@ -494,6 +615,66 @@
       color: #ffffff;
       border-color: #14b8a6;
     }
+    /* Main page: stations stacked in rows, every row flows left to right, large readable cards */
+    .line-rows { display: flex; flex-direction: column; gap: 12px; }
+    .line-row-wrap { display: flex; align-items: stretch; gap: 8px; }
+    .line-group-rows { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 14px; }
+    .line-row-label {
+      flex: 0 0 auto;
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      text-align: center;
+      font-size: 12.7px;
+      font-weight: bold;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: #93c5fd;
+      background: #141416;
+      border: 1px solid #2e2e32;
+      border-radius: 6px;
+      padding: 6px 4px;
+    }
+    .line-row {
+      flex: 1 1 auto;
+      min-width: 0;
+      display: grid;
+      grid-template-columns: repeat(10, minmax(0, 1fr));
+      gap: 20px;
+    }
+    .line-row .station-box {
+      width: auto;
+      min-width: 0;
+      min-height: 110px;
+      padding: 6px 8px;
+      border-radius: 6px;
+      gap: 6px;
+    }
+    .line-row .station-box:not(.last-in-row)::after {
+      content: "\203A";
+      position: absolute;
+      right: -16px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 12px;
+      text-align: center;
+      font-size: 23px;
+      font-weight: bold;
+      line-height: 1;
+      color: #60a5fa;
+      pointer-events: none;
+    }
+    .line-row .station-top { font-size: 12.7px; margin-bottom: 0; gap: 2px 4px; flex-wrap: wrap; justify-content: flex-start; }
+    .line-row .st-badge { font-size: 12.5px; padding: 2px 4px; overflow: visible; text-overflow: clip; flex: 0 0 auto; }
+    .line-row .arrow-txt { font-size: 11.5px; color: #fbbf24; font-weight: bold; }
+    .line-row .bay-empty { font-size: 11.5px; min-height: 55px; }
+    .line-row .car-box, .line-row .gap-box { font-size: 13.8px; line-height: 1.3; padding: 5px 7px; border-radius: 4px; }
+    .line-row .car-vin { font-size: 15px; }
+    .line-row .car-model { font-size: 13.8px; }
+    .line-row .car-color { font-size: 12.7px; line-height: 1.3; }
+    .line-row .mini-chip { width: 10px; height: 10px; }
+    .line-row .gap-title { font-size: 15px; }
+    @media (max-width: 1100px) { .line-row { grid-template-columns: repeat(5, minmax(0, 1fr)); row-gap: 14px; } }
+    @media (max-width: 600px)  { .line-row { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
     /* Stacked Left-to-Right Layout for Trim, Chassis, and Final pages */
     .zone-page-panel {
       background: rgba(24, 24, 27, 0.92);
@@ -785,83 +966,94 @@
       </div>
     </div>
 
-    <!-- MAIN PAGE (Original Layout Preserved) -->
+    <!-- MAIN PAGE (Single-Row Vehicle Entry Panel Above Station Line View) -->
     <div id="mainPageView">
       <div class="main-wrap">
         <div class="form-panel">
-          <h2 style="font-size:15px; margin:0 0 10px 0;">Vehicle Entry (Trim 01)</h2>
-          <form id="carForm">
-            <div class="field">
-              <label for="vinField">Vehicle VIN Number (6 Digits)</label>
-              <input type="text" id="vinField" placeholder="e.g. 100123" maxlength="6" pattern="[0-9]{6}" inputmode="numeric" required />
+          <div class="form-panel-header">
+            <h2>Vehicle Entry (Trim 01)</h2>
+            <div id="ClockBox" class="clock-box">
+              <span class="clock-label">Date &amp; Time:</span>
+              <span id="ClockValue" class="clock-value">--</span>
             </div>
-            <div class="field">
-              <label for="modelField">Model / Variant</label>
-              <select id="modelField" required>
-                <option value="" disabled selected>Select Model / Variant</option>
-                <option value="AD">AD</option>
-                <option value="CN7">CN7</option>
-                <option value="DN8 2.0">DN8 2.0</option>
-                <option value="DN8 2.5">DN8 2.5</option>
-                <option value="DN8 FL">DN8 FL</option>
-                <option value="TM S3">TM S3</option>
-                <option value="TM S5">TM S5</option>
-                <option value="TM S6">TM S6</option>
-                <option value="NX4 S1">NX4 S1</option>
-                <option value="NX4 S2">NX4 S2</option>
-                <option value="LX3 HEV S1 (Smart)">LX3 HEV S1 (Smart)</option>
-                <option value="LX3 HEV S2 (Caligrpahy)">LX3 HEV S2 (Caligrpahy)</option>
-                <option value="J7 Prem">J7 Prem</option>
-                <option value="J5 Prem">J5 Prem</option>
-                <option value="J5 Comf">J5 Comf</option>
-                <option value="J5 BEV">J5 BEV</option>
-                <option value="O7">O7</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="exteriorField">Exterior Color</label>
-              <select id="exteriorField" required>
-                <option value="" disabled selected>Select Exterior</option>
-                <option value="NKW">NKW</option>
-                <option value="CCB">CCB</option>
-                <option value="MMS">MMS</option>
-                <option value="RBG">RBG</option>
-                <option value="NPG">NPG</option>
-                <option value="MOG">MOG</option>
-                <option value="NUG">NUG</option>
-                <option value="EGM">EGM</option>
-                <option value="NDB">NDB</option>
-                <option value="NMG">NMG</option>
-                <option value="WYW">WYW</option>
-                <option value="NBA">NBA</option>
-                <option value="XB2">XB2</option>
-                <option value="NT2">NT2</option>
-                <option value="SMH">SMH</option>
-                <option value="2RP">2RP</option>
-                <option value="R2F">R2F</option>
-                <option value="M2F">M2F</option>
-                <option value="NKA">NKA</option>
-                <option value="TB5">TB5</option>
-                <option value="R8N">R8N</option>
-                <option value="CBP">CBP</option>
-                <option value="__MANUAL__">Manual Code...</option>
-              </select>
-              <input type="text" id="exteriorManualField" class="hidden" placeholder="3-char code" maxlength="3" style="margin-top:3px;" />
-            </div>
-            <div class="field">
-              <label for="interiorField">Interior Color</label>
-              <input type="text" id="interiorField" placeholder="e.g. Black" required />
-            </div>
-            <button type="submit" id="submitCarBtn" class="btn-add">Enter Vehicle & Move Line</button>
-            <div class="btn-row">
-              <button type="button" id="gapBtn" class="btn-gap">Gap</button>
-            </div>
-            <div id="errBox" class="err"></div>
-          </form>
-          <div id="ClockBox" class="clock-box">
-            <div class="clock-label">Date &amp; Time</div>
-            <div id="ClockValue" class="clock-value">--</div>
           </div>
+          <form id="carForm" class="entry-input-stack">
+            <div class="entry-single-row">
+              <div class="field field-vin">
+                <label for="vinField">VIN (6 Digits)</label>
+                <input type="text" id="vinField" placeholder="100123" maxlength="6" pattern="[0-9]{6}" inputmode="numeric" required />
+              </div>
+
+              <div class="field field-brand">
+                <label for="brandField">Brand</label>
+                <input type="text" id="brandField" placeholder="Brand" readonly required />
+                <div id="brandTouchGroup" class="field-sub-buttons" role="group" aria-label="Brand Selection">
+                  <button type="button" class="touch-select-btn brand-touch-btn" data-brand="Hyundai">Hyundai</button>
+                  <button type="button" class="touch-select-btn brand-touch-btn" data-brand="OJ">OJ</button>
+                </div>
+              </div>
+
+              <div class="field field-model">
+                <label for="modelField">Model</label>
+                <input type="text" id="modelField" placeholder="Model" readonly required />
+                <div id="modelTouchGroup" class="field-sub-buttons" role="group" aria-label="Model Selection">
+                  <span class="touch-placeholder-note" style="white-space:nowrap;">Select Brand</span>
+                </div>
+              </div>
+
+              <div class="field field-variant">
+                <label for="variantField">Variant</label>
+                <input type="text" id="variantField" placeholder="Variant" readonly />
+                <div id="variantTouchGroup" class="field-sub-buttons" role="group" aria-label="Variant Selection">
+                  <span class="touch-placeholder-note" style="white-space:nowrap;">Select Model</span>
+                </div>
+              </div>
+
+              <div class="field field-exterior">
+                <label for="exteriorField">Exterior Color</label>
+                <div class="exterior-input-group">
+                  <select id="exteriorField" required>
+                    <option value="" disabled selected>Exterior</option>
+                    <option value="NKW">NKW</option>
+                    <option value="CCB">CCB</option>
+                    <option value="MMS">MMS</option>
+                    <option value="RBG">RBG</option>
+                    <option value="NPG">NPG</option>
+                    <option value="MOG">MOG</option>
+                    <option value="NUG">NUG</option>
+                    <option value="EGM">EGM</option>
+                    <option value="NDB">NDB</option>
+                    <option value="NMG">NMG</option>
+                    <option value="WYW">WYW</option>
+                    <option value="NBA">NBA</option>
+                    <option value="XB2">XB2</option>
+                    <option value="NT2">NT2</option>
+                    <option value="SMH">SMH</option>
+                    <option value="2RP">2RP</option>
+                    <option value="R2F">R2F</option>
+                    <option value="M2F">M2F</option>
+                    <option value="NKA">NKA</option>
+                    <option value="TB5">TB5</option>
+                    <option value="R8N">R8N</option>
+                    <option value="CBP">CBP</option>
+                    <option value="__MANUAL__">Manual</option>
+                  </select>
+                  <input type="text" id="exteriorManualField" class="hidden" placeholder="3-ch" maxlength="3" />
+                </div>
+              </div>
+
+              <div class="field field-interior">
+                <label for="interiorField">Interior Color</label>
+                <input type="text" id="interiorField" placeholder="e.g. Black" required />
+              </div>
+
+              <div class="horizontal-entry-actions">
+                <button type="submit" id="submitCarBtn" class="btn-add">Enter &amp; Move</button>
+                <button type="button" id="gapBtn" class="btn-gap">Gap</button>
+              </div>
+            </div>
+          </form>
+          <div id="errBox" class="err"></div>
         </div>
 
         <div class="line-panel">
@@ -870,7 +1062,7 @@
             <button type="button" id="resetBtn" class="btn-red">Reset</button>
           </div>
           <div class="flow-note">
-            Vehicles and Null entries enter at TRIM 01 and advance sequentially through FINAL 09 (FIFO exit) following the line diagram.
+            Vehicles and Null entries enter at TRIM 01 and advance sequentially through FINAL 09 (FIFO exit). Every row flows left to right; continue on the next row down.
           </div>
           <div id="stationsContainer"></div>
         </div>
@@ -957,26 +1149,7 @@
                 </div>
                 <div class="field">
                   <label for="editModelField">Model / Variant</label>
-                  <select id="editModelField">
-                    <option value="" disabled selected>Select Model / Variant</option>
-                    <option value="AD">AD</option>
-                    <option value="CN7">CN7</option>
-                    <option value="DN8 2.0">DN8 2.0</option>
-                    <option value="DN8 2.5">DN8 2.5</option>
-                    <option value="DN8 FL">DN8 FL</option>
-                    <option value="TM S3">TM S3</option>
-                    <option value="TM S5">TM S5</option>
-                    <option value="TM S6">TM S6</option>
-                    <option value="NX4 S1">NX4 S1</option>
-                    <option value="NX4 S2">NX4 S2</option>
-                    <option value="LX3 HEV S1 (Smart)">LX3 HEV S1 (Smart)</option>
-                    <option value="LX3 HEV S2 (Caligrpahy)">LX3 HEV S2 (Caligrpahy)</option>
-                    <option value="J7 Prem">J7 Prem</option>
-                    <option value="J5 Prem">J5 Prem</option>
-                    <option value="J5 Comf">J5 Comf</option>
-                    <option value="J5 BEV">J5 BEV</option>
-                    <option value="O7">O7</option>
-                  </select>
+                  <input type="text" id="editModelField" placeholder="e.g. AD or J5 PREM" />
                 </div>
                 <div class="field">
                   <label for="editExteriorField">Exterior Color</label>
@@ -1103,6 +1276,23 @@
       ];
       var NUM_STATIONS = STATION_NAMES.length;
 
+      var BRAND_MODELS = {
+        Hyundai: ["AD", "CN7", "TM HEV", "NX4", "DN8", "LX3"],
+        OJ: ["J5", "J7", "O7"]
+      };
+
+      var MODEL_VARIANTS = {
+        "AD": ["1.6", "2.0"],
+        "CN7": [],
+        "TM HEV": ["S3", "S5", "S6"],
+        "NX4": ["S1", "S2"],
+        "DN8": ["2.0", "2.5", "FL"],
+        "LX3": ["S1 Smart", "S2 Calligraphy"],
+        "J5": ["PREM", "COMF", "BEV"],
+        "J7": ["PHEV"],
+        "O7": ["PHEV"]
+      };
+
       var ZONE_CONFIG = {
         trim: {
           title: "Trim Line Stations (TRIM 01 – TRIM 19)",
@@ -1127,7 +1317,7 @@
       var line = new Array(NUM_STATIONS).fill(null);
       var exitedList = [];
       var statusHtml = "System ready. Add a vehicle or gap to place it in <strong>TRIM 01</strong> and shift existing entries forward.";
-      var formInputs = { vin: "", model: "", exterior: "", interior: "" };
+      var formInputs = { vin: "", brand: "", model: "", variant: "", exterior: "", interior: "" };
 
       var currentUser = null;
       var isGuestMode = false;
@@ -1146,7 +1336,12 @@
 
       var carForm = document.getElementById("carForm");
       var vinField = document.getElementById("vinField");
+      var brandField = document.getElementById("brandField");
+      var brandTouchGroup = document.getElementById("brandTouchGroup");
       var modelField = document.getElementById("modelField");
+      var modelTouchGroup = document.getElementById("modelTouchGroup");
+      var variantField = document.getElementById("variantField");
+      var variantTouchGroup = document.getElementById("variantTouchGroup");
       var exteriorField = document.getElementById("exteriorField");
       var exteriorManualField = document.getElementById("exteriorManualField");
       var EXT_PRESETS = ["NKW", "CCB", "MMS", "RBG", "NPG", "MOG", "NUG", "EGM", "NDB", "NMG", "WYW", "NBA", "XB2", "NT2", "SMH", "2RP", "R2F", "M2F", "NKA", "TB5", "R8N", "CBP"];
@@ -1258,13 +1453,20 @@
 
         var editable = canEdit();
         vinField.disabled = !editable;
+        brandField.disabled = !editable;
         modelField.disabled = !editable;
+        variantField.disabled = !editable;
         exteriorField.disabled = !editable;
         exteriorManualField.disabled = !editable;
         interiorField.disabled = !editable;
         submitCarBtn.disabled = !editable;
         gapBtn.disabled = !editable;
         resetBtn.disabled = !editable;
+
+        var touchBtns = document.querySelectorAll(".touch-select-btn");
+        for (var t = 0; t < touchBtns.length; t++) {
+          touchBtns[t].disabled = !editable;
+        }
 
         if (editable) {
           roleBadge.textContent = "Operator: " + (currentUser.email || "Signed In");
@@ -1334,6 +1536,7 @@
         return {
           isGap: Boolean(entry.isGap),
           vin: entry.vin !== undefined ? entry.vin : null,
+          brand: entry.brand !== undefined ? entry.brand : null,
           model: entry.model !== undefined ? entry.model : null,
           extHex: entry.extHex !== undefined ? entry.extHex : null,
           extLabel: entry.extLabel !== undefined ? entry.extLabel : null,
@@ -1386,6 +1589,7 @@
         pushEntryToLine({
           isGap: false,
           vin: data.vin,
+          brand: data.brand || null,
           model: data.model,
           extHex: data.extHex,
           extLabel: data.extLabel,
@@ -1402,6 +1606,7 @@
         pushEntryToLine({
           isGap: true,
           vin: null,
+          brand: null,
           model: null,
           extHex: null,
           extLabel: null,
@@ -1460,9 +1665,196 @@
         }
       }
 
+      function inferBrandFromModel(modelVal) {
+        if (!modelVal) return "";
+        if (BRAND_MODELS.Hyundai.indexOf(modelVal) !== -1) return "Hyundai";
+        if (BRAND_MODELS.OJ.indexOf(modelVal) !== -1) return "OJ";
+        if (/^(AD|CN7|TM HEV|NX4|DN8|LX3)(\b|\s|$)/.test(modelVal)) return "Hyundai";
+        if (/^(J5|J7|O7)(\b|\s|$)/.test(modelVal)) return "OJ";
+        return "";
+      }
+
+      function getVariantsForModel(modelVal) {
+        if (!modelVal) return [];
+        if (Object.prototype.hasOwnProperty.call(MODEL_VARIANTS, modelVal)) {
+          return MODEL_VARIANTS[modelVal];
+        }
+        var keys = Object.keys(MODEL_VARIANTS);
+        for (var i = 0; i < keys.length; i++) {
+          var k = keys[i];
+          if (modelVal.indexOf(k + " ") === 0) {
+            return MODEL_VARIANTS[k];
+          }
+        }
+        return [];
+      }
+
+      function composeDisplayModel(modelVal, variantVal) {
+        var m = (modelVal || "").trim();
+        var v = (variantVal || "").trim();
+        if (!m) return "";
+        if (!v) return m;
+        if (m === v || m.indexOf(m + " ") === 0 && m.endsWith(" " + v)) return m;
+        return m + " " + v;
+      }
+
+      function renderBrandAndModelTouchUI(brandVal, modelVal, variantVal) {
+        var activeBrand = brandVal || inferBrandFromModel(modelVal) || "";
+        var brandBtns = brandTouchGroup.querySelectorAll(".brand-touch-btn");
+        for (var b = 0; b < brandBtns.length; b++) {
+          var bName = brandBtns[b].getAttribute("data-brand");
+          brandBtns[b].classList.toggle("active", bName === activeBrand);
+          brandBtns[b].disabled = !canEdit();
+        }
+
+        if (!activeBrand || !BRAND_MODELS[activeBrand]) {
+          modelTouchGroup.className = "field-sub-buttons";
+          modelTouchGroup.innerHTML = '<div class="model-btn-row"><span class="touch-placeholder-note" style="white-space:nowrap;">Select Brand</span></div>';
+        } else {
+          modelTouchGroup.className = "model-sub-buttons";
+          var models = BRAND_MODELS[activeBrand];
+          var rows = [];
+          for (var r = 0; r < models.length; r += 3) {
+            rows.push(models.slice(r, r + 3));
+          }
+          var html = "";
+          for (var rowIdx = 0; rowIdx < rows.length; rowIdx++) {
+            html += '<div class="model-btn-row">';
+            var rowModels = rows[rowIdx];
+            for (var m = 0; m < rowModels.length; m++) {
+              var mName = rowModels[m];
+              var isSel = mName === modelVal;
+              html +=
+                '<button type="button" class="touch-select-btn model-touch-btn' +
+                (isSel ? " active" : "") +
+                '" data-model="' +
+                escapeHtml(mName) +
+                '"' +
+                (!canEdit() ? " disabled" : "") +
+                ">" +
+                escapeHtml(mName) +
+                "</button>";
+            }
+            html += "</div>";
+          }
+          modelTouchGroup.innerHTML = html;
+        }
+
+        if (!modelVal) {
+          variantTouchGroup.className = "model-sub-buttons";
+          variantTouchGroup.innerHTML = '<div class="model-btn-row"><span class="touch-placeholder-note" style="white-space:nowrap;">Select Model</span></div>';
+          return;
+        }
+
+        var variants = getVariantsForModel(modelVal);
+        if (!variants || variants.length === 0) {
+          variantTouchGroup.className = "model-sub-buttons";
+          variantTouchGroup.innerHTML = '<div class="model-btn-row"><span class="touch-placeholder-note" style="white-space:nowrap;">No Variants</span></div>';
+          return;
+        }
+
+        variantTouchGroup.className = "model-sub-buttons";
+        var vHtml = '<div class="model-btn-row">';
+        for (var v = 0; v < variants.length; v++) {
+          var vName = variants[v];
+          var isVSel = vName === variantVal;
+          vHtml +=
+            '<button type="button" class="touch-select-btn variant-touch-btn' +
+            (isVSel ? " active" : "") +
+            '" data-variant="' +
+            escapeHtml(vName) +
+            '"' +
+            (!canEdit() ? " disabled" : "") +
+            ">" +
+            escapeHtml(vName) +
+            "</button>";
+        }
+        vHtml += "</div>";
+        variantTouchGroup.innerHTML = vHtml;
+      }
+
+      function selectBrand(brandName) {
+        if (!canEdit()) return;
+        errBox.textContent = "";
+        var allowedModels = BRAND_MODELS[brandName] || [];
+        formInputs.brand = brandName;
+        if (allowedModels.indexOf(formInputs.model) === -1) {
+          formInputs.model = "";
+          formInputs.variant = "";
+        } else {
+          var allowedVars = getVariantsForModel(formInputs.model);
+          if (allowedVars.indexOf(formInputs.variant) === -1) {
+            formInputs.variant = "";
+          }
+        }
+        brandField.value = formInputs.brand;
+        modelField.value = formInputs.model;
+        variantField.value = formInputs.variant;
+        renderBrandAndModelTouchUI(formInputs.brand, formInputs.model, formInputs.variant);
+        syncToCloud();
+      }
+
+      function selectModel(modelName) {
+        if (!canEdit()) return;
+        errBox.textContent = "";
+        formInputs.model = modelName;
+        if (!formInputs.brand) {
+          formInputs.brand = inferBrandFromModel(modelName);
+        }
+        var allowedVars = getVariantsForModel(modelName);
+        if (allowedVars.indexOf(formInputs.variant) === -1) {
+          formInputs.variant = "";
+        }
+        brandField.value = formInputs.brand;
+        modelField.value = formInputs.model;
+        variantField.value = formInputs.variant;
+        renderBrandAndModelTouchUI(formInputs.brand, formInputs.model, formInputs.variant);
+        syncToCloud();
+      }
+
+      function selectVariant(variantName) {
+        if (!canEdit()) return;
+        errBox.textContent = "";
+        formInputs.variant = variantName;
+        variantField.value = formInputs.variant;
+        renderBrandAndModelTouchUI(formInputs.brand, formInputs.model, formInputs.variant);
+        syncToCloud();
+      }
+
+      brandTouchGroup.addEventListener("click", function (e) {
+        var btn = e.target.closest(".brand-touch-btn");
+        if (!btn) return;
+        var bName = btn.getAttribute("data-brand");
+        if (bName) {
+          selectBrand(bName);
+        }
+      });
+
+      modelTouchGroup.addEventListener("click", function (e) {
+        var btn = e.target.closest(".model-touch-btn");
+        if (!btn) return;
+        var mName = btn.getAttribute("data-model");
+        if (mName) {
+          selectModel(mName);
+        }
+      });
+
+      variantTouchGroup.addEventListener("click", function (e) {
+        var btn = e.target.closest(".variant-touch-btn");
+        if (!btn) return;
+        var vName = btn.getAttribute("data-variant");
+        if (vName) {
+          selectVariant(vName);
+        }
+      });
+
       function renderInputs() {
         syncInputValue(vinField, formInputs.vin);
+        var resolvedBrand = formInputs.brand || inferBrandFromModel(formInputs.model);
+        syncInputValue(brandField, resolvedBrand);
         syncInputValue(modelField, formInputs.model);
+        syncInputValue(variantField, formInputs.variant);
+        renderBrandAndModelTouchUI(resolvedBrand, formInputs.model, formInputs.variant);
         syncExteriorUI(formInputs.exterior);
         syncInputValue(interiorField, formInputs.interior);
       }
@@ -1485,6 +1877,31 @@
         stationHoverTooltip.style.top = y + "px";
       }
 
+      function splitModelAndVariant(composedModel) {
+        var raw = (composedModel || "").trim();
+        if (!raw) return { model: "-", variant: "-" };
+
+        var allModels = [].concat(BRAND_MODELS.Hyundai || [], BRAND_MODELS.OJ || []);
+        allModels.sort(function (a, b) { return b.length - a.length; });
+
+        for (var i = 0; i < allModels.length; i++) {
+          var mName = allModels[i];
+          if (raw === mName) {
+            return { model: mName, variant: "-" };
+          }
+          if (raw.indexOf(mName + " ") === 0) {
+            var rest = raw.slice(mName.length + 1).trim();
+            return { model: mName, variant: rest || "-" };
+          }
+        }
+
+        var parts = raw.split(/\s+/);
+        if (parts.length > 1) {
+          return { model: parts[0], variant: parts.slice(1).join(" ") };
+        }
+        return { model: raw, variant: "-" };
+      }
+
       function showStationTooltip(stationLabel, entry, e) {
         if (!stationHoverTooltip) return;
         var html = '<div class="tt-title">' + escapeHtml(stationLabel) + "</div>";
@@ -1493,15 +1910,21 @@
         } else if (entry.isGap) {
           html +=
             '<div class="tt-row"><span class="tt-label">VIN Number:</span> Null</div>' +
-            '<div class="tt-row"><span class="tt-label">Model / Variant:</span> Null</div>' +
+            '<div class="tt-row"><span class="tt-label">Brand:</span> Null</div>' +
+            '<div class="tt-row"><span class="tt-label">Model:</span> Null</div>' +
+            '<div class="tt-row"><span class="tt-label">Variant:</span> Null</div>' +
             '<div class="tt-row"><span class="tt-label">Exterior Color:</span> Null</div>' +
             '<div class="tt-row"><span class="tt-label">Interior Color:</span> Null</div>' +
             '<div class="tt-row"><span class="tt-label">Date &amp; Time:</span> ' + escapeHtml(((entry.entryDate || "-") + " " + (entry.entryTime || "-")).trim()) + "</div>";
         } else {
           var dtText = ((entry.entryDate || "") + " " + (entry.entryTime || "")).trim() || "-";
+          var displayBrand = entry.brand || inferBrandFromModel(entry.model) || "-";
+          var mv = splitModelAndVariant(entry.model);
           html +=
             '<div class="tt-row"><span class="tt-label">VIN Number:</span> <strong>' + escapeHtml(entry.vin) + "</strong></div>" +
-            '<div class="tt-row"><span class="tt-label">Model / Variant:</span> ' + escapeHtml(entry.model) + "</div>" +
+            '<div class="tt-row"><span class="tt-label">Brand:</span> ' + escapeHtml(displayBrand) + "</div>" +
+            '<div class="tt-row"><span class="tt-label">Model:</span> ' + escapeHtml(mv.model) + "</div>" +
+            '<div class="tt-row"><span class="tt-label">Variant:</span> ' + escapeHtml(mv.variant) + "</div>" +
             '<div class="tt-row"><span class="tt-label">Exterior Color:</span> <span class="color-chip" style="background:' + escapeHtml(entry.extHex) + '"></span>' + escapeHtml(entry.extLabel) + "</div>" +
             '<div class="tt-row"><span class="tt-label">Interior Color:</span> <span class="color-chip" style="background:transparent"></span>' + escapeHtml(entry.intLabel) + "</div>" +
             '<div class="tt-row"><span class="tt-label">Date &amp; Time:</span> ' + escapeHtml(dtText) + "</div>";
@@ -1577,73 +2000,42 @@
         stationsContainer.innerHTML = "";
         hideStationTooltip();
 
-        var scrollWrap = document.createElement("div");
-        scrollWrap.className = "diagram-scroll-wrap";
+        // Stacked rows, each flowing left to right; rows follow the line order top to bottom.
+        var groupDefs = [
+          { label: "Trim", rows: [[0, 9], [10, 19]] },
+          { label: "Chassis", rows: [[20, 27]] },
+          { label: "Final", rows: [[28, NUM_STATIONS - 1]] }
+        ];
 
-        var gridDiv = document.createElement("div");
-        gridDiv.className = "diagram-grid";
+        var wrap = document.createElement("div");
+        wrap.className = "line-rows";
 
-        // Row 1 (right-aligned so PANORAMA sits directly on top of TRIM 05)
-        var row1Div = document.createElement("div");
-        row1Div.className = "diagram-row diagram-row-right";
-        for (var i = 0; i < 5; i++) {
-          row1Div.appendChild(createStationCard(i, i === 4 ? "v" : ""));
-          if (i < 4) {
-            var conn1 = document.createElement("span");
-            conn1.className = "flow-connector";
-            conn1.textContent = "->";
-            row1Div.appendChild(conn1);
-          }
-        }
-        gridDiv.appendChild(row1Div);
+        groupDefs.forEach(function (g) {
+          var groupWrap = document.createElement("div");
+          groupWrap.className = "line-row-wrap";
 
-        // Vertical connector directly between PANORAMA and TRIM 05
-        var bridge1 = document.createElement("div");
-        bridge1.className = "vertical-bridge-row vertical-bridge-right";
-        bridge1.innerHTML = '<div class="vertical-bridge-cell">↓</div>';
-        gridDiv.appendChild(bridge1);
+          var lbl = document.createElement("div");
+          lbl.className = "line-row-label";
+          lbl.textContent = g.label;
+          groupWrap.appendChild(lbl);
 
-        // Row 2 (CHASSIS 04 ... TRIM 05, right-to-left flow)
-        var row2Indices = [];
-        for (var j = 23; j >= 5; j--) {
-          row2Indices.push(j);
-        }
-        var row2Div = document.createElement("div");
-        row2Div.className = "diagram-row diagram-row-left";
-        for (var r2 = 0; r2 < row2Indices.length; r2++) {
-          var idx2 = row2Indices[r2];
-          row2Div.appendChild(createStationCard(idx2, idx2 === 23 ? "v" : ""));
-          if (r2 < row2Indices.length - 1) {
-            var conn2 = document.createElement("span");
-            conn2.className = "flow-connector";
-            conn2.textContent = "<-";
-            row2Div.appendChild(conn2);
-          }
-        }
-        gridDiv.appendChild(row2Div);
+          var rowsCol = document.createElement("div");
+          rowsCol.className = "line-group-rows";
+          g.rows.forEach(function (rg) {
+            var row = document.createElement("div");
+            row.className = "line-row";
+            for (var i = rg[0]; i <= rg[1]; i++) {
+              var card = createStationCard(i, i === NUM_STATIONS - 1 ? "EXIT" : "");
+              if (i === rg[1]) card.classList.add("last-in-row");
+              row.appendChild(card);
+            }
+            rowsCol.appendChild(row);
+          });
+          groupWrap.appendChild(rowsCol);
+          wrap.appendChild(groupWrap);
+        });
 
-        // Vertical connector directly between CHASSIS 04 and CHASSIS 05
-        var bridge2 = document.createElement("div");
-        bridge2.className = "vertical-bridge-row vertical-bridge-left";
-        bridge2.innerHTML = '<div class="vertical-bridge-cell">↓</div>';
-        gridDiv.appendChild(bridge2);
-
-        // Row 3 (CHASSIS 05 ... FINAL 09, left-to-right flow)
-        var row3Div = document.createElement("div");
-        row3Div.className = "diagram-row diagram-row-left";
-        for (var k = 24; k < NUM_STATIONS; k++) {
-          row3Div.appendChild(createStationCard(k, k === NUM_STATIONS - 1 ? "EXIT" : ""));
-          if (k < NUM_STATIONS - 1) {
-            var conn3 = document.createElement("span");
-            conn3.className = "flow-connector";
-            conn3.textContent = "->";
-            row3Div.appendChild(conn3);
-          }
-        }
-        gridDiv.appendChild(row3Div);
-
-        scrollWrap.appendChild(gridDiv);
-        stationsContainer.appendChild(scrollWrap);
+        stationsContainer.appendChild(wrap);
       }
 
       // Render Stacked Left-to-Right Zone View for Trim, Chassis, or Final
@@ -1696,10 +2088,11 @@
               "</div>";
           } else {
             var carDt = ((entry.entryDate || "") + " " + (entry.entryTime || "")).trim() || "-";
+            var cardBrand = entry.brand || inferBrandFromModel(entry.model);
             bodyHtml =
               '<div class="zone-card-body">' +
                 '<div class="zone-vin">' + escapeHtml(entry.vin) + "</div>" +
-                '<div class="zone-model">' + escapeHtml(entry.model) + "</div>" +
+                '<div class="zone-model">' + escapeHtml((cardBrand ? cardBrand + " • " : "") + entry.model) + "</div>" +
                 '<div class="zone-detail-row">' +
                   '<span class="color-chip" style="background:' + escapeHtml(entry.extHex) + '"></span>' +
                   '<span>Ext: <strong>' + escapeHtml(entry.extLabel) + "</strong></span>" +
@@ -1887,9 +2280,14 @@
         if (cloudState.statusHtml) {
           statusHtml = cloudState.statusHtml;
         }
+        var loadedModel = (cloudState.formInputs && cloudState.formInputs.model) || "";
+        var loadedVariant = (cloudState.formInputs && cloudState.formInputs.variant) || "";
+        var loadedBrand = (cloudState.formInputs && cloudState.formInputs.brand) || inferBrandFromModel(loadedModel);
         formInputs = {
           vin: (cloudState.formInputs && cloudState.formInputs.vin) || "",
-          model: (cloudState.formInputs && cloudState.formInputs.model) || "",
+          brand: loadedBrand,
+          model: loadedModel,
+          variant: loadedVariant,
           exterior: (cloudState.formInputs && cloudState.formInputs.exterior) || "",
           interior: (cloudState.formInputs && cloudState.formInputs.interior) || ""
         };
@@ -1911,7 +2309,6 @@
         }
       });
       attachInputSync(vinField, "vin");
-      attachInputSync(modelField, "model");
       exteriorField.addEventListener("change", function () {
         if (!canEdit()) return;
         if (exteriorField.value === "__MANUAL__") {
@@ -1989,8 +2386,24 @@
         }
 
         var vin = vinField.value.trim().toUpperCase();
-        var model = modelField.value.trim();
+        var rawModel = modelField.value.trim();
+        var rawVariant = variantField.value.trim();
+        var brand = brandField.value.trim() || inferBrandFromModel(rawModel);
+        var model = composeDisplayModel(rawModel, rawVariant);
         var extLabel = getExteriorValue();
+        if (!brand) {
+          errBox.textContent = "Please select a Brand (Hyundai or OJ).";
+          return;
+        }
+        if (!rawModel) {
+          errBox.textContent = "Please select a Model.";
+          return;
+        }
+        var availableVariants = getVariantsForModel(rawModel);
+        if (availableVariants.length > 0 && !rawVariant) {
+          errBox.textContent = "Please select a Variant.";
+          return;
+        }
         if (!extLabel) {
           errBox.textContent = exteriorField.value === "__MANUAL__"
             ? "Please enter a manual exterior code."
@@ -2014,6 +2427,7 @@
 
         pushVehicleToLine({
           vin: vin,
+          brand: brand,
           model: model,
           extHex: resolveColorHex(extLabel, "#3b82f6"),
           extLabel: extLabel,
@@ -2021,9 +2435,11 @@
           intLabel: intLabel
         });
 
-        formInputs = { vin: "", model: "", exterior: "", interior: "" };
+        formInputs = { vin: "", brand: "", model: "", variant: "", exterior: "", interior: "" };
         vinField.value = "";
+        brandField.value = "";
         modelField.value = "";
+        variantField.value = "";
         exteriorField.value = "";
         exteriorManualField.value = "";
         exteriorManualField.classList.add("hidden");
@@ -2045,9 +2461,11 @@
       function executeLineReset() {
         line = new Array(NUM_STATIONS).fill(null);
         exitedList = [];
-        formInputs = { vin: "", model: "", exterior: "", interior: "" };
+        formInputs = { vin: "", brand: "", model: "", variant: "", exterior: "", interior: "" };
         vinField.value = "";
+        brandField.value = "";
         modelField.value = "";
+        variantField.value = "";
         exteriorField.value = "";
         exteriorManualField.value = "";
         exteriorManualField.classList.add("hidden");
@@ -2354,7 +2772,7 @@
                 "</tr>";
             }
           } else {
-            if (matchesFilter([sLoc, sEntry.vin, sEntry.model, sEntry.extLabel, sEntry.intLabel])) {
+            if (matchesFilter([sLoc, sEntry.vin, sEntry.brand || "", sEntry.model, sEntry.extLabel, sEntry.intLabel])) {
               rowsHtml +=
                 "<tr>" +
                 "<td><strong>" + escapeHtml(sLoc) + "</strong></td>" +
@@ -2383,7 +2801,7 @@
                 "</tr>";
             }
           } else {
-            if (matchesFilter([eLoc, eItem.vin, eItem.model, eItem.extLabel, eItem.intLabel, eItem.remarks || ""])) {
+            if (matchesFilter([eLoc, eItem.vin, eItem.brand || "", eItem.model, eItem.extLabel, eItem.intLabel, eItem.remarks || ""])) {
               rowsHtml +=
                 "<tr>" +
                 "<td><strong>" + escapeHtml(eLoc) + "</strong></td>" +
@@ -2474,6 +2892,7 @@
           nextEntry = {
             isGap: true,
             vin: null,
+            brand: null,
             model: null,
             extHex: null,
             extLabel: null,
@@ -2488,6 +2907,7 @@
         } else {
           var vin = editVinField.value.trim().toUpperCase();
           var model = editModelField.value.trim();
+          var brand = inferBrandFromModel(model) || (existing && existing.brand) || null;
           var extLabel = editExteriorField.value === "__MANUAL__"
             ? editExteriorManualField.value.trim().toUpperCase().slice(0, 3)
             : editExteriorField.value.trim().toUpperCase();
@@ -2498,7 +2918,7 @@
             return;
           }
           if (!model) {
-            editErrBox.textContent = "Please select a model / variant.";
+            editErrBox.textContent = "Please enter a model / variant.";
             return;
           }
           if (!extLabel) {
@@ -2524,6 +2944,7 @@
           nextEntry = {
             isGap: false,
             vin: vin,
+            brand: brand,
             model: model,
             extHex: resolveColorHex(extLabel, "#3b82f6"),
             extLabel: extLabel,
@@ -2579,11 +3000,11 @@
         });
       }
 
-      var ClockValue = document.getElementById("liveClockValue");
+      var clockValueEl = document.getElementById("ClockValue");
       function updateLiveClock() {
-        if (!liveClockValue) return;
+        if (!clockValueEl) return;
         var dt = currentDateTime();
-        liveClockValue.textContent = dt.date + "  |  " + dt.time;
+        clockValueEl.textContent = dt.date + "  |  " + dt.time;
       }
       updateLiveClock();
       setInterval(updateLiveClock, 1000);

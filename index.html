@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>19-Station Assembly Line Monitor — Hyundai Nishat Motor (Pvt.) Ltd</title>
+  <title>21-Station Assembly Line Monitor — Hyundai Nishat Motor (Pvt.) Ltd</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     body {
@@ -325,7 +325,7 @@
         <h1 style="margin:0;">Automotive Assembly Shop Line Monitoring (Trim Line)</h1>
       </div>
       <div class="auth-controls">
-        <strong>Active Entries:</strong> <span id="activeCount">0 / 19</span>  | 
+        <strong>Active Entries:</strong> <span id="activeCount">0 / 21</span>  | 
         <strong>Exited (FIFO):</strong> <span id="exitedCount">0</span>
         <span id="roleBadge" class="auth-badge">Guest (Read-Only)</span>
         <button type="button" id="authActionBtn" class="btn-gray" style="flex:none; padding:6px 10px;">Operator Sign In</button>
@@ -424,7 +424,8 @@
       var SUPABASE_KEY = "sb_publishable_Np81y_009PW1LNiPVa20ig_CEYB82bD";
       var ROW_ID = 1;
 
-      var NUM_STATIONS = 19;
+      var STATION_NAMES = ['Trim 01', 'Trim 02', 'Trim 03', 'Trim 04', 'Moon Roof', 'Panorama', 'Trim 05', 'Trim 06', 'Trim 07', 'Trim 08', 'Trim 09', 'Trim 10', 'Trim 11', 'Trim 12', 'Trim 13', 'Trim 14', 'Trim 15', 'Trim 16', 'Trim 17', 'Trim 18', 'Trim 19'];
+      var NUM_STATIONS = STATION_NAMES.length;
       var PER_ROW = 5;
       var line = new Array(NUM_STATIONS).fill(null);
       var exitedList = [];
@@ -509,7 +510,7 @@
       }
 
       function getStationName(stNum) {
-        return "Trim " + String(stNum).padStart(2, "0");
+        return STATION_NAMES[stNum - 1] || ("Station " + stNum);
       }
 
       function resolveColorHex(label, fallbackHex) {
@@ -944,7 +945,7 @@
         exteriorField.value = "";
         interiorField.value = "";
         errBox.textContent = "";
-        statusHtml = "Line reset. All 19 stations are empty.";
+        statusHtml = "Line reset. All " + NUM_STATIONS + " stations are empty.";
         renderAll();
         syncToCloud();
       });

@@ -148,16 +148,16 @@
       margin-top: 4px;
       min-height: 12px;
     }
-    .form-panel .live-clock-box {
+    .form-panel .clock-box {
       margin-top: 6px;
       padding: 5px 6px;
       border-radius: 4px;
     }
-    .form-panel .live-clock-label {
+    .form-panel .clock-label {
       font-size: 9px;
       margin-bottom: 2px;
     }
-    .form-panel .live-clock-value {
+    .form-panel .clock-value {
       font-size: 10px;
     }
     .line-panel {
@@ -208,7 +208,7 @@
     .btn-guest { background: #27272a; color: #f4f4f5; border: 1px solid #52525b; }
     .btn-guest:hover:not(:disabled) { background: #3f3f46; }
     .err { color: #fca5a5; font-size: 12px; margin-top: 8px; min-height: 16px; }
-    .live-clock-box {
+    .clock-box {
       margin-top: 12px;
       padding: 10px 12px;
       background: #141416;
@@ -216,14 +216,14 @@
       border-radius: 6px;
       text-align: center;
     }
-    .live-clock-label {
+    .clock-label {
       font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 0.6px;
       color: #a1a1aa;
       margin-bottom: 4px;
     }
-    .live-clock-value {
+    .clock-value {
       font-family: monospace;
       font-size: 14px;
       font-weight: bold;
@@ -578,9 +578,9 @@
           </div>
           <div id="errBox" class="err"></div>
         </form>
-        <div id="liveClockBox" class="live-clock-box">
-          <div class="live-clock-label">Live Date &amp; Time</div>
-          <div id="liveClockValue" class="live-clock-value">--</div>
+        <div id="ClockBox" class="clock-box">
+          <div class="clock-label">Date &amp; Time</div>
+          <div id="ClockValue" class="clock-value">--</div>
         </div>
       </div>
 
@@ -1363,14 +1363,14 @@
         syncToCloud();
       });
 
-      var liveClockValue = document.getElementById("liveClockValue");
-      function updateLiveClock() {
-        if (!liveClockValue) return;
+      var ClockValue = document.getElementById("ClockValue");
+      function updateClock() {
+        if (!ClockValue) return;
         var dt = currentDateTime();
-        liveClockValue.textContent = dt.date + "  |  " + dt.time;
+        ClockValue.textContent = dt.date + "  |  " + dt.time;
       }
-      updateLiveClock();
-      setInterval(updateLiveClock, 1000);
+      updateClock();
+      setInterval(updateClock, 1000);
 
       // Render UI immediately
       renderAll();

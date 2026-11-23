@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>20-Station Assembly Line Monitor — Hyundai Nishat Motor (Pvt.) Ltd</title>
+  <title>37-Station Assembly Line Monitor — Hyundai Nishat Motor (Pvt.) Ltd</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     body {
@@ -110,12 +110,55 @@
     }
     .main-wrap { display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start; }
     .form-panel {
-      width: 310px;
+      width: 196px;
       max-width: 100%;
       background: rgba(24, 24, 27, 0.92);
       border: 1px solid #2e2e32;
-      border-radius: 8px;
-      padding: 14px;
+      border-radius: 6px;
+      padding: 8px;
+    }
+    .form-panel h2 {
+      font-size: 12px !important;
+      margin: 0 0 6px 0 !important;
+    }
+    .form-panel .field {
+      margin-bottom: 5px;
+    }
+    .form-panel .field label {
+      font-size: 10px;
+      margin-bottom: 2px;
+    }
+    .form-panel .field input,
+    .form-panel .field select {
+      padding: 4px 5px;
+      font-size: 11px;
+      border-radius: 4px;
+    }
+    .form-panel button {
+      padding: 5px 6px;
+      font-size: 11px;
+      border-radius: 4px;
+    }
+    .form-panel .btn-row {
+      gap: 4px;
+      margin-top: 4px;
+    }
+    .form-panel .err {
+      font-size: 10px;
+      margin-top: 4px;
+      min-height: 12px;
+    }
+    .form-panel .live-clock-box {
+      margin-top: 6px;
+      padding: 5px 6px;
+      border-radius: 4px;
+    }
+    .form-panel .live-clock-label {
+      font-size: 9px;
+      margin-bottom: 2px;
+    }
+    .form-panel .live-clock-value {
+      font-size: 10px;
     }
     .line-panel {
       flex: 1;
@@ -165,7 +208,7 @@
     .btn-guest { background: #27272a; color: #f4f4f5; border: 1px solid #52525b; }
     .btn-guest:hover:not(:disabled) { background: #3f3f46; }
     .err { color: #fca5a5; font-size: 12px; margin-top: 8px; min-height: 16px; }
-    .clock-box {
+    .live-clock-box {
       margin-top: 12px;
       padding: 10px 12px;
       background: #141416;
@@ -173,14 +216,14 @@
       border-radius: 6px;
       text-align: center;
     }
-    .clock-label {
+    .live-clock-label {
       font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 0.6px;
       color: #a1a1aa;
       margin-bottom: 4px;
     }
-    .clock-value {
+    .live-clock-value {
       font-family: monospace;
       font-size: 14px;
       font-weight: bold;
@@ -196,16 +239,103 @@
       border-bottom: 1px dashed #2e2e32;
     }
     .stack-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .diagram-scroll-wrap {
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+    .diagram-grid {
+      display: inline-flex;
+      flex-direction: column;
+      min-width: 100%;
+    }
+    .diagram-row {
+      display: flex;
+      flex-wrap: nowrap;
+      align-items: center;
+      gap: 1px;
+      width: 100%;
+    }
+    .diagram-row-right {
+      justify-content: flex-end;
+    }
+    .diagram-row-left {
+      justify-content: flex-start;
+    }
+    .vertical-bridge-row {
+      display: flex;
+      width: 100%;
+      padding: 1px 0;
+    }
+    .vertical-bridge-right {
+      justify-content: flex-end;
+    }
+    .vertical-bridge-left {
+      justify-content: flex-start;
+    }
+    .vertical-bridge-cell {
+      width: 44px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 10px;
+      line-height: 1;
+      color: #60a5fa;
+      user-select: none;
+    }
+    .flow-connector {
+      flex: 0 0 auto;
+      font-weight: bold;
+      font-size: 8px;
+      color: #60a5fa;
+      user-select: none;
+      padding: 0;
+    }
     .station-box {
-      width: 135px;
-      min-height: 140px;
+      position: relative;
+      flex: 0 0 auto;
+      width: 44px;
+      min-height: 36px;
       background: #141416;
       border: 1px solid #2b2b30;
-      border-radius: 8px;
-      padding: 8px;
+      border-radius: 3px;
+      padding: 1.5px 2px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      cursor: pointer;
+    }
+    .station-box:hover {
+      z-index: 30;
+      border-color: #93c5fd;
+    }
+    .station-tooltip {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      min-width: 220px;
+      max-width: 280px;
+      background: #09090b;
+      color: #f4f4f5;
+      border: 1px solid #60a5fa;
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 12px;
+      line-height: 1.45;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.75);
+      pointer-events: none;
+    }
+    .tt-title {
+      font-weight: bold;
+      color: #93c5fd;
+      margin-bottom: 6px;
+      border-bottom: 1px solid #27272a;
+      padding-bottom: 4px;
+    }
+    .tt-row {
+      margin-bottom: 3px;
+      word-break: break-word;
+    }
+    .tt-label {
+      color: #a1a1aa;
     }
     .station-box.has-car { border-color: #3b82f6; background: #141b26; }
     .station-box.is-gap { border-color: #8b5cf6; border-style: dashed; background: #1a1526; }
@@ -213,52 +343,72 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 12px;
+      gap: 1px;
+      font-size: 6.5px;
       font-weight: bold;
-      margin-bottom: 6px;
+      margin-bottom: 1px;
+      line-height: 1;
     }
     .st-badge {
       background: #1e1e22;
       color: #93c5fd;
-      padding: 2px 6px;
-      border-radius: 4px;
+      padding: 0.5px 1.5px;
+      border-radius: 2px;
       border: 1px solid #323238;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
-    .arrow-txt { color: #a1a1aa; }
+    .arrow-txt { color: #a1a1aa; font-size: 6.5px; }
     .bay-empty {
       flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
       border: 1px dashed #2e2e32;
-      border-radius: 6px;
+      border-radius: 2px;
       color: #71717a;
-      font-size: 11px;
+      font-size: 6.5px;
       text-transform: uppercase;
     }
     .car-box {
       background: #1c1c20;
       border: 1px solid #323238;
-      border-radius: 6px;
-      padding: 6px;
-      font-size: 11px;
+      border-radius: 2px;
+      padding: 1px 1.5px;
+      font-size: 7.5px;
+      line-height: 1.1;
     }
     .gap-box {
       background: #141417;
       border: 1px dashed #8b5cf6;
-      border-radius: 6px;
-      padding: 6px;
-      font-size: 11px;
+      border-radius: 2px;
+      padding: 1px 1.5px;
+      font-size: 7.5px;
+      line-height: 1.1;
     }
     .gap-title {
       font-weight: bold;
       color: #ddd6fe;
-      margin-bottom: 4px;
+      margin-bottom: 1px;
       font-family: monospace;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
-    .car-head { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
-    .car-vin { font-weight: bold; font-family: monospace; color: #fafafa; word-break: break-all; }
-    .car-model { color: #d4d4d8; margin-bottom: 4px; }
+    .car-head { display: flex; align-items: center; gap: 3px; margin-bottom: 2px; }
+    .car-vin { font-weight: bold; font-family: monospace; color: #fafafa; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .car-model { color: #d4d4d8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .car-color { color: #a1a1aa; font-size: 7px; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .mini-chip {
+      display: inline-block;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      margin-right: 2px;
+      vertical-align: middle;
+      border: 1px solid #71717a;
+    }
     .car-meta { color: #a1a1aa; margin-bottom: 2px; }
     .color-chip {
       display: inline-block;
@@ -346,7 +496,7 @@
         <h1 style="margin:0;">Automotive Assembly Shop Line Monitoring (Trim Line)</h1>
       </div>
       <div class="auth-controls">
-        <strong>Active Entries:</strong> <span id="activeCount">0 / 20</span>  | 
+        <strong>Active Entries:</strong> <span id="activeCount">0 / 37</span>  | 
         <strong>Exited (FIFO):</strong> <span id="exitedCount">0</span>
         <span id="roleBadge" class="auth-badge">Guest (Read-Only)</span>
         <button type="button" id="authActionBtn" class="btn-gray" style="flex:none; padding:6px 10px;">Operator Sign In</button>
@@ -354,7 +504,7 @@
     </div>
 
     <div id="statusBox" class="status-box">
-      System ready. Add a vehicle or gap to place it in <strong>Trim 01</strong> and shift existing entries forward.
+      System ready. Add a vehicle or gap to place it in <strong>TRIM 01</strong> and shift existing entries forward.
     </div>
 
     <div class="main-wrap">
@@ -362,8 +512,8 @@
         <h2 style="font-size:15px; margin:0 0 10px 0;">Vehicle Entry (Trim 01)</h2>
         <form id="carForm">
           <div class="field">
-            <label for="vinField">Vehicle VIN Number</label>
-            <input type="text" id="vinField" placeholder="e.g. VIN1001A" required />
+            <label for="vinField">Vehicle VIN Number (6 Digits)</label>
+            <input type="text" id="vinField" placeholder="e.g. 100123" maxlength="6" pattern="[0-9]{6}" inputmode="numeric" required />
           </div>
           <div class="field">
   <label for="modelField">Model / Variant</label>
@@ -381,16 +531,42 @@
     <option value="NX4 S2">NX4 S2</option>
     <option value="LX3 HEV S1 (Smart)">LX3 HEV S1 (Smart)</option>
     <option value="LX3 HEV S2 (Caligrpahy)">LX3 HEV S2 (Caligrpahy)</option>
-    <option value="J7 PREM PHEV">J7 PREM PHEV</option>
-    <option value="J5 PREM">J5 PREM</option>
-    <option value="J5 COMF">J5 COMF</option>
+    <option value="J7 Prem">J7 Prem</option>
+    <option value="J5 Prem">J5 Prem</option>
+    <option value="J5 Comf">J5 Comf</option>
     <option value="J5 BEV">J5 BEV</option>
-    <option value="O7 PREM PHEV">O7 PREM PHEV</option>
+    <option value="O7">O7</option>
   </select>
 </div>
           <div class="field">
             <label for="exteriorField">Exterior Color</label>
-            <input type="text" id="exteriorField" placeholder="e.g. NKW" required />
+            <select id="exteriorField" required>
+              <option value="" disabled selected>Select Exterior</option>
+              <option value="NKW">NKW</option>
+              <option value="CCB">CCB</option>
+              <option value="MMS">MMS</option>
+              <option value="RBG">RBG</option>
+              <option value="NPG">NPG</option>
+              <option value="MOG">MOG</option>
+              <option value="NUG">NUG</option>
+              <option value="EGM">EGM</option>
+              <option value="NDB">NDB</option>
+              <option value="NMG">NMG</option>
+              <option value="WYW">WYW</option>
+              <option value="NBA">NBA</option>
+              <option value="XB2">XB2</option>
+              <option value="NT2">NT2</option>
+              <option value="SMH">SMH</option>
+              <option value="2RP">2RP</option>
+              <option value="R2F">R2F</option>
+              <option value="M2F">M2F</option>
+              <option value="NKA">NKA</option>
+              <option value="TB5">TB5</option>
+              <option value="R8N">R8N</option>
+              <option value="CBP">CBP</option>
+              <option value="__MANUAL__">Manual Code...</option>
+            </select>
+            <input type="text" id="exteriorManualField" class="hidden" placeholder="3-char code" maxlength="3" style="margin-top:3px;" />
           </div>
           <div class="field">
             <label for="interiorField">Interior Color</label>
@@ -402,9 +578,9 @@
           </div>
           <div id="errBox" class="err"></div>
         </form>
-        <div id="ClockBox" class="clock-box">
-          <div class="clock-label">Date &amp; Time</div>
-          <div id="ClockValue" class="clock-value">--</div>
+        <div id="liveClockBox" class="live-clock-box">
+          <div class="live-clock-label">Live Date &amp; Time</div>
+          <div id="liveClockValue" class="live-clock-value">--</div>
         </div>
       </div>
 
@@ -414,7 +590,7 @@
           <button type="button" id="resetBtn" class="btn-red">Reset</button>
         </div>
         <div class="flow-note">
-          Vehicles and Null entries enter at Trim 01 and advance sequentially through Trim 19 (FIFO exit).
+          Vehicles and Null entries enter at TRIM 01 and advance sequentially through FINAL 09 (FIFO exit) following the line diagram.
         </div>
         <div id="stationsContainer"></div>
       </div>
@@ -443,18 +619,19 @@
     </div>
   </div>
 
+    <div id="stationHoverTooltip" class="station-tooltip"></div>
   <script>
     (function () {
       var SUPABASE_URL = "https://lcymqrfkigibvayokuoy.supabase.co";
       var SUPABASE_KEY = "sb_publishable_Np81y_009PW1LNiPVa20ig_CEYB82bD";
       var ROW_ID = 1;
 
-      var STATION_NAMES = ['Trim 01', 'Trim 02', 'Trim 03', 'Trim 04', 'Panorama', 'Trim 05', 'Trim 06', 'Trim 07', 'Trim 08', 'Trim 09', 'Trim 10', 'Trim 11', 'Trim 12', 'Trim 13', 'Trim 14', 'Trim 15', 'Trim 16', 'Trim 17', 'Trim 18', 'Trim 19'];
+      var STATION_NAMES = ['TRIM 01', 'TRIM 02', 'TRIM 03', 'TRIM 04', 'PANORAMA', 'TRIM 05', 'TRIM 06', 'TRIM 07', 'TRIM 08', 'TRIM 09', 'TRIM 10', 'TRIM 11', 'TRIM 12', 'TRIM 13', 'TRIM 14', 'TRIM 15', 'TRIM 16', 'TRIM 17', 'TRIM 18', 'TRIM 19', 'CHASSIS 01', 'CHASSIS 02', 'CHASSIS 03', 'CHASSIS 04', 'CHASSIS 05', 'CHASSIS 06', 'CHASSIS 07', 'CHASSIS 08', 'FINAL 01', 'FINAL 02', 'FINAL 03', 'FINAL 04', 'FINAL 05', 'FINAL 06', 'FINAL 07', 'FINAL 08', 'FINAL 09'];
       var NUM_STATIONS = STATION_NAMES.length;
       var PER_ROW = 5;
       var line = new Array(NUM_STATIONS).fill(null);
       var exitedList = [];
-      var statusHtml = "System ready. Add a vehicle or gap to place it in <strong>Trim 01</strong> and shift existing entries forward.";
+      var statusHtml = "System ready. Add a vehicle or gap to place it in <strong>TRIM 01</strong> and shift existing entries forward.";
       var formInputs = { vin: "", model: "", exterior: "", interior: "" };
 
       var currentUser = null;
@@ -475,6 +652,8 @@
       var vinField = document.getElementById("vinField");
       var modelField = document.getElementById("modelField");
       var exteriorField = document.getElementById("exteriorField");
+      var exteriorManualField = document.getElementById("exteriorManualField");
+      var EXT_PRESETS = ["NKW", "CCB", "MMS", "RBG", "NPG", "MOG", "NUG", "EGM", "NDB", "NMG", "WYW", "NBA", "XB2", "NT2", "SMH", "2RP", "R2F", "M2F", "NKA", "TB5", "R8N", "CBP"];
       var interiorField = document.getElementById("interiorField");
       var submitCarBtn = document.getElementById("submitCarBtn");
       var errBox = document.getElementById("errBox");
@@ -487,9 +666,41 @@
       var resetBtn = document.getElementById("resetBtn");
 
       var COLOR_MAP = {
-        blue: "#2563eb", red: "#dc2626", green: "#16a34a", white: "#f4f4f5",
-        nkw: "#f4f4f5", gold: "#eab308", slate: "#3f3f46", tan: "#78350f",
-        black: "#18181b", grey: "#a1a1aa", gray: "#a1a1aa", silver: "#d4d4d8"
+        // Exterior color code equivalents for round circle indicators
+        nkw: "#ffffff",
+        wyw: "#ffffff",
+        white: "#ffffff",
+        ccb: "#09090b",
+        nba: "#09090b",
+        nka: "#09090b",
+        black: "#09090b",
+        mms: "#9ca3af",
+        npg: "#c084fc",
+        egm: "#d1d5db",
+        xb2: "#2563eb",
+        tb5: "#0d9488",
+        nt2: "#4b5563",
+        smh: "#d4d4d8",
+        silver: "#d4d4d8",
+        "2rp": "#dc2626",
+        red: "#dc2626",
+        r2f: "#14532d",
+        r8n: "#14532d",
+        m2f: "#374151",
+        nmg: "#86efac",
+        ndb: "#1e3a8a",
+        mog: "#6b705c",
+        nug: "#86efac",
+        rbg: "#15803d",
+        cbp: "#3b82f6",
+        // Common fallback aliases
+        blue: "#2563eb",
+        green: "#16a34a",
+        gold: "#eab308",
+        slate: "#3f3f46",
+        tan: "#78350f",
+        grey: "#a1a1aa",
+        gray: "#a1a1aa"
       };
 
       var db = null;
@@ -519,6 +730,7 @@
         vinField.disabled = !editable;
         modelField.disabled = !editable;
         exteriorField.disabled = !editable;
+        exteriorManualField.disabled = !editable;
         interiorField.disabled = !editable;
         submitCarBtn.disabled = !editable;
         gapBtn.disabled = !editable;
@@ -579,7 +791,7 @@
           model: entry.model !== undefined ? entry.model : null,
           extHex: entry.extHex !== undefined ? entry.extHex : null,
           extLabel: entry.extLabel !== undefined ? entry.extLabel : null,
-          intHex: entry.intHex !== undefined ? entry.intHex : null,
+          intHex: entry.intHex !== undefined ? entry.intHex : "transparent",
           intLabel: entry.intLabel !== undefined ? entry.intLabel : null,
           entryDate: entry.entryDate || "",
           entryTime: entry.entryTime || "",
@@ -669,93 +881,230 @@
         }
       }
 
+      function getExteriorValue() {
+        if (exteriorField.value === "__MANUAL__") {
+          return exteriorManualField.value.trim().toUpperCase().slice(0, 3);
+        }
+        return exteriorField.value.trim().toUpperCase();
+      }
+
+      function syncExteriorUI(val) {
+        var clean = (val || "").trim().toUpperCase();
+        if (!clean) {
+          if (document.activeElement !== exteriorField) {
+            exteriorField.value = "";
+        exteriorManualField.value = "";
+        exteriorManualField.classList.add("hidden");
+          }
+          exteriorManualField.classList.add("hidden");
+          if (document.activeElement !== exteriorManualField) {
+            exteriorManualField.value = "";
+          }
+          return;
+        }
+        if (EXT_PRESETS.indexOf(clean) !== -1) {
+          if (document.activeElement !== exteriorField) {
+            exteriorField.value = clean;
+          }
+          exteriorManualField.classList.add("hidden");
+          if (document.activeElement !== exteriorManualField) {
+            exteriorManualField.value = "";
+          }
+        } else {
+          if (document.activeElement !== exteriorField) {
+            exteriorField.value = "__MANUAL__";
+          }
+          exteriorManualField.classList.remove("hidden");
+          if (document.activeElement !== exteriorManualField && exteriorManualField.value !== clean) {
+            exteriorManualField.value = clean;
+          }
+        }
+      }
+
       function renderInputs() {
         syncInputValue(vinField, formInputs.vin);
         syncInputValue(modelField, formInputs.model);
-        syncInputValue(exteriorField, formInputs.exterior);
+        syncExteriorUI(formInputs.exterior);
         syncInputValue(interiorField, formInputs.interior);
+      }
+
+      var stationHoverTooltip = document.getElementById("stationHoverTooltip");
+
+      function positionTooltip(e) {
+        if (!stationHoverTooltip || stationHoverTooltip.style.display !== "block") return;
+        var pad = 14;
+        var rect = stationHoverTooltip.getBoundingClientRect();
+        var x = e.clientX + pad;
+        var y = e.clientY + pad;
+        if (x + rect.width > window.innerWidth - 8) {
+          x = Math.max(8, e.clientX - rect.width - pad);
+        }
+        if (y + rect.height > window.innerHeight - 8) {
+          y = Math.max(8, e.clientY - rect.height - pad);
+        }
+        stationHoverTooltip.style.left = x + "px";
+        stationHoverTooltip.style.top = y + "px";
+      }
+
+      function showStationTooltip(stationLabel, entry, e) {
+        if (!stationHoverTooltip) return;
+        var html = '<div class="tt-title">' + stationLabel + "</div>";
+        if (!entry) {
+          html += '<div class="tt-row"><span class="tt-label">Status:</span> Empty Bay</div>';
+        } else if (entry.isGap) {
+          html +=
+            '<div class="tt-row"><span class="tt-label">VIN Number:</span> Null</div>' +
+            '<div class="tt-row"><span class="tt-label">Model / Variant:</span> Null</div>' +
+            '<div class="tt-row"><span class="tt-label">Exterior Color:</span> Null</div>' +
+            '<div class="tt-row"><span class="tt-label">Interior Color:</span> Null</div>' +
+            '<div class="tt-row"><span class="tt-label">Date &amp; Time:</span> ' + ((entry.entryDate || "-") + " " + (entry.entryTime || "-")).trim() + "</div>";
+        } else {
+          var dtText = ((entry.entryDate || "") + " " + (entry.entryTime || "")).trim() || "-";
+          html +=
+            '<div class="tt-row"><span class="tt-label">VIN Number:</span> <strong>' + entry.vin + "</strong></div>" +
+            '<div class="tt-row"><span class="tt-label">Model / Variant:</span> ' + entry.model + "</div>" +
+            '<div class="tt-row"><span class="tt-label">Exterior Color:</span> <span class="color-chip" style="background:' + entry.extHex + '"></span>' + entry.extLabel + "</div>" +
+            '<div class="tt-row"><span class="tt-label">Interior Color:</span> <span class="color-chip" style="background:transparent"></span>' + entry.intLabel + "</div>" +
+            '<div class="tt-row"><span class="tt-label">Date &amp; Time:</span> ' + dtText + "</div>";
+        }
+        stationHoverTooltip.innerHTML = html;
+        stationHoverTooltip.style.display = "block";
+        positionTooltip(e);
+      }
+
+      function hideStationTooltip() {
+        if (stationHoverTooltip) {
+          stationHoverTooltip.style.display = "none";
+        }
+      }
+
+      function createStationCard(stIdx, badgeRightText) {
+        var stNum = stIdx + 1;
+        var stationLabel = getStationName(stNum);
+        var entry = line[stIdx];
+
+        var boxClass = "station-box";
+        if (entry) {
+          boxClass += entry.isGap ? " is-gap" : " has-car";
+        }
+
+        var box = document.createElement("div");
+        box.className = boxClass;
+
+        var inner =
+          '<div class="station-top">' +
+          '<span class="st-badge">' + stationLabel + "</span>" +
+          '<span class="arrow-txt">' + (badgeRightText || "") + "</span>" +
+          "</div>";
+
+        if (entry) {
+          if (entry.isGap) {
+            inner +=
+              '<div class="gap-box">' +
+              '<div class="gap-title">Null</div>' +
+              '<div class="car-model">Null</div>' +
+              '<div class="car-color">Null</div>' +
+              '<div class="car-color">Null</div>' +
+              "</div>";
+          } else {
+            inner +=
+              '<div class="car-box">' +
+              '<div class="car-vin">' + entry.vin + "</div>" +
+              '<div class="car-model">' + entry.model + "</div>" +
+              '<div class="car-color"><span class="mini-chip" style="background:' + entry.extHex + '"></span>' + entry.extLabel + "</div>" +
+              '<div class="car-color">I/C: ' + entry.intLabel + "</div>" +
+              "</div>";
+          }
+        } else {
+          inner += '<div class="bay-empty">Empty</div>';
+        }
+
+        box.innerHTML = inner;
+
+        box.addEventListener("mouseenter", function (e) {
+          showStationTooltip(stationLabel, entry, e);
+        });
+        box.addEventListener("mousemove", function (e) {
+          positionTooltip(e);
+        });
+        box.addEventListener("mouseleave", function () {
+          hideStationTooltip();
+        });
+
+        return box;
       }
 
       function renderStations() {
         stationsContainer.innerHTML = "";
-        var totalRows = Math.ceil(NUM_STATIONS / PER_ROW);
+        hideStationTooltip();
 
-        for (var r = 0; r < totalRows; r++) {
-          var start = r * PER_ROW;
-          var end = Math.min(start + PER_ROW, NUM_STATIONS);
-          var indices = [];
+        var scrollWrap = document.createElement("div");
+        scrollWrap.className = "diagram-scroll-wrap";
 
-          for (var k = start; k < end; k++) {
-            indices.push(k);
+        var gridDiv = document.createElement("div");
+        gridDiv.className = "diagram-grid";
+
+        // Row 1 (right-aligned so PANORAMA sits directly on top of TRIM 05)
+        var row1Div = document.createElement("div");
+        row1Div.className = "diagram-row diagram-row-right";
+        for (var i = 0; i < 5; i++) {
+          row1Div.appendChild(createStationCard(i, i === 4 ? "v" : ""));
+          if (i < 4) {
+            var conn1 = document.createElement("span");
+            conn1.className = "flow-connector";
+            conn1.textContent = "->";
+            row1Div.appendChild(conn1);
           }
-
-          var rowDiv = document.createElement("div");
-          rowDiv.className = "stack-row";
-
-          for (var m = 0; m < indices.length; m++) {
-            var stIdx = indices[m];
-            var stNum = stIdx + 1;
-            var entry = line[stIdx];
-            var dirText = "";
-
-            if (stNum === NUM_STATIONS) {
-              dirText = "EXIT";
-            } else if (m < indices.length - 1) {
-              dirText = "->";
-            } else {
-              dirText = "↳";
-            }
-
-            var boxClass = "station-box";
-            if (entry) {
-              boxClass += entry.isGap ? " is-gap" : " has-car";
-            }
-
-            var box = document.createElement("div");
-            box.className = boxClass;
-
-            var stationLabel = getStationName(stNum);
-            var inner =
-              '<div class="station-top">' +
-              '<span class="st-badge">' + stationLabel + "</span>" +
-              '<span class="arrow-txt">' + dirText + "</span>" +
-              "</div>";
-
-            if (entry) {
-              var dateDisplay = entry.entryDate ? "Date: " + entry.entryDate + "<br>" : "";
-              if (entry.isGap) {
-                inner +=
-                  '<div class="gap-box">' +
-                  '<div class="gap-title">Null</div>' +
-                  '<div class="car-meta">VIN: Null</div>' +
-                  '<div class="car-meta">Model: Null</div>' +
-                  '<div class="car-meta">Ext: Null</div>' +
-                  '<div class="car-meta">Int: Null</div>' +
-                  '<div class="gap-time">' + dateDisplay + "Time: " + entry.entryTime + "</div>" +
-                  "</div>";
-              } else {
-                inner +=
-                  '<div class="car-box">' +
-                  '<div class="car-head">' +
-                  makeCarSvg(entry.extHex, entry.intHex) +
-                  '<div class="car-vin">' + entry.vin + "</div>" +
-                  "</div>" +
-                  '<div class="car-model">' + entry.model + "</div>" +
-                  '<div class="car-meta"><span class="color-chip" style="background:' + entry.extHex + '"></span>Ext: ' + entry.extLabel + "</div>" +
-                  '<div class="car-meta"><span class="color-chip" style="background:' + entry.intHex + '"></span>Int: ' + entry.intLabel + "</div>" +
-                  '<div class="car-time">' + dateDisplay + "Time: " + entry.entryTime + "</div>" +
-                  "</div>";
-              }
-            } else {
-              inner += '<div class="bay-empty">Empty Bay</div>';
-            }
-
-            box.innerHTML = inner;
-            rowDiv.appendChild(box);
-          }
-
-          stationsContainer.appendChild(rowDiv);
         }
+        gridDiv.appendChild(row1Div);
+
+        // Vertical connector directly between PANORAMA and TRIM 05
+        var bridge1 = document.createElement("div");
+        bridge1.className = "vertical-bridge-row vertical-bridge-right";
+        bridge1.innerHTML = '<div class="vertical-bridge-cell">↓</div>';
+        gridDiv.appendChild(bridge1);
+
+        // Row 2 (CHASSIS 04 ... TRIM 05, right-to-left flow)
+        var row2Indices = [];
+        for (var j = 23; j >= 5; j--) {
+          row2Indices.push(j);
+        }
+        var row2Div = document.createElement("div");
+        row2Div.className = "diagram-row diagram-row-left";
+        for (var r2 = 0; r2 < row2Indices.length; r2++) {
+          var idx2 = row2Indices[r2];
+          row2Div.appendChild(createStationCard(idx2, idx2 === 23 ? "v" : ""));
+          if (r2 < row2Indices.length - 1) {
+            var conn2 = document.createElement("span");
+            conn2.className = "flow-connector";
+            conn2.textContent = "<-";
+            row2Div.appendChild(conn2);
+          }
+        }
+        gridDiv.appendChild(row2Div);
+
+        // Vertical connector directly between CHASSIS 04 and CHASSIS 05
+        var bridge2 = document.createElement("div");
+        bridge2.className = "vertical-bridge-row vertical-bridge-left";
+        bridge2.innerHTML = '<div class="vertical-bridge-cell">↓</div>';
+        gridDiv.appendChild(bridge2);
+
+        // Row 3 (CHASSIS 05 ... FINAL 09, left-to-right flow)
+        var row3Div = document.createElement("div");
+        row3Div.className = "diagram-row diagram-row-left";
+        for (var k = 24; k < NUM_STATIONS; k++) {
+          row3Div.appendChild(createStationCard(k, k === NUM_STATIONS - 1 ? "EXIT" : ""));
+          if (k < NUM_STATIONS - 1) {
+            var conn3 = document.createElement("span");
+            conn3.className = "flow-connector";
+            conn3.textContent = "->";
+            row3Div.appendChild(conn3);
+          }
+        }
+        gridDiv.appendChild(row3Div);
+
+        scrollWrap.appendChild(gridDiv);
+        stationsContainer.appendChild(scrollWrap);
       }
 
       function renderHistory() {
@@ -788,7 +1137,7 @@
               '<td style="font-family:monospace; font-weight:bold;">' + item.vin + "</td>" +
               "<td>" + item.model + "</td>" +
               '<td><span class="color-chip" style="background:' + item.extHex + '"></span>' + item.extLabel + "</td>" +
-              '<td><span class="color-chip" style="background:' + item.intHex + '"></span>' + item.intLabel + "</td>" +
+              '<td><span class="color-chip" style="background:transparent"></span>' + item.intLabel + "</td>" +
               '<td style="font-family:monospace;">' + entryStamp + "</td>" +
               '<td style="font-family:monospace;">' + exitStamp + "</td>" +
               "</tr>";
@@ -861,9 +1210,38 @@
         });
       }
 
+      vinField.addEventListener("input", function () {
+        var digitsOnly = vinField.value.replace(/\D/g, "").slice(0, 6);
+        if (vinField.value !== digitsOnly) {
+          vinField.value = digitsOnly;
+        }
+      });
       attachInputSync(vinField, "vin");
       attachInputSync(modelField, "model");
-      attachInputSync(exteriorField, "exterior");
+      exteriorField.addEventListener("change", function () {
+        if (!canEdit()) return;
+        if (exteriorField.value === "__MANUAL__") {
+          exteriorManualField.classList.remove("hidden");
+          formInputs.exterior = exteriorManualField.value.trim().toUpperCase().slice(0, 3);
+          syncToCloud();
+          exteriorManualField.focus();
+        } else {
+          exteriorManualField.classList.add("hidden");
+          exteriorManualField.value = "";
+          formInputs.exterior = exteriorField.value;
+          syncToCloud();
+        }
+      });
+      exteriorManualField.addEventListener("input", function () {
+        var trimmed = exteriorManualField.value.toUpperCase().slice(0, 3);
+        if (exteriorManualField.value !== trimmed) {
+          exteriorManualField.value = trimmed;
+        }
+        if (!canEdit()) return;
+        formInputs.exterior = trimmed;
+        syncToCloud();
+      });
+
       attachInputSync(interiorField, "interior");
 
       loginForm.addEventListener("submit", async function (e) {
@@ -917,11 +1295,21 @@
 
         var vin = vinField.value.trim().toUpperCase();
         var model = modelField.value.trim();
-        var extLabel = exteriorField.value.trim();
+        var extLabel = getExteriorValue();
+        if (!extLabel) {
+          errBox.textContent = exteriorField.value === "__MANUAL__"
+            ? "Please enter a manual exterior code."
+            : "Please select an exterior color.";
+          return;
+        }
         var intLabel = interiorField.value.trim();
 
-        if (!vin) {
-          errBox.textContent = "Please enter a VIN number.";
+        if (!/^\d{1,6}$/.test(vin)) {
+          errBox.textContent = "VIN number must be up to 6 digits.";
+          return;
+        }
+        if (extLabel.length > 3) {
+          errBox.textContent = "Exterior color code must be at most 3 characters.";
           return;
         }
         if (vinExists(vin)) {
@@ -934,7 +1322,7 @@
           model: model,
           extHex: resolveColorHex(extLabel, "#3b82f6"),
           extLabel: extLabel,
-          intHex: resolveColorHex(intLabel, "#3f3f46"),
+          intHex: "transparent",
           intLabel: intLabel
         });
 
@@ -942,6 +1330,8 @@
         vinField.value = "";
         modelField.value = "";
         exteriorField.value = "";
+        exteriorManualField.value = "";
+        exteriorManualField.classList.add("hidden");
         interiorField.value = "";
         renderAll();
         syncToCloud();
@@ -964,6 +1354,8 @@
         vinField.value = "";
         modelField.value = "";
         exteriorField.value = "";
+        exteriorManualField.value = "";
+        exteriorManualField.classList.add("hidden");
         interiorField.value = "";
         errBox.textContent = "";
         statusHtml = "Line reset. All " + NUM_STATIONS + " stations are empty.";
@@ -971,14 +1363,14 @@
         syncToCloud();
       });
 
-      var ClockValue = document.getElementById("ClockValue");
-      function updateClock() {
-        if (!ClockValue) return;
+      var liveClockValue = document.getElementById("liveClockValue");
+      function updateLiveClock() {
+        if (!liveClockValue) return;
         var dt = currentDateTime();
-        ClockValue.textContent = dt.date + "  |  " + dt.time;
+        liveClockValue.textContent = dt.date + "  |  " + dt.time;
       }
-      updateClock();
-      setInterval(updateClock, 1000);
+      updateLiveClock();
+      setInterval(updateLiveClock, 1000);
 
       // Render UI immediately
       renderAll();

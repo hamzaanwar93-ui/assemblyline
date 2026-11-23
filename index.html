@@ -440,12 +440,21 @@
       font-size: 10px;
       line-height: 1.3;
     }
-        .tab-bar {
+    .tab-bar {
       display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
       gap: 8px;
       margin-bottom: 12px;
       border-bottom: 1px solid #2e2e32;
       padding-bottom: 8px;
+    }
+    .tab-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
     }
     .tab-btn {
       padding: 7px 14px;
@@ -465,6 +474,147 @@
       background: #2563eb;
       color: #ffffff;
       border-color: #3b82f6;
+    }
+    .page-btn {
+      padding: 7px 14px;
+      border-radius: 6px;
+      background: #18181b;
+      color: #d4d4d8;
+      border: 1px solid #3f3f46;
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .page-btn:hover:not(:disabled) {
+      background: #27272a;
+      color: #ffffff;
+    }
+    .page-btn.active {
+      background: #0d9488;
+      color: #ffffff;
+      border-color: #14b8a6;
+    }
+    /* Stacked Left-to-Right Layout for Trim, Chassis, and Final pages */
+    .zone-page-panel {
+      background: rgba(24, 24, 27, 0.92);
+      border: 1px solid #2e2e32;
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .zone-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #2e2e32;
+    }
+    .zone-summary-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      font-size: 12px;
+    }
+    .zone-badge {
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: #141416;
+      border: 1px solid #3f3f46;
+      color: #e4e4e7;
+    }
+    .zone-stacked-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+      gap: 12px;
+      align-items: stretch;
+    }
+    .zone-station-card {
+      background: #141416;
+      border: 1px solid #2e2e32;
+      border-radius: 8px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 124px;
+      cursor: pointer;
+      transition: border-color 0.15s ease, transform 0.15s ease;
+    }
+    .zone-station-card:hover {
+      border-color: #93c5fd;
+      transform: translateY(-1px);
+    }
+    .zone-station-card.has-car {
+      border-color: #3b82f6;
+      background: #141b26;
+    }
+    .zone-station-card.is-gap {
+      border-color: #8b5cf6;
+      border-style: dashed;
+      background: #1a1526;
+    }
+    .zone-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+    .zone-st-badge {
+      background: #1e1e22;
+      color: #93c5fd;
+      padding: 3px 7px;
+      border-radius: 4px;
+      border: 1px solid #323238;
+      font-size: 11px;
+      font-weight: bold;
+    }
+    .zone-seq-tag {
+      font-size: 10px;
+      color: #a1a1aa;
+      font-family: monospace;
+    }
+    .zone-card-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 4px;
+      font-size: 12px;
+    }
+    .zone-vin {
+      font-family: monospace;
+      font-size: 15px;
+      font-weight: bold;
+      color: #fafafa;
+    }
+    .zone-model {
+      color: #e4e4e7;
+      font-weight: 600;
+      font-size: 12px;
+    }
+    .zone-detail-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #a1a1aa;
+      font-size: 11px;
+    }
+    .zone-empty-state {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px dashed #2e2e32;
+      border-radius: 6px;
+      color: #71717a;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      min-height: 74px;
     }
     .edit-panel {
       background: rgba(24, 24, 27, 0.92);
@@ -524,9 +674,49 @@
       padding: 14px;
       overflow-x: auto;
     }
+    .remarks-cell-wrap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      min-width: 190px;
+    }
+    .remarks-input {
+      flex: 1;
+      min-width: 120px;
+      padding: 5px 7px;
+      border-radius: 4px;
+      border: 1px solid #3f3f46;
+      background: #121212;
+      color: #fafafa;
+      font-size: 12px;
+    }
+    .remarks-input:focus {
+      outline: none;
+      border-color: #60a5fa;
+    }
     table { width: 100%; border-collapse: collapse; font-size: 13px; }
     th, td { text-align: left; padding: 8px; border-bottom: 1px solid #2b2b30; }
     th { background: #141416; color: #a1a1aa; font-size: 11px; text-transform: uppercase; }
+    /* Modal overlay for password re-authentication on Reset */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      background: rgba(0, 0, 0, 0.78);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .modal-card {
+      width: 100%;
+      max-width: 390px;
+      background: #18181b;
+      border: 1px solid #3f3f46;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.85);
+    }
     .hidden { display: none !important; }
   </style>
 </head>
@@ -569,10 +759,10 @@
     <div class="topbar">
       <div>
         <div class="brand-tag">Hyundai Nishat Motor (Pvt.) Ltd.</div>
-        <h1 style="margin:0;">Automotive Assembly Shop Line Monitoring (Trim Line)</h1>
+        <h1 style="margin:0;">Automotive Assembly Shop Line Monitoring</h1>
       </div>
       <div class="auth-controls">
-        <strong>Active Entries:</strong> <span id="activeCount">0 / 37</span>  | 
+        <strong>Active Entries:</strong> <span id="activeCount">0 / 37</span> &nbsp;|&nbsp;
         <strong>Exited (FIFO):</strong> <span id="exitedCount">0</span>
         <span id="roleBadge" class="auth-badge">Guest (Read-Only)</span>
         <button type="button" id="authActionBtn" class="btn-gray" style="flex:none; padding:6px 10px;">Operator Sign In</button>
@@ -583,12 +773,20 @@
       System ready. Add a vehicle or gap to place it in <strong>TRIM 01</strong> and shift existing entries forward.
     </div>
 
-    <div class="tab-bar" role="tablist">
-      <button type="button" id="tabLineBtn" class="tab-btn active" role="tab" aria-selected="true">Line Monitor</button>
-      <button type="button" id="tabEditBtn" class="tab-btn" role="tab" aria-selected="false">Edit Entries (Login Required)</button>
+    <div class="tab-bar">
+      <div class="tab-group" role="tablist" aria-label="Assembly Line Pages">
+        <button type="button" id="pageMainBtn" class="page-btn active" data-page="main">Main</button>
+        <button type="button" id="pageTrimBtn" class="page-btn" data-page="trim">Trim</button>
+        <button type="button" id="pageChassisBtn" class="page-btn" data-page="chassis">Chassis</button>
+        <button type="button" id="pageFinalBtn" class="page-btn" data-page="final">Final</button>
+      </div>
+      <div class="tab-group" role="tablist" aria-label="Editor Mode">
+        <button type="button" id="tabEditBtn" class="tab-btn" role="tab" aria-selected="false">Edit Entries (Login Required)</button>
+      </div>
     </div>
 
-    <div id="lineViewTab">
+    <!-- MAIN PAGE (Original Layout Preserved) -->
+    <div id="mainPageView">
       <div class="main-wrap">
         <div class="form-panel">
           <h2 style="font-size:15px; margin:0 0 10px 0;">Vehicle Entry (Trim 01)</h2>
@@ -598,28 +796,28 @@
               <input type="text" id="vinField" placeholder="e.g. 100123" maxlength="6" pattern="[0-9]{6}" inputmode="numeric" required />
             </div>
             <div class="field">
-    <label for="modelField">Model / Variant</label>
-    <select id="modelField" required>
-      <option value="" disabled selected>Select Model / Variant</option>
-      <option value="AD">AD</option>
-      <option value="CN7">CN7</option>
-      <option value="DN8 2.0">DN8 2.0</option>
-      <option value="DN8 2.5">DN8 2.5</option>
-      <option value="DN8 FL">DN8 FL</option>
-      <option value="TM S3">TM S3</option>
-      <option value="TM S5">TM S5</option>
-      <option value="TM S6">TM S6</option>
-      <option value="NX4 S1">NX4 S1</option>
-      <option value="NX4 S2">NX4 S2</option>
-      <option value="LX3 HEV S1 (Smart)">LX3 HEV S1 (Smart)</option>
-      <option value="LX3 HEV S2 (Caligrpahy)">LX3 HEV S2 (Caligrpahy)</option>
-      <option value="J7 Prem">J7 Prem</option>
-      <option value="J5 Prem">J5 Prem</option>
-      <option value="J5 Comf">J5 Comf</option>
-      <option value="J5 BEV">J5 BEV</option>
-      <option value="O7">O7</option>
-    </select>
-  </div>
+              <label for="modelField">Model / Variant</label>
+              <select id="modelField" required>
+                <option value="" disabled selected>Select Model / Variant</option>
+                <option value="AD">AD</option>
+                <option value="CN7">CN7</option>
+                <option value="DN8 2.0">DN8 2.0</option>
+                <option value="DN8 2.5">DN8 2.5</option>
+                <option value="DN8 FL">DN8 FL</option>
+                <option value="TM S3">TM S3</option>
+                <option value="TM S5">TM S5</option>
+                <option value="TM S6">TM S6</option>
+                <option value="NX4 S1">NX4 S1</option>
+                <option value="NX4 S2">NX4 S2</option>
+                <option value="LX3 HEV S1 (Smart)">LX3 HEV S1 (Smart)</option>
+                <option value="LX3 HEV S2 (Caligrpahy)">LX3 HEV S2 (Caligrpahy)</option>
+                <option value="J7 Prem">J7 Prem</option>
+                <option value="J5 Prem">J5 Prem</option>
+                <option value="J5 Comf">J5 Comf</option>
+                <option value="J5 BEV">J5 BEV</option>
+                <option value="O7">O7</option>
+              </select>
+            </div>
             <div class="field">
               <label for="exteriorField">Exterior Color</label>
               <select id="exteriorField" required>
@@ -668,7 +866,7 @@
 
         <div class="line-panel">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-            <h2 style="font-size:15px; margin:0;">Station Line View</h2>
+            <h2 style="font-size:15px; margin:0;">Station Line View (All 37 Stations)</h2>
             <button type="button" id="resetBtn" class="btn-red">Reset</button>
           </div>
           <div class="flow-note">
@@ -688,24 +886,46 @@
               <th>Model / Variant</th>
               <th>Exterior Color</th>
               <th>Interior Color</th>
-              <th>Entry Date & Time</th>
-              <th>Exit Date & Time</th>
+              <th>Entry Date &amp; Time</th>
+              <th>Exit Date &amp; Time</th>
+              <th>Remarks</th>
             </tr>
           </thead>
           <tbody id="historyBody">
             <tr>
-              <td colspan="7" style="text-align:center; color:#a1a1aa;">No vehicles exited yet.</td>
+              <td colspan="8" style="text-align:center; color:#a1a1aa;">No vehicles exited yet.</td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
 
+    <!-- TRIM / CHASSIS / FINAL STACKED LEFT-TO-RIGHT PAGE -->
+    <div id="zonePageView" class="hidden">
+      <div class="zone-page-panel">
+        <div class="zone-header">
+          <div>
+            <h2 id="zonePageTitle" style="font-size:16px; margin:0 0 4px 0;">Trim Line Stations</h2>
+            <div id="zonePageSubtitle" class="flow-note" style="margin:0;">
+              Stacked station layout flowing left to right. Hover over any station card for complete details.
+            </div>
+          </div>
+          <div class="zone-summary-badges">
+            <span class="zone-badge"><strong>Zone Occupancy:</strong> <span id="zoneOccupiedCount">0 / 0</span></span>
+            <span class="zone-badge"><strong>Vehicles:</strong> <span id="zoneVehicleCount">0</span></span>
+            <span class="zone-badge"><strong>Gaps (Null):</strong> <span id="zoneGapCount">0</span></span>
+          </div>
+        </div>
+        <div id="zoneStackedContainer" class="zone-stacked-grid"></div>
+      </div>
+    </div>
+
+    <!-- EDIT ENTRIES TAB -->
     <div id="editEntriesTab" class="hidden">
       <div class="edit-panel">
         <h2 style="font-size:16px; margin:0 0 6px 0;">Edit Station &amp; Exit Entries</h2>
         <div class="flow-note">
-          Sign in as an operator to correct wrong VIN numbers, models, exterior/interior colors, or convert an entry into a Null gap.
+          Sign in as an operator to correct wrong VIN numbers, models, exterior/interior colors, remarks, or convert an entry into a Null gap.
         </div>
 
         <div id="editLoginPrompt" class="edit-notice hidden">
@@ -801,6 +1021,10 @@
                   <input type="time" id="editEntryTimeField" step="1" />
                 </div>
               </div>
+              <div id="editRemarksFieldWrap" class="field hidden">
+                <label for="editRemarksField">Exit Remarks</label>
+                <input type="text" id="editRemarksField" placeholder="Enter remarks for exited VIN..." maxlength="200" />
+              </div>
               <div class="btn-row">
                 <button type="submit" id="saveEditBtn" class="btn-green" style="flex:1;">Save Changes</button>
                 <button type="button" id="clearEntryBtn" class="btn-red">Clear Bay</button>
@@ -833,16 +1057,73 @@
     </div>
   </div>
 
-    <div id="stationHoverTooltip" class="station-tooltip"></div>
+  <!-- Password Re-Authentication Modal for Reset -->
+  <div id="resetAuthModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="resetModalTitle">
+    <div class="modal-card">
+      <div class="brand-tag">Security Verification Required</div>
+      <h2 id="resetModalTitle" style="font-size:16px; margin:0 0 8px 0; color:#fafafa;">Confirm Assembly Line Reset</h2>
+      <div class="flow-note" style="margin-bottom:12px;">
+        Resetting will clear all <strong>37 stations</strong> and the entire <strong>Vehicle Exit History</strong>. Re-enter your operator password to proceed.
+      </div>
+      <form id="resetAuthForm">
+        <div class="field">
+          <label for="resetOperatorEmailDisplay">Signed-In Operator</label>
+          <input type="text" id="resetOperatorEmailDisplay" readonly style="color:#a1a1aa; background:#141416;" />
+        </div>
+        <div class="field">
+          <label for="resetPasswordField">Operator Password</label>
+          <input type="password" id="resetPasswordField" placeholder="Enter your password" required autocomplete="current-password" />
+        </div>
+        <div id="resetAuthErrBox" class="err" style="margin-top:4px; margin-bottom:8px;"></div>
+        <div class="btn-row">
+          <button type="button" id="cancelResetModalBtn" class="btn-gray">Cancel</button>
+          <button type="submit" id="confirmResetModalBtn" class="btn-red" style="flex:1;">Verify &amp; Reset Line</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="stationHoverTooltip" class="station-tooltip"></div>
+
   <script>
     (function () {
       var SUPABASE_URL = "https://lcymqrfkigibvayokuoy.supabase.co";
       var SUPABASE_KEY = "sb_publishable_Np81y_009PW1LNiPVa20ig_CEYB82bD";
       var ROW_ID = 1;
 
-      var STATION_NAMES = ['TRIM 01', 'TRIM 02', 'TRIM 03', 'TRIM 04', 'PANORAMA', 'TRIM 05', 'TRIM 06', 'TRIM 07', 'TRIM 08', 'TRIM 09', 'TRIM 10', 'TRIM 11', 'TRIM 12', 'TRIM 13', 'TRIM 14', 'TRIM 15', 'TRIM 16', 'TRIM 17', 'TRIM 18', 'TRIM 19', 'CHASSIS 01', 'CHASSIS 02', 'CHASSIS 03', 'CHASSIS 04', 'CHASSIS 05', 'CHASSIS 06', 'CHASSIS 07', 'CHASSIS 08', 'FINAL 01', 'FINAL 02', 'FINAL 03', 'FINAL 04', 'FINAL 05', 'FINAL 06', 'FINAL 07', 'FINAL 08', 'FINAL 09'];
+      var STATION_NAMES = [
+        'TRIM 01', 'TRIM 02', 'TRIM 03', 'TRIM 04', 'PANORAMA',
+        'TRIM 05', 'TRIM 06', 'TRIM 07', 'TRIM 08', 'TRIM 09',
+        'TRIM 10', 'TRIM 11', 'TRIM 12', 'TRIM 13', 'TRIM 14',
+        'TRIM 15', 'TRIM 16', 'TRIM 17', 'TRIM 18', 'TRIM 19',
+        'CHASSIS 01', 'CHASSIS 02', 'CHASSIS 03', 'CHASSIS 04',
+        'CHASSIS 05', 'CHASSIS 06', 'CHASSIS 07', 'CHASSIS 08',
+        'FINAL 01', 'FINAL 02', 'FINAL 03', 'FINAL 04', 'FINAL 05',
+        'FINAL 06', 'FINAL 07', 'FINAL 08', 'FINAL 09'
+      ];
       var NUM_STATIONS = STATION_NAMES.length;
-      var PER_ROW = 5;
+
+      var ZONE_CONFIG = {
+        trim: {
+          title: "Trim Line Stations (TRIM 01 – TRIM 19)",
+          subtitle: "Stacked left-to-right view of Trim Line stations including PANORAMA.",
+          startIndex: 0,
+          endIndex: 19
+        },
+        chassis: {
+          title: "Chassis Line Stations (CHASSIS 01 – CHASSIS 08)",
+          subtitle: "Stacked left-to-right view of Chassis Line stations.",
+          startIndex: 20,
+          endIndex: 27
+        },
+        final: {
+          title: "Final Line Stations (FINAL 01 – FINAL 09)",
+          subtitle: "Stacked left-to-right view of Final Line stations leading to FIFO exit.",
+          startIndex: 28,
+          endIndex: 36
+        }
+      };
+
       var line = new Array(NUM_STATIONS).fill(null);
       var exitedList = [];
       var statusHtml = "System ready. Add a vehicle or gap to place it in <strong>TRIM 01</strong> and shift existing entries forward.";
@@ -850,6 +1131,7 @@
 
       var currentUser = null;
       var isGuestMode = false;
+      var activePage = "main"; // "main" | "trim" | "chassis" | "final" | "edit"
 
       var loginScreen = document.getElementById("loginScreen");
       var appScreen = document.getElementById("appScreen");
@@ -879,8 +1161,33 @@
       var gapBtn = document.getElementById("gapBtn");
       var resetBtn = document.getElementById("resetBtn");
 
+      // Page Navigation Elements
+      var pageMainBtn = document.getElementById("pageMainBtn");
+      var pageTrimBtn = document.getElementById("pageTrimBtn");
+      var pageChassisBtn = document.getElementById("pageChassisBtn");
+      var pageFinalBtn = document.getElementById("pageFinalBtn");
+      var tabEditBtn = document.getElementById("tabEditBtn");
+      var mainPageView = document.getElementById("mainPageView");
+      var zonePageView = document.getElementById("zonePageView");
+      var editEntriesTab = document.getElementById("editEntriesTab");
+
+      var zonePageTitle = document.getElementById("zonePageTitle");
+      var zonePageSubtitle = document.getElementById("zonePageSubtitle");
+      var zoneOccupiedCount = document.getElementById("zoneOccupiedCount");
+      var zoneVehicleCount = document.getElementById("zoneVehicleCount");
+      var zoneGapCount = document.getElementById("zoneGapCount");
+      var zoneStackedContainer = document.getElementById("zoneStackedContainer");
+
+      // Reset Auth Modal Elements
+      var resetAuthModal = document.getElementById("resetAuthModal");
+      var resetAuthForm = document.getElementById("resetAuthForm");
+      var resetOperatorEmailDisplay = document.getElementById("resetOperatorEmailDisplay");
+      var resetPasswordField = document.getElementById("resetPasswordField");
+      var resetAuthErrBox = document.getElementById("resetAuthErrBox");
+      var cancelResetModalBtn = document.getElementById("cancelResetModalBtn");
+      var confirmResetModalBtn = document.getElementById("confirmResetModalBtn");
+
       var COLOR_MAP = {
-        // Exterior color code equivalents for round circle indicators
         nkw: "#ffffff",
         wyw: "#ffffff",
         white: "#ffffff",
@@ -907,7 +1214,6 @@
         nug: "#86efac",
         rbg: "#15803d",
         cbp: "#3b82f6",
-        // Common fallback aliases
         blue: "#2563eb",
         green: "#16a34a",
         gold: "#eab308",
@@ -927,6 +1233,16 @@
 
       function canEdit() {
         return Boolean(currentUser);
+      }
+
+      function escapeHtml(str) {
+        if (str === null || str === undefined) return "";
+        return String(str)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
       }
 
       function updateAuthUI() {
@@ -970,6 +1286,7 @@
         editInteriorField.disabled = !editable;
         editEntryDateField.disabled = !editable;
         editEntryTimeField.disabled = !editable;
+        editRemarksField.disabled = !editable;
         editSearchField.disabled = !editable;
         saveEditBtn.disabled = !editable;
         clearEntryBtn.disabled = !editable;
@@ -1025,19 +1342,9 @@
           entryDate: entry.entryDate || "",
           entryTime: entry.entryTime || "",
           exitDate: entry.exitDate || "",
-          exitTime: entry.exitTime || ""
+          exitTime: entry.exitTime || "",
+          remarks: entry.remarks || ""
         };
-      }
-
-      function makeCarSvg(extHex, intHex) {
-        return (
-          '<svg width="42" height="22" viewBox="0 0 80 42">' +
-          '<path d="M18 22 L26 9 L52 9 L62 22 Z" fill="' + intHex + '" stroke="#d4d4d8" stroke-width="2" />' +
-          '<rect x="6" y="20" width="68" height="13" rx="5" fill="' + extHex + '" stroke="#fafafa" stroke-width="2" />' +
-          '<circle cx="22" cy="34" r="6" fill="#121212" stroke="#d4d4d8" stroke-width="2" />' +
-          '<circle cx="58" cy="34" r="6" fill="#121212" stroke="#d4d4d8" stroke-width="2" />' +
-          "</svg>"
-        );
       }
 
       function pushEntryToLine(newEntry) {
@@ -1050,6 +1357,7 @@
           var exitedCopy = cloneEntry(lastEntry);
           exitedCopy.exitDate = stamp.date;
           exitedCopy.exitTime = stamp.time;
+          exitedCopy.remarks = exitedCopy.remarks || "";
           exitedList.push(exitedCopy);
         }
 
@@ -1084,7 +1392,8 @@
           intHex: data.intHex,
           intLabel: data.intLabel,
           entryDate: stamp.date,
-          entryTime: stamp.time
+          entryTime: stamp.time,
+          remarks: ""
         });
       }
 
@@ -1099,7 +1408,8 @@
           intHex: null,
           intLabel: null,
           entryDate: stamp.date,
-          entryTime: stamp.time
+          entryTime: stamp.time,
+          remarks: ""
         });
       }
 
@@ -1122,8 +1432,8 @@
         if (!clean) {
           if (document.activeElement !== exteriorField) {
             exteriorField.value = "";
-        exteriorManualField.value = "";
-        exteriorManualField.classList.add("hidden");
+            exteriorManualField.value = "";
+            exteriorManualField.classList.add("hidden");
           }
           exteriorManualField.classList.add("hidden");
           if (document.activeElement !== exteriorManualField) {
@@ -1177,7 +1487,7 @@
 
       function showStationTooltip(stationLabel, entry, e) {
         if (!stationHoverTooltip) return;
-        var html = '<div class="tt-title">' + stationLabel + "</div>";
+        var html = '<div class="tt-title">' + escapeHtml(stationLabel) + "</div>";
         if (!entry) {
           html += '<div class="tt-row"><span class="tt-label">Status:</span> Empty Bay</div>';
         } else if (entry.isGap) {
@@ -1186,15 +1496,15 @@
             '<div class="tt-row"><span class="tt-label">Model / Variant:</span> Null</div>' +
             '<div class="tt-row"><span class="tt-label">Exterior Color:</span> Null</div>' +
             '<div class="tt-row"><span class="tt-label">Interior Color:</span> Null</div>' +
-            '<div class="tt-row"><span class="tt-label">Date &amp; Time:</span> ' + ((entry.entryDate || "-") + " " + (entry.entryTime || "-")).trim() + "</div>";
+            '<div class="tt-row"><span class="tt-label">Date &amp; Time:</span> ' + escapeHtml(((entry.entryDate || "-") + " " + (entry.entryTime || "-")).trim()) + "</div>";
         } else {
           var dtText = ((entry.entryDate || "") + " " + (entry.entryTime || "")).trim() || "-";
           html +=
-            '<div class="tt-row"><span class="tt-label">VIN Number:</span> <strong>' + entry.vin + "</strong></div>" +
-            '<div class="tt-row"><span class="tt-label">Model / Variant:</span> ' + entry.model + "</div>" +
-            '<div class="tt-row"><span class="tt-label">Exterior Color:</span> <span class="color-chip" style="background:' + entry.extHex + '"></span>' + entry.extLabel + "</div>" +
-            '<div class="tt-row"><span class="tt-label">Interior Color:</span> <span class="color-chip" style="background:transparent"></span>' + entry.intLabel + "</div>" +
-            '<div class="tt-row"><span class="tt-label">Date &amp; Time:</span> ' + dtText + "</div>";
+            '<div class="tt-row"><span class="tt-label">VIN Number:</span> <strong>' + escapeHtml(entry.vin) + "</strong></div>" +
+            '<div class="tt-row"><span class="tt-label">Model / Variant:</span> ' + escapeHtml(entry.model) + "</div>" +
+            '<div class="tt-row"><span class="tt-label">Exterior Color:</span> <span class="color-chip" style="background:' + escapeHtml(entry.extHex) + '"></span>' + escapeHtml(entry.extLabel) + "</div>" +
+            '<div class="tt-row"><span class="tt-label">Interior Color:</span> <span class="color-chip" style="background:transparent"></span>' + escapeHtml(entry.intLabel) + "</div>" +
+            '<div class="tt-row"><span class="tt-label">Date &amp; Time:</span> ' + escapeHtml(dtText) + "</div>";
         }
         stationHoverTooltip.innerHTML = html;
         stationHoverTooltip.style.display = "block";
@@ -1222,8 +1532,8 @@
 
         var inner =
           '<div class="station-top">' +
-          '<span class="st-badge">' + stationLabel + "</span>" +
-          '<span class="arrow-txt">' + (badgeRightText || "") + "</span>" +
+          '<span class="st-badge">' + escapeHtml(stationLabel) + "</span>" +
+          '<span class="arrow-txt">' + escapeHtml(badgeRightText || "") + "</span>" +
           "</div>";
 
         if (entry) {
@@ -1238,10 +1548,10 @@
           } else {
             inner +=
               '<div class="car-box">' +
-              '<div class="car-vin">' + entry.vin + "</div>" +
-              '<div class="car-model">' + entry.model + "</div>" +
-              '<div class="car-color"><span class="mini-chip" style="background:' + entry.extHex + '"></span>' + entry.extLabel + "</div>" +
-              '<div class="car-color">I/C: ' + entry.intLabel + "</div>" +
+              '<div class="car-vin">' + escapeHtml(entry.vin) + "</div>" +
+              '<div class="car-model">' + escapeHtml(entry.model) + "</div>" +
+              '<div class="car-color"><span class="mini-chip" style="background:' + escapeHtml(entry.extHex) + '"></span>' + escapeHtml(entry.extLabel) + "</div>" +
+              '<div class="car-color">I/C: ' + escapeHtml(entry.intLabel) + "</div>" +
               "</div>";
           }
         } else {
@@ -1336,18 +1646,135 @@
         stationsContainer.appendChild(scrollWrap);
       }
 
+      // Render Stacked Left-to-Right Zone View for Trim, Chassis, or Final
+      function renderZonePage(zoneKey) {
+        var cfg = ZONE_CONFIG[zoneKey];
+        if (!cfg) return;
+
+        zonePageTitle.textContent = cfg.title;
+        zonePageSubtitle.textContent = cfg.subtitle;
+        zoneStackedContainer.innerHTML = "";
+        hideStationTooltip();
+
+        var totalInZone = cfg.endIndex - cfg.startIndex + 1;
+        var occupied = 0;
+        var vehicles = 0;
+        var gaps = 0;
+
+        for (var idx = cfg.startIndex; idx <= cfg.endIndex; idx++) {
+          var stationLabel = getStationName(idx + 1);
+          var entry = line[idx];
+
+          if (entry) {
+            occupied++;
+            if (entry.isGap) {
+              gaps++;
+            } else {
+              vehicles++;
+            }
+          }
+
+          var card = document.createElement("div");
+          card.className = "zone-station-card" + (entry ? (entry.isGap ? " is-gap" : " has-car") : "");
+
+          var headerHtml =
+            '<div class="zone-card-top">' +
+              '<span class="zone-st-badge">' + escapeHtml(stationLabel) + "</span>" +
+              '<span class="zone-seq-tag">#' + (idx + 1) + "</span>" +
+            "</div>";
+
+          var bodyHtml = "";
+          if (!entry) {
+            bodyHtml = '<div class="zone-empty-state">Empty Bay</div>';
+          } else if (entry.isGap) {
+            var gapDt = ((entry.entryDate || "") + " " + (entry.entryTime || "")).trim() || "-";
+            bodyHtml =
+              '<div class="zone-card-body">' +
+                '<div class="zone-vin" style="color:#ddd6fe;">Null (Gap)</div>' +
+                '<div class="zone-detail-row">No vehicle assigned</div>' +
+                '<div class="gap-time">' + escapeHtml(gapDt) + "</div>" +
+              "</div>";
+          } else {
+            var carDt = ((entry.entryDate || "") + " " + (entry.entryTime || "")).trim() || "-";
+            bodyHtml =
+              '<div class="zone-card-body">' +
+                '<div class="zone-vin">' + escapeHtml(entry.vin) + "</div>" +
+                '<div class="zone-model">' + escapeHtml(entry.model) + "</div>" +
+                '<div class="zone-detail-row">' +
+                  '<span class="color-chip" style="background:' + escapeHtml(entry.extHex) + '"></span>' +
+                  '<span>Ext: <strong>' + escapeHtml(entry.extLabel) + "</strong></span>" +
+                  "<span>|</span>" +
+                  '<span>Int: <strong>' + escapeHtml(entry.intLabel) + "</strong></span>" +
+                "</div>" +
+                '<div class="car-time">' + escapeHtml(carDt) + "</div>" +
+              "</div>";
+          }
+
+          card.innerHTML = headerHtml + bodyHtml;
+
+          (function (lbl, ent) {
+            card.addEventListener("mouseenter", function (e) {
+              showStationTooltip(lbl, ent, e);
+            });
+            card.addEventListener("mousemove", function (e) {
+              positionTooltip(e);
+            });
+            card.addEventListener("mouseleave", function () {
+              hideStationTooltip();
+            });
+          })(stationLabel, entry);
+
+          zoneStackedContainer.appendChild(card);
+        }
+
+        zoneOccupiedCount.textContent = occupied + " / " + totalInZone;
+        zoneVehicleCount.textContent = String(vehicles);
+        zoneGapCount.textContent = String(gaps);
+      }
+
+      function saveExitRemark(exitIndex, newRemarkText) {
+        if (!canEdit()) return;
+        if (exitIndex < 0 || exitIndex >= exitedList.length) return;
+        var cleanRemark = (newRemarkText || "").trim();
+        exitedList[exitIndex].remarks = cleanRemark;
+        var label = exitedList[exitIndex].isGap ? "Null" : exitedList[exitIndex].vin;
+        statusHtml = "Saved remarks for exited entry <strong>FIFO #" + (exitIndex + 1) + " (" + escapeHtml(label) + ")</strong>.";
+        renderStats();
+        renderEditTab();
+        syncToCloud();
+      }
+
       function renderHistory() {
         if (exitedList.length === 0) {
           historyBody.innerHTML =
-            '<tr><td colspan="7" style="text-align:center; color:#a1a1aa;">No vehicles exited yet.</td></tr>';
+            '<tr><td colspan="8" style="text-align:center; color:#a1a1aa;">No vehicles exited yet.</td></tr>';
           return;
         }
 
+        var editable = canEdit();
         var html = "";
         for (var i = 0; i < exitedList.length; i++) {
           var item = exitedList[i];
           var entryStamp = ((item.entryDate || "") + " " + (item.entryTime || "")).trim() || "-";
           var exitStamp = ((item.exitDate || "") + " " + (item.exitTime || "")).trim() || "-";
+          var remarkVal = item.remarks || "";
+
+          var remarksCellHtml = "";
+          if (editable) {
+            remarksCellHtml =
+              '<td>' +
+                '<div class="remarks-cell-wrap">' +
+                  '<input type="text" class="remarks-input history-remark-input" data-ex-index="' + i + '" value="' + escapeHtml(remarkVal) + '" placeholder="Add remarks..." maxlength="200" />' +
+                  '<button type="button" class="btn-gray btn-sm history-remark-save-btn" data-ex-index="' + i + '">Save</button>' +
+                "</div>" +
+              "</td>";
+          } else {
+            remarksCellHtml =
+              '<td style="color:' + (remarkVal ? "#e4e4e7" : "#71717a") + ';">' +
+                (remarkVal ? escapeHtml(remarkVal) : "-") +
+              "</td>";
+          }
+
           if (item.isGap) {
             html +=
               "<tr>" +
@@ -1356,24 +1783,58 @@
               '<td style="color:#a1a1aa;">Null</td>' +
               '<td style="color:#a1a1aa;">Null</td>' +
               '<td style="color:#a1a1aa;">Null</td>' +
-              '<td style="font-family:monospace;">' + entryStamp + "</td>" +
-              '<td style="font-family:monospace;">' + exitStamp + "</td>" +
+              '<td style="font-family:monospace;">' + escapeHtml(entryStamp) + "</td>" +
+              '<td style="font-family:monospace;">' + escapeHtml(exitStamp) + "</td>" +
+              remarksCellHtml +
               "</tr>";
           } else {
             html +=
               "<tr>" +
               "<td>#" + (i + 1) + "</td>" +
-              '<td style="font-family:monospace; font-weight:bold;">' + item.vin + "</td>" +
-              "<td>" + item.model + "</td>" +
-              '<td><span class="color-chip" style="background:' + item.extHex + '"></span>' + item.extLabel + "</td>" +
-              '<td><span class="color-chip" style="background:transparent"></span>' + item.intLabel + "</td>" +
-              '<td style="font-family:monospace;">' + entryStamp + "</td>" +
-              '<td style="font-family:monospace;">' + exitStamp + "</td>" +
+              '<td style="font-family:monospace; font-weight:bold;">' + escapeHtml(item.vin) + "</td>" +
+              "<td>" + escapeHtml(item.model) + "</td>" +
+              '<td><span class="color-chip" style="background:' + escapeHtml(item.extHex) + '"></span>' + escapeHtml(item.extLabel) + "</td>" +
+              '<td><span class="color-chip" style="background:transparent"></span>' + escapeHtml(item.intLabel) + "</td>" +
+              '<td style="font-family:monospace;">' + escapeHtml(entryStamp) + "</td>" +
+              '<td style="font-family:monospace;">' + escapeHtml(exitStamp) + "</td>" +
+              remarksCellHtml +
               "</tr>";
           }
         }
         historyBody.innerHTML = html;
       }
+
+      // Event delegation for Remarks inline editing in Vehicle Exit History
+      historyBody.addEventListener("click", function (e) {
+        var saveBtn = e.target.closest(".history-remark-save-btn");
+        if (!saveBtn) return;
+        var idx = parseInt(saveBtn.getAttribute("data-ex-index"), 10);
+        if (isNaN(idx)) return;
+        var inputEl = historyBody.querySelector('.history-remark-input[data-ex-index="' + idx + '"]');
+        if (inputEl) {
+          saveExitRemark(idx, inputEl.value);
+        }
+      });
+
+      historyBody.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" && e.target.classList.contains("history-remark-input")) {
+          e.preventDefault();
+          var idx = parseInt(e.target.getAttribute("data-ex-index"), 10);
+          if (!isNaN(idx)) {
+            saveExitRemark(idx, e.target.value);
+            e.target.blur();
+          }
+        }
+      });
+
+      historyBody.addEventListener("change", function (e) {
+        if (e.target.classList.contains("history-remark-input")) {
+          var idx = parseInt(e.target.getAttribute("data-ex-index"), 10);
+          if (!isNaN(idx)) {
+            saveExitRemark(idx, e.target.value);
+          }
+        }
+      });
 
       function renderStats() {
         var count = 0;
@@ -1388,6 +1849,9 @@
       function renderAll() {
         renderInputs();
         renderStations();
+        if (activePage === "trim" || activePage === "chassis" || activePage === "final") {
+          renderZonePage(activePage);
+        }
         renderHistory();
         renderEditTab();
         renderStats();
@@ -1493,13 +1957,13 @@
         isGuestMode = false;
         currentUser = res.data.user || null;
         passwordField.value = "";
-        updateAuthUI();
+        renderAll();
       });
 
       guestBtn.addEventListener("click", function () {
         authErrBox.textContent = "";
         isGuestMode = true;
-        updateAuthUI();
+        renderAll();
       });
 
       authActionBtn.addEventListener("click", async function () {
@@ -1507,8 +1971,8 @@
           await db.auth.signOut();
           currentUser = null;
           isGuestMode = false;
-          setActiveTab("line");
-          updateAuthUI();
+          setActivePage("main");
+          renderAll();
         } else {
           isGuestMode = false;
           authErrBox.textContent = "";
@@ -1577,8 +2041,8 @@
         syncToCloud();
       });
 
-      resetBtn.addEventListener("click", function () {
-        if (!canEdit()) return;
+      // Reset Line with Password Re-Authentication
+      function executeLineReset() {
         line = new Array(NUM_STATIONS).fill(null);
         exitedList = [];
         formInputs = { vin: "", model: "", exterior: "", interior: "" };
@@ -1589,16 +2053,87 @@
         exteriorManualField.classList.add("hidden");
         interiorField.value = "";
         errBox.textContent = "";
-        statusHtml = "Line reset. All " + NUM_STATIONS + " stations are empty.";
+        statusHtml = "Line reset verified and executed. All " + NUM_STATIONS + " stations and exit history are cleared.";
         renderAll();
         syncToCloud();
+      }
+
+      function openResetAuthModal() {
+        if (!canEdit() || !currentUser) return;
+        resetAuthErrBox.textContent = "";
+        resetPasswordField.value = "";
+        resetOperatorEmailDisplay.value = currentUser.email || "";
+        resetAuthModal.classList.remove("hidden");
+        setTimeout(function () {
+          resetPasswordField.focus();
+        }, 30);
+      }
+
+      function closeResetAuthModal() {
+        resetAuthModal.classList.add("hidden");
+        resetPasswordField.value = "";
+        resetAuthErrBox.textContent = "";
+      }
+
+      resetBtn.addEventListener("click", function () {
+        if (!canEdit()) return;
+        openResetAuthModal();
       });
 
-      var activeTab = "line";
-      var tabLineBtn = document.getElementById("tabLineBtn");
-      var tabEditBtn = document.getElementById("tabEditBtn");
-      var lineViewTab = document.getElementById("lineViewTab");
-      var editEntriesTab = document.getElementById("editEntriesTab");
+      cancelResetModalBtn.addEventListener("click", function () {
+        closeResetAuthModal();
+      });
+
+      resetAuthModal.addEventListener("click", function (e) {
+        if (e.target === resetAuthModal) {
+          closeResetAuthModal();
+        }
+      });
+
+      resetAuthForm.addEventListener("submit", async function (e) {
+        e.preventDefault();
+        resetAuthErrBox.textContent = "";
+
+        if (!canEdit() || !currentUser || !currentUser.email) {
+          resetAuthErrBox.textContent = "Operator session expired. Please sign in again.";
+          return;
+        }
+        if (!db) {
+          resetAuthErrBox.textContent = "Supabase client is not initialized.";
+          return;
+        }
+
+        var enteredPassword = resetPasswordField.value;
+        if (!enteredPassword) {
+          resetAuthErrBox.textContent = "Please enter your password to authenticate.";
+          return;
+        }
+
+        confirmResetModalBtn.disabled = true;
+        cancelResetModalBtn.disabled = true;
+        confirmResetModalBtn.textContent = "Verifying...";
+
+        var verifyRes = await db.auth.signInWithPassword({
+          email: currentUser.email,
+          password: enteredPassword
+        });
+
+        confirmResetModalBtn.disabled = false;
+        cancelResetModalBtn.disabled = false;
+        confirmResetModalBtn.textContent = "Verify & Reset Line";
+
+        if (verifyRes.error) {
+          resetAuthErrBox.textContent = "Authentication failed: " + verifyRes.error.message;
+          resetPasswordField.select();
+          return;
+        }
+
+        currentUser = (verifyRes.data && verifyRes.data.user) || currentUser;
+        closeResetAuthModal();
+        executeLineReset();
+      });
+
+      // Page / Tab Switching Logic ('main', 'trim', 'chassis', 'final', 'edit')
       var editLoginPrompt = document.getElementById("editLoginPrompt");
       var editTabLoginBtn = document.getElementById("editTabLoginBtn");
       var editEntryForm = document.getElementById("editEntryForm");
@@ -1612,47 +2147,49 @@
       var editInteriorField = document.getElementById("editInteriorField");
       var editEntryDateField = document.getElementById("editEntryDateField");
       var editEntryTimeField = document.getElementById("editEntryTimeField");
+      var editRemarksFieldWrap = document.getElementById("editRemarksFieldWrap");
+      var editRemarksField = document.getElementById("editRemarksField");
       var editSearchField = document.getElementById("editSearchField");
       var saveEditBtn = document.getElementById("saveEditBtn");
       var clearEntryBtn = document.getElementById("clearEntryBtn");
       var editErrBox = document.getElementById("editErrBox");
       var editEntriesTableBody = document.getElementById("editEntriesTableBody");
 
-      function setActiveTab(tabName) {
-        if (tabName === "edit" && !canEdit()) {
-          activeTab = "line";
-          tabLineBtn.classList.add("active");
-          tabLineBtn.setAttribute("aria-selected", "true");
-          tabEditBtn.classList.remove("active");
-          tabEditBtn.setAttribute("aria-selected", "false");
-          lineViewTab.classList.remove("hidden");
-          editEntriesTab.classList.add("hidden");
+      function setActivePage(pageName) {
+        if (pageName === "edit" && !canEdit()) {
           isGuestMode = false;
           authErrBox.textContent = "Please sign in as an operator to access the Edit Entries tab.";
           loginScreen.classList.remove("hidden");
           appScreen.classList.add("hidden");
           return;
         }
-        activeTab = tabName === "edit" ? "edit" : "line";
-        var isEdit = activeTab === "edit";
-        tabLineBtn.classList.toggle("active", !isEdit);
-        tabLineBtn.setAttribute("aria-selected", String(!isEdit));
-        tabEditBtn.classList.toggle("active", isEdit);
-        tabEditBtn.setAttribute("aria-selected", String(isEdit));
-        lineViewTab.classList.toggle("hidden", isEdit);
-        editEntriesTab.classList.toggle("hidden", !isEdit);
-        if (isEdit) {
+
+        activePage = pageName;
+        hideStationTooltip();
+
+        pageMainBtn.classList.toggle("active", pageName === "main");
+        pageTrimBtn.classList.toggle("active", pageName === "trim");
+        pageChassisBtn.classList.toggle("active", pageName === "chassis");
+        pageFinalBtn.classList.toggle("active", pageName === "final");
+        tabEditBtn.classList.toggle("active", pageName === "edit");
+        tabEditBtn.setAttribute("aria-selected", String(pageName === "edit"));
+
+        mainPageView.classList.toggle("hidden", pageName !== "main");
+        zonePageView.classList.toggle("hidden", !(pageName === "trim" || pageName === "chassis" || pageName === "final"));
+        editEntriesTab.classList.toggle("hidden", pageName !== "edit");
+
+        if (pageName === "trim" || pageName === "chassis" || pageName === "final") {
+          renderZonePage(pageName);
+        } else if (pageName === "edit") {
           renderEditTab();
         }
       }
 
-      tabLineBtn.addEventListener("click", function () {
-        setActiveTab("line");
-      });
-
-      tabEditBtn.addEventListener("click", function () {
-        setActiveTab("edit");
-      });
+      pageMainBtn.addEventListener("click", function () { setActivePage("main"); });
+      pageTrimBtn.addEventListener("click", function () { setActivePage("trim"); });
+      pageChassisBtn.addEventListener("click", function () { setActivePage("chassis"); });
+      pageFinalBtn.addEventListener("click", function () { setActivePage("final"); });
+      tabEditBtn.addEventListener("click", function () { setActivePage("edit"); });
 
       editTabLoginBtn.addEventListener("click", function () {
         isGuestMode = false;
@@ -1703,6 +2240,10 @@
       function populateEditFormFromEntry(entry) {
         editErrBox.textContent = "";
         var nowStamp = currentDateTime();
+        var parsed = parseSourceKey(editSourceSelect.value);
+        var isExitedEntry = parsed && parsed.kind === "exited";
+        editRemarksFieldWrap.classList.toggle("hidden", !isExitedEntry);
+
         if (!entry) {
           editTypeSelect.value = "vehicle";
           editVehicleFields.classList.remove("hidden");
@@ -1714,6 +2255,7 @@
           editInteriorField.value = "";
           editEntryDateField.value = nowStamp.date;
           editEntryTimeField.value = nowStamp.time;
+          editRemarksField.value = "";
           return;
         }
         if (entry.isGap) {
@@ -1727,6 +2269,7 @@
           editInteriorField.value = "";
           editEntryDateField.value = entry.entryDate || nowStamp.date;
           editEntryTimeField.value = entry.entryTime || nowStamp.time;
+          editRemarksField.value = entry.remarks || "";
           return;
         }
         editTypeSelect.value = "vehicle";
@@ -1750,6 +2293,7 @@
         editInteriorField.value = entry.intLabel || "";
         editEntryDateField.value = entry.entryDate || nowStamp.date;
         editEntryTimeField.value = entry.entryTime || nowStamp.time;
+        editRemarksField.value = entry.remarks || "";
       }
 
       function renderEditTab() {
@@ -1762,12 +2306,12 @@
           if (stEntry) {
             summary = stEntry.isGap ? "Null (Gap)" : (stEntry.vin + " - " + stEntry.model);
           }
-          optsHtml += '<option value="st:' + i + '">' + stLabel + " (" + summary + ")</option>";
+          optsHtml += '<option value="st:' + i + '">' + escapeHtml(stLabel) + " (" + escapeHtml(summary) + ")</option>";
         }
         for (var j = 0; j < exitedList.length; j++) {
           var exEntry = exitedList[j];
           var exSummary = exEntry.isGap ? "Null (Gap)" : (exEntry.vin + " - " + exEntry.model);
-          optsHtml += '<option value="ex:' + j + '">Exited FIFO #' + (j + 1) + " (" + exSummary + ")</option>";
+          optsHtml += '<option value="ex:' + j + '">Exited FIFO #' + (j + 1) + " (" + escapeHtml(exSummary) + ")</option>";
         }
         editSourceSelect.innerHTML = optsHtml;
         if (prevKey && parseSourceKey(prevKey)) {
@@ -1792,7 +2336,7 @@
             if (matchesFilter([sLoc, "empty", "empty bay"])) {
               rowsHtml +=
                 "<tr>" +
-                "<td><strong>" + sLoc + "</strong></td>" +
+                "<td><strong>" + escapeHtml(sLoc) + "</strong></td>" +
                 '<td colspan="4" style="color:#71717a;">Empty Bay</td>' +
                 '<td><button type="button" class="btn-gray btn-sm edit-row-btn" data-key="st:' + s + '">Edit</button></td>' +
                 "</tr>";
@@ -1801,7 +2345,7 @@
             if (matchesFilter([sLoc, "null", "gap"])) {
               rowsHtml +=
                 "<tr>" +
-                "<td><strong>" + sLoc + "</strong></td>" +
+                "<td><strong>" + escapeHtml(sLoc) + "</strong></td>" +
                 '<td style="font-family:monospace; color:#c4b5fd;">Null</td>' +
                 '<td style="color:#a1a1aa;">Null</td>' +
                 '<td style="color:#a1a1aa;">Null</td>' +
@@ -1813,11 +2357,11 @@
             if (matchesFilter([sLoc, sEntry.vin, sEntry.model, sEntry.extLabel, sEntry.intLabel])) {
               rowsHtml +=
                 "<tr>" +
-                "<td><strong>" + sLoc + "</strong></td>" +
-                '<td style="font-family:monospace; font-weight:bold;">' + sEntry.vin + "</td>" +
-                "<td>" + sEntry.model + "</td>" +
-                '<td><span class="color-chip" style="background:' + sEntry.extHex + '"></span>' + sEntry.extLabel + "</td>" +
-                "<td>" + sEntry.intLabel + "</td>" +
+                "<td><strong>" + escapeHtml(sLoc) + "</strong></td>" +
+                '<td style="font-family:monospace; font-weight:bold;">' + escapeHtml(sEntry.vin) + "</td>" +
+                "<td>" + escapeHtml(sEntry.model) + "</td>" +
+                '<td><span class="color-chip" style="background:' + escapeHtml(sEntry.extHex) + '"></span>' + escapeHtml(sEntry.extLabel) + "</td>" +
+                "<td>" + escapeHtml(sEntry.intLabel) + "</td>" +
                 '<td><button type="button" class="btn-gray btn-sm edit-row-btn" data-key="st:' + s + '">Edit</button></td>' +
                 "</tr>";
             }
@@ -1827,10 +2371,10 @@
           var eItem = exitedList[eIdx];
           var eLoc = "Exited FIFO #" + (eIdx + 1);
           if (eItem.isGap) {
-            if (matchesFilter([eLoc, "null", "gap"])) {
+            if (matchesFilter([eLoc, "null", "gap", eItem.remarks || ""])) {
               rowsHtml +=
                 "<tr>" +
-                "<td><strong>" + eLoc + "</strong></td>" +
+                "<td><strong>" + escapeHtml(eLoc) + "</strong></td>" +
                 '<td style="font-family:monospace; color:#c4b5fd;">Null</td>' +
                 '<td style="color:#a1a1aa;">Null</td>' +
                 '<td style="color:#a1a1aa;">Null</td>' +
@@ -1839,14 +2383,14 @@
                 "</tr>";
             }
           } else {
-            if (matchesFilter([eLoc, eItem.vin, eItem.model, eItem.extLabel, eItem.intLabel])) {
+            if (matchesFilter([eLoc, eItem.vin, eItem.model, eItem.extLabel, eItem.intLabel, eItem.remarks || ""])) {
               rowsHtml +=
                 "<tr>" +
-                "<td><strong>" + eLoc + "</strong></td>" +
-                '<td style="font-family:monospace; font-weight:bold;">' + eItem.vin + "</td>" +
-                "<td>" + eItem.model + "</td>" +
-                '<td><span class="color-chip" style="background:' + eItem.extHex + '"></span>' + eItem.extLabel + "</td>" +
-                "<td>" + eItem.intLabel + "</td>" +
+                "<td><strong>" + escapeHtml(eLoc) + "</strong></td>" +
+                '<td style="font-family:monospace; font-weight:bold;">' + escapeHtml(eItem.vin) + "</td>" +
+                "<td>" + escapeHtml(eItem.model) + "</td>" +
+                '<td><span class="color-chip" style="background:' + escapeHtml(eItem.extHex) + '"></span>' + escapeHtml(eItem.extLabel) + "</td>" +
+                "<td>" + escapeHtml(eItem.intLabel) + "</td>" +
                 '<td><button type="button" class="btn-gray btn-sm edit-row-btn" data-key="ex:' + eIdx + '">Edit</button></td>' +
                 "</tr>";
             }
@@ -1922,6 +2466,9 @@
         var existing = getEntryBySourceKey(key);
         var stamp = currentDateTime();
         var nextEntry = null;
+        var editedRemarks = parsed.kind === "exited"
+          ? (editRemarksField.value || "").trim()
+          : ((existing && existing.remarks) || "");
 
         if (editTypeSelect.value === "gap") {
           nextEntry = {
@@ -1935,7 +2482,8 @@
             entryDate: (existing && existing.entryDate) || stamp.date,
             entryTime: (existing && existing.entryTime) || stamp.time,
             exitDate: (existing && existing.exitDate) || "",
-            exitTime: (existing && existing.exitTime) || ""
+            exitTime: (existing && existing.exitTime) || "",
+            remarks: editedRemarks
           };
         } else {
           var vin = editVinField.value.trim().toUpperCase();
@@ -1984,7 +2532,8 @@
             entryDate: editedDate,
             entryTime: editedTime,
             exitDate: (existing && existing.exitDate) || "",
-            exitTime: (existing && existing.exitTime) || ""
+            exitTime: (existing && existing.exitTime) || "",
+            remarks: editedRemarks
           };
         }
 
@@ -2030,7 +2579,6 @@
         });
       }
 
-
       var liveClockValue = document.getElementById("liveClockValue");
       function updateLiveClock() {
         if (!liveClockValue) return;
@@ -2047,7 +2595,7 @@
       if (db) {
         db.auth.getSession().then(function (sessionRes) {
           currentUser = (sessionRes.data && sessionRes.data.session && sessionRes.data.session.user) || null;
-          updateAuthUI();
+          renderAll();
         });
 
         db.auth.onAuthStateChange(function (_event, session) {
@@ -2055,7 +2603,7 @@
           if (currentUser) {
             isGuestMode = false;
           }
-          updateAuthUI();
+          renderAll();
         });
 
         db.from("live_data")

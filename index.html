@@ -658,14 +658,10 @@
         for (var r = 0; r < totalRows; r++) {
           var start = r * PER_ROW;
           var end = Math.min(start + PER_ROW, NUM_STATIONS);
-          var reverse = (r % 2 === 1);
           var indices = [];
 
           for (var k = start; k < end; k++) {
             indices.push(k);
-          }
-          if (reverse) {
-            indices.reverse();
           }
 
           var rowDiv = document.createElement("div");
@@ -679,10 +675,10 @@
 
             if (stNum === NUM_STATIONS) {
               dirText = "EXIT";
-            } else if (!reverse) {
-              dirText = m < indices.length - 1 ? "->" : "v";
+            } else if (m < indices.length - 1) {
+              dirText = "->";
             } else {
-              dirText = m > 0 ? "<-" : "v";
+              dirText = "↳";
             }
 
             var boxClass = "station-box";

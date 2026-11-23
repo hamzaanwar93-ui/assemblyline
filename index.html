@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>21-Station Assembly Line Monitor — Hyundai Nishat Motor (Pvt.) Ltd</title>
+  <title>20-Station Assembly Line Monitor — Hyundai Nishat Motor (Pvt.) Ltd</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     body {
@@ -165,6 +165,27 @@
     .btn-guest { background: #27272a; color: #f4f4f5; border: 1px solid #52525b; }
     .btn-guest:hover:not(:disabled) { background: #3f3f46; }
     .err { color: #fca5a5; font-size: 12px; margin-top: 8px; min-height: 16px; }
+    .clock-box {
+      margin-top: 12px;
+      padding: 10px 12px;
+      background: #141416;
+      border: 1px solid #2e2e32;
+      border-radius: 6px;
+      text-align: center;
+    }
+    .clock-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: #a1a1aa;
+      margin-bottom: 4px;
+    }
+    .clock-value {
+      font-family: monospace;
+      font-size: 14px;
+      font-weight: bold;
+      color: #86efac;
+    }
     .flow-note { font-size: 12px; color: #a1a1aa; margin-bottom: 12px; }
     .stack-row {
       display: flex;
@@ -325,7 +346,7 @@
         <h1 style="margin:0;">Automotive Assembly Shop Line Monitoring (Trim Line)</h1>
       </div>
       <div class="auth-controls">
-        <strong>Active Entries:</strong> <span id="activeCount">0 / 21</span>  | 
+        <strong>Active Entries:</strong> <span id="activeCount">0 / 20</span>  | 
         <strong>Exited (FIFO):</strong> <span id="exitedCount">0</span>
         <span id="roleBadge" class="auth-badge">Guest (Read-Only)</span>
         <button type="button" id="authActionBtn" class="btn-gray" style="flex:none; padding:6px 10px;">Operator Sign In</button>
@@ -360,11 +381,11 @@
     <option value="NX4 S2">NX4 S2</option>
     <option value="LX3 HEV S1 (Smart)">LX3 HEV S1 (Smart)</option>
     <option value="LX3 HEV S2 (Caligrpahy)">LX3 HEV S2 (Caligrpahy)</option>
-    <option value="J7 Prem">J7 Prem</option>
-    <option value="J5 Prem">J5 Prem</option>
-    <option value="J5 Comf">J5 Comf</option>
+    <option value="J7 PREM PHEV">J7 PREM PHEV</option>
+    <option value="J5 PREM">J5 PREM</option>
+    <option value="J5 COMF">J5 COMF</option>
     <option value="J5 BEV">J5 BEV</option>
-    <option value="O7">O7</option>
+    <option value="O7 PREM PHEV">O7 PREM PHEV</option>
   </select>
 </div>
           <div class="field">
@@ -381,6 +402,10 @@
           </div>
           <div id="errBox" class="err"></div>
         </form>
+        <div id="ClockBox" class="clock-box">
+          <div class="clock-label">Date &amp; Time</div>
+          <div id="ClockValue" class="clock-value">--</div>
+        </div>
       </div>
 
       <div class="line-panel">
@@ -424,7 +449,7 @@
       var SUPABASE_KEY = "sb_publishable_Np81y_009PW1LNiPVa20ig_CEYB82bD";
       var ROW_ID = 1;
 
-      var STATION_NAMES = ['Trim 01', 'Trim 02', 'Trim 03', 'Trim 04', 'Moon Roof', 'Panorama', 'Trim 05', 'Trim 06', 'Trim 07', 'Trim 08', 'Trim 09', 'Trim 10', 'Trim 11', 'Trim 12', 'Trim 13', 'Trim 14', 'Trim 15', 'Trim 16', 'Trim 17', 'Trim 18', 'Trim 19'];
+      var STATION_NAMES = ['Trim 01', 'Trim 02', 'Trim 03', 'Trim 04', 'Panorama', 'Trim 05', 'Trim 06', 'Trim 07', 'Trim 08', 'Trim 09', 'Trim 10', 'Trim 11', 'Trim 12', 'Trim 13', 'Trim 14', 'Trim 15', 'Trim 16', 'Trim 17', 'Trim 18', 'Trim 19'];
       var NUM_STATIONS = STATION_NAMES.length;
       var PER_ROW = 5;
       var line = new Array(NUM_STATIONS).fill(null);
@@ -945,6 +970,15 @@
         renderAll();
         syncToCloud();
       });
+
+      var ClockValue = document.getElementById("ClockValue");
+      function updateClock() {
+        if (!ClockValue) return;
+        var dt = currentDateTime();
+        ClockValue.textContent = dt.date + "  |  " + dt.time;
+      }
+      updateClock();
+      setInterval(updateClock, 1000);
 
       // Render UI immediately
       renderAll();

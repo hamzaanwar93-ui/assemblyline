@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>37-Station Assembly Line Monitor — Hyundai Nishat Motor (Pvt.) Ltd</title>
+  <title>40-Station Assembly Line Monitor — Hyundai Nishat Motor (Pvt.) Ltd</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     body {
@@ -610,21 +610,32 @@
       background: #27272a;
       color: #ffffff;
     }
+    #pageMainBtn, #pageMainBtn:hover:not(:disabled) {
+      background: #1e9044;
+      color: #ffffff;
+      border-color: #1e9044;
+    }
+    #pageMainBtn.active {
+      border-color: #ffffff;
+      box-shadow: 0 0 0 1px #ffffff;
+    }
     .page-btn.active {
       background: #0d9488;
       color: #ffffff;
       border-color: #14b8a6;
     }
     /* Main page: stations stacked in rows, every row flows left to right, large readable cards */
-    .line-rows { display: flex; flex-direction: column; gap: 12px; }
+    .line-rows { display: flex; flex-direction: column; gap: 44px; }
     .line-row-wrap { display: flex; align-items: stretch; gap: 8px; }
-    .line-group-rows { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 14px; }
+    .line-group-rows { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+    .line-row-wrap + .line-row-wrap { position: relative; }
+    .line-row-wrap + .line-row-wrap::before { content: ""; position: absolute; left: 0; right: 0; top: -22px; border-top: 1px dashed #3f3f46; }
     .line-row-label {
       flex: 0 0 auto;
       writing-mode: vertical-rl;
       transform: rotate(180deg);
       text-align: center;
-      font-size: 12.7px;
+      font-size: 14.6px;
       font-weight: bold;
       letter-spacing: 1.2px;
       text-transform: uppercase;
@@ -639,42 +650,186 @@
       min-width: 0;
       display: grid;
       grid-template-columns: repeat(10, minmax(0, 1fr));
-      gap: 20px;
+      gap: 14px;
     }
     .line-row .station-box {
       width: auto;
       min-width: 0;
-      min-height: 110px;
-      padding: 6px 8px;
+      min-height: 120px;
+      padding: 7px 9px;
       border-radius: 6px;
-      gap: 6px;
+      gap: 7px;
     }
     .line-row .station-box:not(.last-in-row)::after {
       content: "\203A";
       position: absolute;
-      right: -16px;
+      right: -13px;
       top: 50%;
       transform: translateY(-50%);
       width: 12px;
       text-align: center;
-      font-size: 23px;
+      font-size: 22px;
       font-weight: bold;
       line-height: 1;
       color: #60a5fa;
       pointer-events: none;
     }
-    .line-row .station-top { font-size: 12.7px; margin-bottom: 0; gap: 2px 4px; flex-wrap: wrap; justify-content: flex-start; }
-    .line-row .st-badge { font-size: 12.5px; padding: 2px 4px; overflow: visible; text-overflow: clip; flex: 0 0 auto; }
-    .line-row .arrow-txt { font-size: 11.5px; color: #fbbf24; font-weight: bold; }
-    .line-row .bay-empty { font-size: 11.5px; min-height: 55px; }
-    .line-row .car-box, .line-row .gap-box { font-size: 13.8px; line-height: 1.3; padding: 5px 7px; border-radius: 4px; }
-    .line-row .car-vin { font-size: 15px; }
-    .line-row .car-model { font-size: 13.8px; }
-    .line-row .car-color { font-size: 12.7px; line-height: 1.3; }
-    .line-row .mini-chip { width: 10px; height: 10px; }
-    .line-row .gap-title { font-size: 15px; }
-    @media (max-width: 1100px) { .line-row { grid-template-columns: repeat(5, minmax(0, 1fr)); row-gap: 14px; } }
+    .line-row .station-top { font-size: 14.6px; margin-bottom: 0; gap: 2px 4px; flex-wrap: wrap; justify-content: flex-start; }
+    .line-row .st-badge { font-size: 14.4px; padding: 2px 4px; overflow: visible; text-overflow: clip; flex: 0 0 auto; }
+    .line-row .arrow-txt { font-size: 13.2px; color: #fbbf24; font-weight: bold; }
+    .line-row .bay-empty { font-size: 13.2px; min-height: 63px; }
+    .line-row .car-box, .line-row .gap-box { flex: 1 1 auto; display: flex; flex-direction: column; justify-content: center; gap: 4px; font-size: 15.9px; line-height: 1.3; padding: 10px 10px; min-height: 76px; border-radius: 4px; }
+    .line-row .car-vin { font-size: 16px; }
+    .line-row .car-model { font-size: 13px; white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: break-word; word-break: normal; line-height: 1.25; }
+    .line-row .car-color { font-size: 14.6px; line-height: 1.3; }
+    .line-row .mini-chip { width: 11.5px; height: 11.5px; }
+    .line-row .gap-title { font-size: 16px; white-space: normal; }
+    @media (max-width: 1100px) { .line-row { grid-template-columns: repeat(5, minmax(0, 1fr)); row-gap: 10px; } }
     @media (max-width: 600px)  { .line-row { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    /* ---- Main page line view redesign: navy theme, colour-tinted station cards ---- */
+    .line-panel { background: #0a2a5e; border: 1px solid #1d4f9a; }
+    .line-panel-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .line-panel-head h2 { font-size: 20px; margin: 0; color: #ffffff; }
+    .line-panel-actions { display: flex; align-items: center; gap: 8px; }
+    .panel-clock-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #0b3270;
+      border: 1px solid #1d6fd1;
+      color: #e0f2fe;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+    }
+    .panel-clock-badge .clock-label {
+      font-size: 11px;
+      margin-bottom: 0;
+      color: #93b4e0;
+    }
+    .panel-clock-badge .clock-value {
+      font-size: 13px;
+      color: #86efac;
+    }
+    .line-panel.fs-active .panel-clock-badge {
+      padding: 0.4vh 0.8vw;
+      font-size: min(1.8vh, 1.1vw);
+    }
+    .line-panel.fs-active .panel-clock-badge .clock-label,
+    .line-panel.fs-active .panel-clock-badge .clock-value {
+      font-size: min(1.8vh, 1.1vw);
+    }
+    .on-line-pill { background: #0f3d84; border: 1px solid #1d6fd1; color: #e0f2fe; font-weight: bold; font-size: 14px; padding: 7px 14px; border-radius: 6px; }
+    .btn-fs { background: transparent; border: 1px solid #3b82c4; color: #e0f2fe; }
+    .btn-fs:hover { background: #0f3d84; }
+    .line-panel .flow-note { color: #93b4e0; }
+    .line-rows { gap: 30px; }
+    .line-row-wrap { gap: 10px; }
+    .line-row-wrap + .line-row-wrap::before { top: -15px; border-top: 3px solid #e5e7eb; opacity: 0.85; }
+    .line-group-rows { gap: 8px; }
+    .line-row-label { display: flex; align-items: center; justify-content: center; background: #0b3270; border: 2px solid #1d6fd1; color: #7cc0ff; font-size: 18px; border-radius: 4px; padding: 6px 6px; }
+    .line-row { gap: 8px; }
+    .line-row .station-box { border: 2px solid #38a5e8; border-radius: 4px; padding: 4px; gap: 6px; min-height: 110px; background: #0e3a7a; }
+    .line-row .station-box.has-car { border-color: #38a5e8; background: #0e3a7a; }
+    .line-row .station-box.is-gap { border-color: #a78bfa; border-style: dashed; background: #2a1d55; }
+    .line-row .station-box.is-empty { border: 2px dashed #94a3b8; background: #3a4a63; }
+    .line-row .station-box:hover { border-color: #ffffff; }
+    .line-row .station-box:not(.last-in-row)::after { display: none; }
+    .line-row .station-top { flex-wrap: nowrap; justify-content: space-between; align-items: center; background: rgba(6, 24, 60, 0.9); border-radius: 3px; padding: 3px 7px; }
+    .line-row .st-badge { background: transparent; border: none; padding: 0; color: #bfe0ff; }
+    .line-row .bay-empty { border: none; color: #e2e8f0; }
+    .line-row .station-box.tinted .car-box { background: transparent; border: none; padding: 4px 4px 2px; }
+    .line-row .station-box.tinted .car-vin,
+    .line-row .station-box.tinted .car-model { color: inherit; }
+    /* Full screen: line stations only, fitted to the screen */
+    .line-panel.fs-active { position: fixed; inset: 0; z-index: 9000; margin: 0; border: none; border-radius: 0; min-width: 0; padding: 1.2vh 1.2vw; display: flex; flex-direction: column; overflow: hidden; box-sizing: border-box; }
+    .line-panel.fs-active .fs-hide { display: none !important; }
+    .line-panel.fs-active .line-panel-head { flex: 0 0 auto; margin-bottom: 0.6vh; }
+    .line-panel.fs-active .line-panel-head h2 { font-size: min(2.6vh, 1.7vw); }
+    .line-panel.fs-active #productionTable { flex: 0 0 auto; position: relative; z-index: 2; margin-bottom: 1vh; }
+    .line-panel.fs-active #stationsContainer { flex: 1 1 0; min-height: 0; overflow: hidden; display: flex; flex-direction: column; position: relative; z-index: 1; }
+    .line-panel.fs-active .line-rows { flex: 1 1 0; min-height: 0; height: 100%; gap: 1.4vh; }
+    .line-panel.fs-active .line-row-wrap { flex: var(--rows, 1) 1 0; min-height: 0; overflow: hidden; }
+    .line-panel.fs-active .line-row-wrap + .line-row-wrap::before { top: -0.8vh; }
+    .line-panel.fs-active .line-group-rows { flex: 1 1 0; min-height: 0; gap: 0.7vh; }
+    .line-panel.fs-active .line-row { flex: 1 1 0; min-height: 0; grid-template-columns: repeat(10, minmax(0, 1fr)); grid-template-rows: minmax(0, 1fr); gap: 0.6vw; }
+    .line-panel.fs-active .line-row .station-box { min-height: 0; height: 100%; padding: 0.35vh 0.35vw; gap: 0.3vh; overflow: hidden; box-sizing: border-box; }
+    .line-panel.fs-active .line-row .station-top { flex: 0 0 auto; padding: 0.2vh 0.35vw; }
+    .line-panel.fs-active .line-row .car-box,
+    .line-panel.fs-active .line-row .gap-box { flex: 1 1 0; min-height: 0; padding: 0.2vh 0.2vw; gap: 0.15vh; overflow: hidden; justify-content: center; }
+    .line-panel.fs-active .line-row-label { font-size: min(2.1vh, 1.45vw); padding: 0.3vh 0.3vw; }
+    .line-panel.fs-active .line-row .st-badge { font-size: min(1.45vh, 0.95vw); }
+    .line-panel.fs-active .line-row .arrow-txt { font-size: min(1.35vh, 0.9vw); }
+    .line-panel.fs-active .line-row .car-vin { font-size: min(2.2vh, 1.5vw); line-height: 1.1; }
+    .line-panel.fs-active .line-row .car-model { font-size: min(1.45vh, 0.95vw); line-height: 1.1; }
+    .line-panel.fs-active .line-row .gap-title { font-size: min(2.2vh, 1.5vw); line-height: 1.1; }
+    .line-panel.fs-active .line-row .bay-empty { flex: 1 1 0; font-size: min(1.7vh, 1.1vw); min-height: 0; }
+    /* CSV export bar */
+    .export-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 12px; padding: 8px 10px; background: #0b3270; border: 1px solid #1d4f9a; border-radius: 6px; font-size: 12px; color: #bfe0ff; }
+    .export-title { font-weight: bold; color: #ffffff; text-transform: uppercase; letter-spacing: 0.6px; margin-right: 4px; }
+    .export-sep { width: 1px; align-self: stretch; background: #1d4f9a; margin: 0 6px; }
+    .export-bar select { padding: 6px 8px; border-radius: 6px; border: 1px solid #3b82c4; background: #0a2a5e; color: #e0f2fe; font-size: 12px; }
+    .export-msg { font-size: 12px; color: #fde68a; }
+    .line-row .car-vin, .line-row .gap-title { flex: none; }
+    /* Summary blocks (left) + squeezed model table (right) */
+    .prod-layout { display: flex; flex-wrap: wrap; gap: 12px; align-items: stretch; }
+    .prod-summary { flex: 0 0 360px; display: flex; flex-direction: column; gap: 10px; }
+    .prod-detail { flex: 1 1 420px; min-width: 0; }
+    .sum-block { flex: 1 1 0; display: flex; align-items: stretch; background: #0b3270; border: 1px solid #1d4f9a; border-radius: 4px; border-bottom: 3px solid #38a5e8; }
+    .sum-label { flex: 0 0 96px; display: flex; flex-direction: column; justify-content: center; gap: 2px; padding: 8px 10px; color: #bfe0ff; border-right: 1px solid #1d4f9a; }
+    .sum-label strong { font-size: 13px; letter-spacing: 0.6px; color: #ffffff; }
+    .sum-label span { font-size: 10px; color: #93b4e0; }
+    .sum-cell { flex: 1 1 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 6px 4px; border-left: 1px solid #1d4f9a; }
+    .sum-cell:nth-child(2) { border-left: none; }
+    .sum-h { font-size: 10px; letter-spacing: 0.6px; color: #93b4e0; }
+    .sum-n { font-size: 34px; font-weight: bold; color: #ffffff; line-height: 1; }
+    .sum-cell.cur { background: rgba(29, 111, 209, 0.35); }
+    .prod-table { font-size: 12.5px; }
+    .prod-table th, .prod-table td { padding: 3px 8px; }
+    .prod-table th { font-size: 10.5px; }
+    .prod-table th.grp { font-size: 12px; }
+    .line-panel.fs-active .prod-summary { flex: 0 0 26vw; height: 100%; max-height: 100%; min-height: 0; gap: 0.6vh; overflow: hidden; box-sizing: border-box; }
+    .line-panel.fs-active .sum-block { flex: 1 1 0; min-height: 0; overflow: hidden; box-sizing: border-box; }
+    .line-panel.fs-active .sum-cell { padding: 0.15vh 0.3vw; gap: 0.1vh; min-height: 0; }
+    .line-panel.fs-active .sum-label { flex-basis: 6vw; padding: 0.15vh 0.5vw; min-height: 0; }
+    .line-panel.fs-active .sum-label strong { font-size: min(1.6vh, 1vw); line-height: 1.1; }
+    .line-panel.fs-active .sum-label span { font-size: min(1.15vh, 0.75vw); line-height: 1.1; }
+    .line-panel.fs-active .sum-h { font-size: min(1.15vh, 0.75vw); line-height: 1.1; }
+    .line-panel.fs-active .sum-n { font-size: min(3.3vh, 2.1vw); line-height: 1; }
+    .line-panel.fs-active .prod-layout { gap: 0.8vw; flex-wrap: nowrap; align-items: stretch; }
+    .line-panel.fs-active .prod-detail { flex: 1 1 0; height: 100%; max-height: 100%; min-height: 0; box-sizing: border-box; }
+    /* Production table: LINE IN / LINE OFF by shift */
+    .prod-wrap { margin-bottom: 16px; }
+    .prod-note { font-size: 12px; color: #93b4e0; margin-bottom: 6px; }
+    .prod-table { width: 100%; border-collapse: collapse; font-size: 15px; background: #0b2f68; border: 1px solid #1d4f9a; }
+    .prod-table th, .prod-table td { text-align: center; padding: 6px 10px; border-bottom: 1px solid #1d4f9a; color: #e0f2fe; }
+    .prod-table th { background: #0b3270; color: #bfe0ff; font-size: 12px; letter-spacing: 0.6px; }
+    .prod-table th.grp { font-size: 13px; color: #ffffff; border-bottom: 2px solid #38a5e8; }
+    .prod-table th.cur { background: #1d6fd1; color: #ffffff; }
+    .prod-table td.model-cell, .prod-table th.model-cell { text-align: left; font-weight: bold; }
+    .prod-table td.today { font-weight: bold; color: #ffffff; }
+    .prod-table .sep { border-left: 2px solid #38a5e8; }
+    .prod-table tr.total-row td { font-weight: bold; font-size: 1.05em; border-top: 2px solid #38a5e8; background: #0b3270; border-bottom: none; }
+    .line-panel.fs-active .prod-wrap { flex: 0 0 auto; margin-bottom: 1vh; }
+    .line-panel.fs-active .prod-note { font-size: min(1.4vh, 0.85vw); margin-bottom: 0.3vh; }
+    .line-panel.fs-active .prod-table { font-size: min(1.75vh, 1.05vw); }
+    .line-panel.fs-active .prod-table th { font-size: min(1.4vh, 0.85vw); padding: 0.2vh 0.6vw; }
+    .line-panel.fs-active .prod-table th.grp { font-size: min(1.6vh, 0.95vw); }
+    .line-panel.fs-active .prod-table td { padding: 0.12vh 0.6vw; }
+    /* Fixed-size shift counter box: does not grow as entries are added; model rows scroll inside */
+    .prod-layout { height: 136px; flex-wrap: nowrap; }
+    .prod-summary, .prod-detail { height: 100%; min-height: 0; }
+    .prod-detail { box-sizing: border-box; overflow-y: auto; overflow-x: hidden; background: #0b2f68; border: 1px solid #1d4f9a; scrollbar-width: thin; scrollbar-color: #38a5e8 #0b2f68; }
+    .prod-detail::-webkit-scrollbar { width: 6px; }
+    .prod-detail::-webkit-scrollbar-thumb { background: #38a5e8; border-radius: 3px; }
+    .prod-detail .prod-table { border: none; }
+    .prod-table thead { position: sticky; top: 0; z-index: 2; }
+    .prod-table tr.total-row td { position: sticky; bottom: 0; z-index: 1; }
+    .prod-detail .prod-table th { padding: 3px 10px; }
+    .prod-detail .prod-table td { padding: 2px 10px; }
+    .prod-detail .prod-table tr.total-row td { padding: 3px 10px; }
+    .line-panel.fs-active .prod-layout { height: 14vh; }
+    @media (max-width: 900px) { .prod-layout { height: auto; flex-wrap: wrap; } .prod-summary { height: 136px; } .prod-detail { height: 136px; } }
     /* Stacked Left-to-Right Layout for Trim, Chassis, and Final pages */
     .zone-page-panel {
       background: rgba(24, 24, 27, 0.92);
@@ -878,6 +1033,13 @@
     table { width: 100%; border-collapse: collapse; font-size: 13px; }
     th, td { text-align: left; padding: 8px; border-bottom: 1px solid #2b2b30; }
     th { background: #141416; color: #a1a1aa; font-size: 11px; text-transform: uppercase; }
+    /* Larger text for Vehicle Exit History */
+    .history-panel table { font-size: 17px; }
+    .history-panel th { font-size: 13px; padding: 10px 8px; }
+    .history-panel td { padding: 10px 8px; }
+    .history-panel .color-chip { width: 12px; height: 12px; margin-right: 6px; }
+    .history-panel .remarks-input { font-size: 15px; padding: 6px 8px; }
+    .history-panel .btn-sm { font-size: 13px; padding: 6px 10px; }
     /* Modal overlay for password re-authentication on Reset */
     .modal-backdrop {
       position: fixed;
@@ -898,6 +1060,160 @@
       padding: 20px;
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.85);
     }
+    /* ---- Trim / Chassis / Final pages: same navy theme and station blocks as the Main line view ---- */
+    #zonePageView .zone-page-panel { background: #0a2a5e; border: 1px solid #1d4f9a; }
+    #zonePageView .zone-header { border-bottom: 1px solid #1d4f9a; }
+    #zonePageView #zonePageTitle { color: #ffffff; font-size: 20px !important; }
+    #zonePageView .flow-note { color: #93b4e0; }
+    #zonePageView .zone-badge { background: #0f3d84; border: 1px solid #1d6fd1; color: #e0f2fe; font-size: 13px; padding: 6px 12px; }
+    #zonePageView .zone-stacked-grid { display: block; }
+    /* Page tabs placed below the Vehicle Entry box on the Main page */
+    .main-wrap > .tab-bar { margin-bottom: 0; }
+    /* Subtle Next Page button in Full Screen (bottom-right, small, low-prominence) */
+    .fs-next-page-bar {
+      display: none;
+    }
+    .line-panel.fs-active .fs-next-page-bar {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      flex: 0 0 auto;
+      padding-top: 0.4vh;
+    }
+    .fs-next-page-btn {
+      background: rgba(15, 61, 132, 0.35);
+      border: 1px solid rgba(59, 130, 196, 0.35);
+      color: rgba(191, 224, 255, 0.65);
+      font-size: 11px;
+      font-weight: normal;
+      padding: 2px 8px;
+      border-radius: 4px;
+      letter-spacing: 0.3px;
+      cursor: pointer;
+      transition: opacity 0.2s ease, color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+    }
+    .fs-next-page-btn:hover {
+      background: rgba(29, 111, 209, 0.55);
+      border-color: rgba(147, 197, 253, 0.7);
+      color: #ffffff;
+    }
+
+    /* Full screen on Trim / Chassis / Final pages */
+    .line-panel.fs-active #zoneStackedContainer { flex: 1 1 0; min-height: 0; overflow: hidden; display: flex; flex-direction: column; }
+    .line-panel.fs-active .zone-header { margin-bottom: 1vh; padding-bottom: 0.8vh; }
+    .line-panel.fs-active #zonePageTitle { font-size: min(2.8vh, 1.8vw) !important; }
+    .line-panel.fs-active #zonePageSubtitle { display: none; }
+    .line-panel.fs-active .station-hold-row { display: none; }
+    .line-panel.fs-active #zoneStackedContainer .line-row { grid-template-columns: repeat(var(--zone-cols, 10), minmax(0, 1fr)); }
+    .line-panel.fs-active #zoneStackedContainer .station-box { padding: 0.8vh 0.6vw; }
+    .line-panel.fs-active #zoneStackedContainer .st-badge { font-size: min(2.4vh, calc(12vw / var(--zone-cols, 10))); }
+    .line-panel.fs-active #zoneStackedContainer .arrow-txt { font-size: min(2.2vh, calc(11vw / var(--zone-cols, 10))); }
+    .line-panel.fs-active #zoneStackedContainer .car-vin { font-size: min(4.4vh, calc(16vw / var(--zone-cols, 10))); }
+    .line-panel.fs-active #zoneStackedContainer .car-model { font-size: min(2.8vh, calc(11vw / var(--zone-cols, 10))); }
+    .line-panel.fs-active #zoneStackedContainer .gap-title { font-size: min(4.4vh, calc(16vw / var(--zone-cols, 10))); }
+    .line-panel.fs-active #zoneStackedContainer .bay-empty { font-size: min(2.8vh, calc(12vw / var(--zone-cols, 10))); }
+    .line-panel.fs-active #zoneStackedContainer .bay-offline { font-size: min(2.6vh, calc(11vw / var(--zone-cols, 10))); }
+    .line-panel.fs-active #zoneStackedContainer .bay-offline .offline-sub { font-size: min(2vh, calc(9vw / var(--zone-cols, 10))); }
+    /* ---- Hold / Offline bay ---- */
+    .btn-hold {
+      background: #c2410c;
+      color: #ffffff;
+      border: 1px solid #fb923c;
+      font-size: 11px;
+      font-weight: bold;
+      letter-spacing: 0.4px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      line-height: 1.2;
+      cursor: pointer;
+    }
+    .btn-hold:hover:not(:disabled) { background: #9a3412; }
+    .station-hold-row { display: flex; justify-content: flex-end; margin-top: 1px; }
+    .line-row .station-hold-row .btn-hold {
+      width: 16px;
+      height: 16px;
+      min-width: 0;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0;
+      padding: 0;
+      border-radius: 3px;
+      line-height: 14px;
+      text-align: center;
+      background: rgba(113, 113, 122, 0.25);
+      color: rgba(244, 244, 245, 0.45);
+      border: 1px solid rgba(161, 161, 170, 0.25);
+      opacity: 0.35;
+      transition: opacity 0.18s ease, background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease, transform 0.15s ease;
+    }
+    .line-row .station-hold-row .btn-hold:hover:not(:disabled) {
+      opacity: 1;
+      background: #c2410c;
+      color: #ffffff;
+      border-color: #fb923c;
+      transform: scale(1.08);
+    }
+    .line-panel.fs-active .station-hold-row { display: none; }
+    .bay-offline {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border: 1px dashed #f97316;
+      border-radius: 2px;
+      color: #fdba74;
+      font-size: 6.5px;
+      font-weight: bold;
+      text-transform: uppercase;
+      line-height: 1.15;
+      padding: 2px;
+    }
+    .bay-offline .offline-sub { font-weight: normal; text-transform: none; color: #fed7aa; }
+    .line-row .station-box.is-offline { border: 2px dashed #f97316; background: #3a4a63; }
+    .line-row .bay-offline { font-size: 13.2px; min-height: 63px; border: none; color: #fdba74; }
+    .line-row .bay-offline .offline-sub { font-size: 11px; }
+    .line-panel.fs-active .line-row .bay-offline { font-size: min(1.8vh, 1.1vw); min-height: 0; }
+    .line-panel.fs-active .line-row .bay-offline .offline-sub { font-size: min(1.4vh, 0.85vw); }
+    .zone-station-card.is-offline { border: 1px dashed #f97316; }
+    .zone-offline-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 3px;
+      min-height: 74px;
+      color: #fdba74;
+      font-size: 12px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+    .zone-offline-state .offline-sub { font-size: 11px; font-weight: normal; text-transform: none; color: #fed7aa; letter-spacing: 0; }
+    .zone-hold-row { margin-top: 8px; display: flex; justify-content: flex-end; }
+    .hold-count-pill {
+      display: inline-block;
+      min-width: 18px;
+      margin-left: 6px;
+      padding: 1px 6px;
+      border-radius: 999px;
+      background: #c2410c;
+      color: #ffffff;
+      font-size: 11px;
+      text-align: center;
+    }
+    .hold-panel { background: rgba(24, 24, 27, 0.92); border: 1px solid #2e2e32; border-radius: 8px; padding: 14px; overflow-x: auto; }
+    .hold-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 10px; }
+    .hold-panel table { font-size: 15px; }
+    .hold-panel th { font-size: 12px; padding: 10px 8px; }
+    .hold-panel td { padding: 10px 8px; vertical-align: top; }
+    .hold-vehicle-summary { background: #141416; border: 1px solid #2e2e32; border-radius: 6px; padding: 8px 10px; font-size: 13px; margin-bottom: 10px; line-height: 1.5; }
+    .btn-release { background: #15803d; color: #ffffff; border: 1px solid #22c55e; font-size: 12px; padding: 5px 12px; border-radius: 4px; }
+    .btn-release:hover:not(:disabled) { background: #166534; }
+    .release-confirm-text { font-size: 13px; color: #bbf7d0; background: rgba(21, 128, 61, 0.18); border: 1px solid #15803d; border-radius: 6px; padding: 8px 10px; margin-top: 4px; line-height: 1.45; }
+    #releaseStationSelect { width: 100%; box-sizing: border-box; padding: 7px 8px; border-radius: 6px; border: 1px solid #3f3f46; background: #121212; color: #fafafa; font-size: 13px; }
     .hidden { display: none !important; }
   </style>
 </head>
@@ -943,7 +1259,7 @@
         <h1 style="margin:0;">Automotive Assembly Shop Line Monitoring</h1>
       </div>
       <div class="auth-controls">
-        <strong>Active Entries:</strong> <span id="activeCount">0 / 37</span> &nbsp;|&nbsp;
+        <strong>Active Entries:</strong> <span id="activeCount">0 / 40</span> &nbsp;|&nbsp;
         <strong>Exited (FIFO):</strong> <span id="exitedCount">0</span>
         <span id="roleBadge" class="auth-badge">Guest (Read-Only)</span>
         <button type="button" id="authActionBtn" class="btn-gray" style="flex:none; padding:6px 10px;">Operator Sign In</button>
@@ -954,27 +1270,31 @@
       System ready. Add a vehicle or gap to place it in <strong>TRIM 01</strong> and shift existing entries forward.
     </div>
 
-    <div class="tab-bar">
+    <div class="tab-bar" id="pageTabBar">
       <div class="tab-group" role="tablist" aria-label="Assembly Line Pages">
         <button type="button" id="pageMainBtn" class="page-btn active" data-page="main">Main</button>
         <button type="button" id="pageTrimBtn" class="page-btn" data-page="trim">Trim</button>
         <button type="button" id="pageChassisBtn" class="page-btn" data-page="chassis">Chassis</button>
         <button type="button" id="pageFinalBtn" class="page-btn" data-page="final">Final</button>
+        <button type="button" id="pageHoldBtn" class="page-btn" data-page="hold">Hold Vehicles<span id="holdCountPill" class="hold-count-pill">0</span></button>
       </div>
       <div class="tab-group" role="tablist" aria-label="Editor Mode">
         <button type="button" id="tabEditBtn" class="tab-btn" role="tab" aria-selected="false">Edit Entries (Login Required)</button>
       </div>
     </div>
 
-    <!-- MAIN PAGE (Single-Row Vehicle Entry Panel Above Station Line View) -->
+    <!-- MAIN PAGE (Single-Row Vehicle Entry Panel Above Assembly Line View) -->
     <div id="mainPageView">
       <div class="main-wrap">
-        <div class="form-panel">
+        <div class="form-panel" id="entryFormPanel">
           <div class="form-panel-header">
             <h2>Vehicle Entry (Trim 01)</h2>
-            <div id="ClockBox" class="clock-box">
-              <span class="clock-label">Date &amp; Time:</span>
-              <span id="ClockValue" class="clock-value">--</span>
+            <div style="display:flex; flex-wrap:wrap; align-items:center; gap:8px;">
+              <div id="ClockBox" class="clock-box">
+                <span class="clock-label">Date &amp; Time:</span>
+                <span id="ClockValue" class="clock-value">--</span>
+              </div>
+              <button type="button" id="resetBtn" class="btn-red">Reset</button>
             </div>
           </div>
           <form id="carForm" class="entry-input-stack">
@@ -1050,21 +1370,45 @@
               <div class="horizontal-entry-actions">
                 <button type="submit" id="submitCarBtn" class="btn-add">Enter &amp; Move</button>
                 <button type="button" id="gapBtn" class="btn-gap">Gap</button>
+                <button type="button" id="sampleBtn" class="btn-gray" style="flex:none; padding:7px 10px; font-size:12px; white-space:nowrap;">Sample Entry (x5)</button>
               </div>
             </div>
           </form>
           <div id="errBox" class="err"></div>
         </div>
 
-        <div class="line-panel">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-            <h2 style="font-size:15px; margin:0;">Station Line View (All 37 Stations)</h2>
-            <button type="button" id="resetBtn" class="btn-red">Reset</button>
+        <div class="line-panel" id="linePanel">
+          <div class="line-panel-head">
+            <h2>Assembly Line View (Hyundai Nishat Motor Pvt Ltd)</h2>
+            <div class="line-panel-actions">
+              <div class="panel-clock-badge">
+                <span class="clock-label">Date &amp; Time:</span>
+                <span class="clock-value live-clock-value">--</span>
+              </div>
+              <span id="onLinePill" class="on-line-pill">0 on line</span>
+              <button type="button" id="fullscreenBtn" class="btn-fs">Full Screen</button>
+            </div>
           </div>
-          <div class="flow-note">
-            Vehicles and Null entries enter at TRIM 01 and advance sequentially through FINAL 09 (FIFO exit). Every row flows left to right; continue on the next row down.
+          <div class="export-bar fs-hide">
+            <span class="export-title">Export CSV</span>
+            <button type="button" id="exportLineInBtn" class="btn-fs">Current Line In Units</button>
+            <span class="export-sep"></span>
+            <label for="exportShiftSelect">Line Off:</label>
+            <select id="exportShiftSelect">
+              <option value="ALL">All Shifts</option>
+              <option value="A">Shift A (08:01 AM - 08:00 PM)</option>
+              <option value="B">Shift B (08:01 PM - 08:00 AM)</option>
+            </select>
+            <select id="exportDaySelect">
+              <option value="CURRENT">Current Production Day</option>
+              <option value="ALL">All Days</option>
+            </select>
+            <button type="button" id="exportLineOffBtn" class="btn-fs">Line Off / Exit Units</button>
+            <span id="exportMsg" class="export-msg"></span>
           </div>
+          <div id="productionTable" class="prod-wrap"></div>
           <div id="stationsContainer"></div>
+          <div class="fs-next-page-bar"><button type="button" id="mainFsNextPageBtn" class="fs-next-page-btn">Next Page</button></div>
         </div>
       </div>
 
@@ -1094,7 +1438,7 @@
 
     <!-- TRIM / CHASSIS / FINAL STACKED LEFT-TO-RIGHT PAGE -->
     <div id="zonePageView" class="hidden">
-      <div class="zone-page-panel">
+      <div class="zone-page-panel line-panel" id="zonePagePanel">
         <div class="zone-header">
           <div>
             <h2 id="zonePageTitle" style="font-size:16px; margin:0 0 4px 0;">Trim Line Stations</h2>
@@ -1103,12 +1447,61 @@
             </div>
           </div>
           <div class="zone-summary-badges">
+            <div class="panel-clock-badge">
+              <span class="clock-label">Date &amp; Time:</span>
+              <span class="clock-value live-clock-value">--</span>
+            </div>
             <span class="zone-badge"><strong>Zone Occupancy:</strong> <span id="zoneOccupiedCount">0 / 0</span></span>
             <span class="zone-badge"><strong>Vehicles:</strong> <span id="zoneVehicleCount">0</span></span>
             <span class="zone-badge"><strong>Gaps (Null):</strong> <span id="zoneGapCount">0</span></span>
+            <button type="button" id="zoneFullscreenBtn" class="btn-fs">Full Screen</button>
           </div>
         </div>
         <div id="zoneStackedContainer" class="zone-stacked-grid"></div>
+        <div class="fs-next-page-bar"><button type="button" id="zoneFsNextPageBtn" class="fs-next-page-btn">Next Page</button></div>
+      </div>
+    </div>
+
+    <!-- HOLD VEHICLES PAGE -->
+    <div id="holdPageView" class="hidden">
+      <div class="hold-panel">
+        <div class="zone-header">
+          <div>
+            <h2 style="font-size:16px; margin:0 0 4px 0;">Hold Vehicles (Taken Off the Conveyor)</h2>
+            <div class="flow-note" style="margin:0;">
+              Vehicles put on hold from a station. Their bay was left empty and marked OFFLINE on the line.
+            </div>
+          </div>
+          <div class="zone-summary-badges">
+            <span class="zone-badge"><strong>On Hold:</strong> <span id="holdTotalCount">0</span></span>
+          </div>
+        </div>
+        <div class="hold-toolbar">
+          <input type="text" id="holdSearchField" placeholder="Filter by VIN, model, station, reason or operator..." style="flex:1; min-width:220px; max-width:360px; padding:6px 8px; border-radius:6px; border:1px solid #3f3f46; background:#121212; color:#fafafa; font-size:12px;" />
+          <button type="button" id="exportHoldBtn" class="btn-fs">Export CSV</button>
+          <span id="holdExportMsg" class="export-msg"></span>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>VIN Number</th>
+              <th>Brand</th>
+              <th>Model / Variant</th>
+              <th>Exterior</th>
+              <th>Interior</th>
+              <th>Line Entry</th>
+              <th>Held From</th>
+              <th>Hold Date &amp; Time</th>
+              <th>Held By</th>
+              <th>Reason</th>
+              <th id="holdActionHead">Action</th>
+            </tr>
+          </thead>
+          <tbody id="holdTableBody">
+            <tr><td colspan="12" style="text-align:center; color:#a1a1aa;">No vehicles on hold.</td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
@@ -1236,7 +1629,7 @@
       <div class="brand-tag">Security Verification Required</div>
       <h2 id="resetModalTitle" style="font-size:16px; margin:0 0 8px 0; color:#fafafa;">Confirm Assembly Line Reset</h2>
       <div class="flow-note" style="margin-bottom:12px;">
-        Resetting will clear all <strong>37 stations</strong> and the entire <strong>Vehicle Exit History</strong>. Re-enter your operator password to proceed.
+        Resetting will clear all <strong>40 stations</strong>, the entire <strong>Vehicle Exit History</strong> and the <strong>Hold Vehicles</strong> list. Re-enter your operator password to proceed.
       </div>
       <form id="resetAuthForm">
         <div class="field">
@@ -1251,6 +1644,61 @@
         <div class="btn-row">
           <button type="button" id="cancelResetModalBtn" class="btn-gray">Cancel</button>
           <button type="submit" id="confirmResetModalBtn" class="btn-red" style="flex:1;">Verify &amp; Reset Line</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Password Authorization Modal for Hold -->
+  <div id="holdAuthModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="holdModalTitle">
+    <div class="modal-card">
+      <div class="brand-tag">Authorization Required</div>
+      <h2 id="holdModalTitle" style="font-size:16px; margin:0 0 8px 0; color:#fafafa;">Hold Vehicle</h2>
+      <div class="flow-note" style="margin-bottom:10px;">
+        The vehicle will be taken off the conveyor and moved to the <strong>Hold Vehicles</strong> list. Its bay will be left empty and shown as <strong>OFFLINE</strong>. Re-enter your operator password to authorize.
+      </div>
+      <div id="holdVehicleSummary" class="hold-vehicle-summary"></div>
+      <form id="holdAuthForm">
+        <div class="field">
+          <label for="holdReasonField">Hold Reason</label>
+          <input type="text" id="holdReasonField" placeholder="e.g. Paint defect, missing part..." maxlength="200" required />
+        </div>
+        <div class="field">
+          <label for="holdOperatorEmailDisplay">Signed-In Operator</label>
+          <input type="text" id="holdOperatorEmailDisplay" readonly style="color:#a1a1aa; background:#141416;" />
+        </div>
+        <div class="field">
+          <label for="holdPasswordField">Operator Password</label>
+          <input type="password" id="holdPasswordField" placeholder="Enter your password" required autocomplete="current-password" />
+        </div>
+        <div id="holdAuthErrBox" class="err" style="margin-top:4px; margin-bottom:8px;"></div>
+        <div class="btn-row">
+          <button type="button" id="cancelHoldModalBtn" class="btn-gray">Cancel</button>
+          <button type="submit" id="confirmHoldModalBtn" class="btn-hold" style="flex:1; font-size:13px; padding:9px 12px;">Verify &amp; Hold Vehicle</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Release Confirmation Modal -->
+  <div id="releaseModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="releaseModalTitle">
+    <div class="modal-card">
+      <div class="brand-tag">Confirm Release</div>
+      <h2 id="releaseModalTitle" style="font-size:16px; margin:0 0 8px 0; color:#fafafa;">Release Vehicle</h2>
+      <div class="flow-note" style="margin-bottom:10px;">
+        The vehicle will be removed from the Hold list and put back on the conveyor at the station selected below.
+      </div>
+      <div id="releaseVehicleSummary" class="hold-vehicle-summary"></div>
+      <form id="releaseForm">
+        <div class="field">
+          <label for="releaseStationSelect">Put Vehicle At Station</label>
+          <select id="releaseStationSelect" required></select>
+        </div>
+        <div id="releaseConfirmText" class="release-confirm-text"></div>
+        <div id="releaseErrBox" class="err" style="margin-top:4px; margin-bottom:8px;"></div>
+        <div class="btn-row">
+          <button type="button" id="cancelReleaseBtn" class="btn-gray">Cancel</button>
+          <button type="submit" id="confirmReleaseBtn" class="btn-green" style="flex:1;">Confirm Release</button>
         </div>
       </form>
     </div>
@@ -1272,7 +1720,8 @@
         'CHASSIS 01', 'CHASSIS 02', 'CHASSIS 03', 'CHASSIS 04',
         'CHASSIS 05', 'CHASSIS 06', 'CHASSIS 07', 'CHASSIS 08',
         'FINAL 01', 'FINAL 02', 'FINAL 03', 'FINAL 04', 'FINAL 05',
-        'FINAL 06', 'FINAL 07', 'FINAL 08', 'FINAL 09'
+        'FINAL 06', 'FINAL 07', 'FINAL 08', 'FINAL 09',
+        'FINAL 10', 'FINAL 11', 'FINAL 12'
       ];
       var NUM_STATIONS = STATION_NAMES.length;
 
@@ -1307,21 +1756,22 @@
           endIndex: 27
         },
         final: {
-          title: "Final Line Stations (FINAL 01 – FINAL 09)",
+          title: "Final Line Stations (FINAL 01 – FINAL 12)",
           subtitle: "Stacked left-to-right view of Final Line stations leading to FIFO exit.",
           startIndex: 28,
-          endIndex: 36
+          endIndex: 39
         }
       };
 
       var line = new Array(NUM_STATIONS).fill(null);
       var exitedList = [];
+      var holdList = []; // vehicles taken off the conveyor via Hold
       var statusHtml = "System ready. Add a vehicle or gap to place it in <strong>TRIM 01</strong> and shift existing entries forward.";
       var formInputs = { vin: "", brand: "", model: "", variant: "", exterior: "", interior: "" };
 
       var currentUser = null;
       var isGuestMode = false;
-      var activePage = "main"; // "main" | "trim" | "chassis" | "final" | "edit"
+      var activePage = "main"; // "main" | "trim" | "chassis" | "final" | "hold" | "edit"
 
       var loginScreen = document.getElementById("loginScreen");
       var appScreen = document.getElementById("appScreen");
@@ -1354,6 +1804,7 @@
       var activeCount = document.getElementById("activeCount");
       var exitedCount = document.getElementById("exitedCount");
       var gapBtn = document.getElementById("gapBtn");
+      var sampleBtn = document.getElementById("sampleBtn");
       var resetBtn = document.getElementById("resetBtn");
 
       // Page Navigation Elements
@@ -1365,6 +1816,25 @@
       var mainPageView = document.getElementById("mainPageView");
       var zonePageView = document.getElementById("zonePageView");
       var editEntriesTab = document.getElementById("editEntriesTab");
+
+      // Hold Vehicles page / modal elements
+      var pageHoldBtn = document.getElementById("pageHoldBtn");
+      var holdPageView = document.getElementById("holdPageView");
+      var holdCountPill = document.getElementById("holdCountPill");
+      var holdTotalCount = document.getElementById("holdTotalCount");
+      var holdTableBody = document.getElementById("holdTableBody");
+      var holdSearchField = document.getElementById("holdSearchField");
+      var holdAuthModal = document.getElementById("holdAuthModal");
+      var holdAuthForm = document.getElementById("holdAuthForm");
+      var holdModalTitle = document.getElementById("holdModalTitle");
+      var holdVehicleSummary = document.getElementById("holdVehicleSummary");
+      var holdReasonField = document.getElementById("holdReasonField");
+      var holdOperatorEmailDisplay = document.getElementById("holdOperatorEmailDisplay");
+      var holdPasswordField = document.getElementById("holdPasswordField");
+      var holdAuthErrBox = document.getElementById("holdAuthErrBox");
+      var cancelHoldModalBtn = document.getElementById("cancelHoldModalBtn");
+      var confirmHoldModalBtn = document.getElementById("confirmHoldModalBtn");
+      var pendingHold = null; // { index, vin }
 
       var zonePageTitle = document.getElementById("zonePageTitle");
       var zonePageSubtitle = document.getElementById("zonePageSubtitle");
@@ -1452,6 +1922,13 @@
         appScreen.classList.remove("hidden");
 
         var editable = canEdit();
+        // Guests are read-only: hide all data entry controls
+        document.getElementById("entryFormPanel").classList.toggle("hidden", !editable);
+        tabEditBtn.classList.toggle("hidden", !editable);
+        resetBtn.classList.toggle("hidden", !editable);
+        if (!editable && activePage === "edit") {
+          setActivePage("main");
+        }
         vinField.disabled = !editable;
         brandField.disabled = !editable;
         modelField.disabled = !editable;
@@ -1461,6 +1938,7 @@
         interiorField.disabled = !editable;
         submitCarBtn.disabled = !editable;
         gapBtn.disabled = !editable;
+        sampleBtn.disabled = !editable;
         resetBtn.disabled = !editable;
 
         var touchBtns = document.querySelectorAll(".touch-select-btn");
@@ -1528,11 +2006,52 @@
         for (var j = 0; j < exitedList.length; j++) {
           if (exitedList[j] && exitedList[j].vin && exitedList[j].vin.toUpperCase() === target) return true;
         }
+        for (var h = 0; h < holdList.length; h++) {
+          if (holdList[h] && holdList[h].vin && holdList[h].vin.toUpperCase() === target) return true;
+        }
         return false;
+      }
+
+      // An OFFLINE bay: the vehicle was put on Hold and taken off the conveyor; the bay is empty.
+      function isOfflineEntry(entry) {
+        return Boolean(entry && entry.isOffline);
+      }
+
+      // A real vehicle on the line (not a gap, not an empty/offline bay)
+      function isVehicleEntry(entry) {
+        return Boolean(entry && !entry.isGap && !entry.isOffline);
+      }
+
+      function cloneHoldItem(item) {
+        if (!item) return null;
+        var c = cloneEntry(item);
+        c.holdId = item.holdId || "";
+        c.holdStationNo = item.holdStationNo || null;
+        c.holdStation = item.holdStation || "";
+        c.holdDate = item.holdDate || "";
+        c.holdTime = item.holdTime || "";
+        c.holdBy = item.holdBy || "";
+        c.holdReason = item.holdReason || "";
+        return c;
       }
 
       function cloneEntry(entry) {
         if (!entry) return null;
+        if (entry.isOffline) {
+          return {
+            isOffline: true,
+            isGap: false,
+            vin: null,
+            holdId: entry.holdId || "",
+            offlineVin: entry.offlineVin || "",
+            offlineModel: entry.offlineModel || "",
+            holdStation: entry.holdStation || "",
+            holdDate: entry.holdDate || "",
+            holdTime: entry.holdTime || "",
+            entryDate: entry.entryDate || "",
+            entryTime: entry.entryTime || ""
+          };
+        }
         return {
           isGap: Boolean(entry.isGap),
           vin: entry.vin !== undefined ? entry.vin : null,
@@ -1553,6 +2072,8 @@
       function pushEntryToLine(newEntry) {
         var stamp = currentDateTime();
         var lastEntry = line[NUM_STATIONS - 1];
+        // An OFFLINE (empty) bay leaving the last station is not a vehicle exit
+        if (isOfflineEntry(lastEntry)) lastEntry = null;
         var firstStationName = getStationName(1);
         var lastStationName = getStationName(NUM_STATIONS);
 
@@ -1907,6 +2428,14 @@
         var html = '<div class="tt-title">' + escapeHtml(stationLabel) + "</div>";
         if (!entry) {
           html += '<div class="tt-row"><span class="tt-label">Status:</span> Empty Bay</div>';
+        } else if (isOfflineEntry(entry)) {
+          html +=
+            '<div class="tt-row"><span class="tt-label">Status:</span> <strong style="color:#fdba74;">OFFLINE</strong> (Taken off the conveyor)</div>' +
+            '<div class="tt-row"><span class="tt-label">Bay:</span> Empty</div>' +
+            '<div class="tt-row"><span class="tt-label">Held VIN:</span> ' + escapeHtml(entry.offlineVin || "-") + "</div>" +
+            '<div class="tt-row"><span class="tt-label">Model:</span> ' + escapeHtml(entry.offlineModel || "-") + "</div>" +
+            '<div class="tt-row"><span class="tt-label">Held From:</span> ' + escapeHtml(entry.holdStation || "-") + "</div>" +
+            '<div class="tt-row"><span class="tt-label">Hold Time:</span> ' + escapeHtml(((entry.holdDate || "") + " " + (entry.holdTime || "")).trim() || "-") + "</div>";
         } else if (entry.isGap) {
           html +=
             '<div class="tt-row"><span class="tt-label">VIN Number:</span> Null</div>' +
@@ -1940,18 +2469,36 @@
         }
       }
 
-      function createStationCard(stIdx, badgeRightText) {
+      function pickTextColor(hex) {
+        var h = String(hex || "").replace("#", "");
+        if (h.length === 3) h = h.charAt(0) + h.charAt(0) + h.charAt(1) + h.charAt(1) + h.charAt(2) + h.charAt(2);
+        if (!/^[0-9a-fA-F]{6}$/.test(h)) return "#ffffff";
+        var r = parseInt(h.slice(0, 2), 16), g = parseInt(h.slice(2, 4), 16), b = parseInt(h.slice(4, 6), 16);
+        var lum = 0.299 * r + 0.587 * g + 0.114 * b;
+        return lum > 150 ? "#0b1220" : "#ffffff";
+      }
+
+      function createStationCard(stIdx, badgeRightText, showHold) {
         var stNum = stIdx + 1;
         var stationLabel = getStationName(stNum);
         var entry = line[stIdx];
 
         var boxClass = "station-box";
-        if (entry) {
+        if (isOfflineEntry(entry)) {
+          boxClass += " is-empty is-offline";
+        } else if (entry) {
           boxClass += entry.isGap ? " is-gap" : " has-car";
         }
 
+        if (!entry) boxClass += " is-empty";
+
         var box = document.createElement("div");
         box.className = boxClass;
+        if (isVehicleEntry(entry) && entry.extHex) {
+          box.classList.add("tinted");
+          box.style.background = entry.extHex;
+          box.style.color = pickTextColor(entry.extHex);
+        }
 
         var inner =
           '<div class="station-top">' +
@@ -1959,26 +2506,36 @@
           '<span class="arrow-txt">' + escapeHtml(badgeRightText || "") + "</span>" +
           "</div>";
 
-        if (entry) {
+        if (isOfflineEntry(entry)) {
+          inner +=
+            '<div class="bay-offline">' +
+            "<div>OFFLINE</div>" +
+            '<div class="offline-sub">(Taken off the conveyor)</div>' +
+            "</div>";
+        } else if (entry) {
           if (entry.isGap) {
             inner +=
               '<div class="gap-box">' +
               '<div class="gap-title">Null</div>' +
               '<div class="car-model">Null</div>' +
-              '<div class="car-color">Null</div>' +
-              '<div class="car-color">Null</div>' +
               "</div>";
           } else {
             inner +=
               '<div class="car-box">' +
               '<div class="car-vin">' + escapeHtml(entry.vin) + "</div>" +
               '<div class="car-model">' + escapeHtml(entry.model) + "</div>" +
-              '<div class="car-color"><span class="mini-chip" style="background:' + escapeHtml(entry.extHex) + '"></span>' + escapeHtml(entry.extLabel) + "</div>" +
-              '<div class="car-color">I/C: ' + escapeHtml(entry.intLabel) + "</div>" +
               "</div>";
           }
         } else {
           inner += '<div class="bay-empty">Empty</div>';
+        }
+
+        // Hold button only on the Trim / Chassis / Final pages (not on Main)
+        if (showHold && canEdit() && isVehicleEntry(entry)) {
+          inner +=
+            '<div class="station-hold-row">' +
+            '<button type="button" class="btn-hold station-hold-btn" data-st-index="' + stIdx + '" title="Hold vehicle" aria-label="Hold vehicle">H</button>' +
+            "</div>";
         }
 
         box.innerHTML = inner;
@@ -2004,7 +2561,7 @@
         var groupDefs = [
           { label: "Trim", rows: [[0, 9], [10, 19]] },
           { label: "Chassis", rows: [[20, 27]] },
-          { label: "Final", rows: [[28, NUM_STATIONS - 1]] }
+          { label: "Final", rows: [[28, 37], [38, NUM_STATIONS - 1]] }
         ];
 
         var wrap = document.createElement("div");
@@ -2013,6 +2570,7 @@
         groupDefs.forEach(function (g) {
           var groupWrap = document.createElement("div");
           groupWrap.className = "line-row-wrap";
+          groupWrap.style.setProperty("--rows", String(g.rows.length));
 
           var lbl = document.createElement("div");
           lbl.className = "line-row-label";
@@ -2038,10 +2596,17 @@
         stationsContainer.appendChild(wrap);
       }
 
-      // Render Stacked Left-to-Right Zone View for Trim, Chassis, or Final
+      // Render Trim / Chassis / Final pages with the same station blocks and colour coding as the Main line view
+      var ZONE_ROWS = {
+        trim: { label: "Trim", rows: [[0, 9], [10, 19]] },
+        chassis: { label: "Chassis", rows: [[20, 27]] },
+        final: { label: "Final", rows: [[28, 37], [38, 39]] }
+      };
+
       function renderZonePage(zoneKey) {
         var cfg = ZONE_CONFIG[zoneKey];
-        if (!cfg) return;
+        var rowsDef = ZONE_ROWS[zoneKey];
+        if (!cfg || !rowsDef) return;
 
         zonePageTitle.textContent = cfg.title;
         zonePageSubtitle.textContent = cfg.subtitle;
@@ -2052,73 +2617,43 @@
         var occupied = 0;
         var vehicles = 0;
         var gaps = 0;
-
         for (var idx = cfg.startIndex; idx <= cfg.endIndex; idx++) {
-          var stationLabel = getStationName(idx + 1);
           var entry = line[idx];
-
-          if (entry) {
-            occupied++;
-            if (entry.isGap) {
-              gaps++;
-            } else {
-              vehicles++;
-            }
-          }
-
-          var card = document.createElement("div");
-          card.className = "zone-station-card" + (entry ? (entry.isGap ? " is-gap" : " has-car") : "");
-
-          var headerHtml =
-            '<div class="zone-card-top">' +
-              '<span class="zone-st-badge">' + escapeHtml(stationLabel) + "</span>" +
-              '<span class="zone-seq-tag">#' + (idx + 1) + "</span>" +
-            "</div>";
-
-          var bodyHtml = "";
-          if (!entry) {
-            bodyHtml = '<div class="zone-empty-state">Empty Bay</div>';
-          } else if (entry.isGap) {
-            var gapDt = ((entry.entryDate || "") + " " + (entry.entryTime || "")).trim() || "-";
-            bodyHtml =
-              '<div class="zone-card-body">' +
-                '<div class="zone-vin" style="color:#ddd6fe;">Null (Gap)</div>' +
-                '<div class="zone-detail-row">No vehicle assigned</div>' +
-                '<div class="gap-time">' + escapeHtml(gapDt) + "</div>" +
-              "</div>";
-          } else {
-            var carDt = ((entry.entryDate || "") + " " + (entry.entryTime || "")).trim() || "-";
-            var cardBrand = entry.brand || inferBrandFromModel(entry.model);
-            bodyHtml =
-              '<div class="zone-card-body">' +
-                '<div class="zone-vin">' + escapeHtml(entry.vin) + "</div>" +
-                '<div class="zone-model">' + escapeHtml((cardBrand ? cardBrand + " • " : "") + entry.model) + "</div>" +
-                '<div class="zone-detail-row">' +
-                  '<span class="color-chip" style="background:' + escapeHtml(entry.extHex) + '"></span>' +
-                  '<span>Ext: <strong>' + escapeHtml(entry.extLabel) + "</strong></span>" +
-                  "<span>|</span>" +
-                  '<span>Int: <strong>' + escapeHtml(entry.intLabel) + "</strong></span>" +
-                "</div>" +
-                '<div class="car-time">' + escapeHtml(carDt) + "</div>" +
-              "</div>";
-          }
-
-          card.innerHTML = headerHtml + bodyHtml;
-
-          (function (lbl, ent) {
-            card.addEventListener("mouseenter", function (e) {
-              showStationTooltip(lbl, ent, e);
-            });
-            card.addEventListener("mousemove", function (e) {
-              positionTooltip(e);
-            });
-            card.addEventListener("mouseleave", function () {
-              hideStationTooltip();
-            });
-          })(stationLabel, entry);
-
-          zoneStackedContainer.appendChild(card);
+          if (!entry || isOfflineEntry(entry)) continue;
+          occupied++;
+          if (entry.isGap) gaps++; else vehicles++;
         }
+
+        var wrap = document.createElement("div");
+        wrap.className = "line-rows";
+        var groupWrap = document.createElement("div");
+        groupWrap.className = "line-row-wrap";
+        groupWrap.style.setProperty("--rows", String(rowsDef.rows.length));
+
+        var lbl = document.createElement("div");
+        lbl.className = "line-row-label";
+        lbl.textContent = rowsDef.label;
+        groupWrap.appendChild(lbl);
+
+        var rowsCol = document.createElement("div");
+        rowsCol.className = "line-group-rows";
+        rowsDef.rows.forEach(function (rg) {
+          var row = document.createElement("div");
+          row.className = "line-row";
+          // In full screen, each zone spreads across the full width (e.g. 8 columns for Chassis)
+          var maxCols = 0;
+          rowsDef.rows.forEach(function (r) { maxCols = Math.max(maxCols, r[1] - r[0] + 1); });
+          row.style.setProperty("--zone-cols", String(maxCols));
+          for (var i = rg[0]; i <= rg[1]; i++) {
+            var card = createStationCard(i, i === NUM_STATIONS - 1 ? "EXIT" : "", true);
+            if (i === rg[1]) card.classList.add("last-in-row");
+            row.appendChild(card);
+          }
+          rowsCol.appendChild(row);
+        });
+        groupWrap.appendChild(rowsCol);
+        wrap.appendChild(groupWrap);
+        zoneStackedContainer.appendChild(wrap);
 
         zoneOccupiedCount.textContent = occupied + " / " + totalInZone;
         zoneVehicleCount.textContent = String(vehicles);
@@ -2146,7 +2681,7 @@
 
         var editable = canEdit();
         var html = "";
-        for (var i = 0; i < exitedList.length; i++) {
+        for (var i = exitedList.length - 1; i >= 0; i--) {
           var item = exitedList[i];
           var entryStamp = ((item.entryDate || "") + " " + (item.entryTime || "")).trim() || "-";
           var exitStamp = ((item.exitDate || "") + " " + (item.exitTime || "")).trim() || "-";
@@ -2229,14 +2764,137 @@
         }
       });
 
+      // ---- Production table (LINE IN / LINE OFF) split into Shift A and Shift B ----
+      // Shift A: 08:01 AM - 08:00 PM, Shift B: 08:01 PM - 08:00 AM (next day).
+      // "Today" is the current production day, starting at 08:01 AM.
+      function parseStamp(d, t) {
+        if (!d) return null;
+        var dp = String(d).split("-");
+        if (dp.length !== 3) return null;
+        var tp = String(t || "00:00:00").split(":");
+        var dt = new Date(Number(dp[0]), Number(dp[1]) - 1, Number(dp[2]), Number(tp[0]) || 0, Number(tp[1]) || 0, Number(tp[2]) || 0);
+        return isNaN(dt.getTime()) ? null : dt;
+      }
+
+      function getProductionWindow(now) {
+        var start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 8, 1, 0);
+        if (now < start) start.setDate(start.getDate() - 1);
+        var mid = new Date(start.getFullYear(), start.getMonth(), start.getDate(), 20, 1, 0);
+        var end = new Date(start.getFullYear(), start.getMonth(), start.getDate() + 1, 8, 1, 0);
+        return { start: start, mid: mid, end: end };
+      }
+
+      function shiftOf(dt, win) {
+        if (!dt) return null;
+        if (dt >= win.start && dt < win.mid) return "A";
+        if (dt >= win.mid && dt < win.end) return "B";
+        return null;
+      }
+
+      function renderProductionTable() {
+        var host = document.getElementById("productionTable");
+        if (!host) return;
+        var now = new Date();
+        var win = getProductionWindow(now);
+        var curShift = shiftOf(now, win) || "A";
+        var rows = {};
+
+        function bucket(modelText) {
+          var m = splitModelAndVariant(modelText).model;
+          if (!rows[m]) rows[m] = { inA: 0, inB: 0, outA: 0, outB: 0 };
+          return rows[m];
+        }
+
+        function countEntry(entry, countIn, countOut) {
+          if (!entry || entry.isGap) return;
+          var b = bucket(entry.model);
+          if (countIn) {
+            var sIn = shiftOf(parseStamp(entry.entryDate, entry.entryTime), win);
+            if (sIn === "A") b.inA++; else if (sIn === "B") b.inB++;
+          }
+          if (countOut) {
+            var sOut = shiftOf(parseStamp(entry.exitDate, entry.exitTime), win);
+            if (sOut === "A") b.outA++; else if (sOut === "B") b.outB++;
+          }
+        }
+
+        for (var i = 0; i < line.length; i++) { if (!isOfflineEntry(line[i])) countEntry(line[i], true, false); }
+        for (var j = 0; j < exitedList.length; j++) countEntry(exitedList[j], true, true);
+        // Held vehicles did enter the line, so they still count as LINE IN
+        for (var hq = 0; hq < holdList.length; hq++) countEntry(holdList[hq], true, false);
+
+        var order = [].concat(BRAND_MODELS.Hyundai || [], BRAND_MODELS.OJ || []);
+        var names = Object.keys(rows).filter(function (n) {
+          var r = rows[n];
+          return (r.inA + r.inB + r.outA + r.outB) > 0;
+        });
+        names.sort(function (a, b) {
+          var ia = order.indexOf(a), ib = order.indexOf(b);
+          if (ia === -1) ia = 999;
+          if (ib === -1) ib = 999;
+          return ia === ib ? a.localeCompare(b) : ia - ib;
+        });
+
+        var tot = { inA: 0, inB: 0, outA: 0, outB: 0 };
+        var body = "";
+        names.forEach(function (n) {
+          var r = rows[n];
+          tot.inA += r.inA; tot.inB += r.inB; tot.outA += r.outA; tot.outB += r.outB;
+          body +=
+            "<tr>" +
+            '<td class="model-cell">' + escapeHtml(n) + "</td>" +
+            '<td class="today sep">' + (r.inA + r.inB) + "</td><td>" + r.inA + "</td><td>" + r.inB + "</td>" +
+            '<td class="today sep">' + (r.outA + r.outB) + "</td><td>" + r.outA + "</td><td>" + r.outB + "</td>" +
+            "</tr>";
+        });
+        body +=
+          '<tr class="total-row">' +
+          '<td class="model-cell">All models</td>' +
+          '<td class="sep">' + (tot.inA + tot.inB) + "</td><td>" + tot.inA + "</td><td>" + tot.inB + "</td>" +
+          '<td class="sep">' + (tot.outA + tot.outB) + "</td><td>" + tot.outA + "</td><td>" + tot.outB + "</td>" +
+          "</tr>";
+
+        var cA = curShift === "A" ? " cur" : "";
+        var cB = curShift === "B" ? " cur" : "";
+        var dayLabel = win.start.getFullYear() + "-" + String(win.start.getMonth() + 1).padStart(2, "0") + "-" + String(win.start.getDate()).padStart(2, "0");
+
+        function sumBlock(title, sub, all, a, b) {
+          return '<div class="sum-block">' +
+            '<div class="sum-label"><strong>' + title + "</strong><span>" + sub + "</span></div>" +
+            '<div class="sum-cell"><span class="sum-h">TODAY</span><span class="sum-n">' + all + "</span></div>" +
+            '<div class="sum-cell' + (curShift === "A" ? " cur" : "") + '"><span class="sum-h">SHIFT A</span><span class="sum-n">' + a + "</span></div>" +
+            '<div class="sum-cell' + (curShift === "B" ? " cur" : "") + '"><span class="sum-h">SHIFT B</span><span class="sum-n">' + b + "</span></div>" +
+            "</div>";
+        }
+        var summaryHtml =
+          sumBlock("LINE IN", "(Trim 01 entry)", tot.inA + tot.inB, tot.inA, tot.inB) +
+          sumBlock("LINE OFF", "(Final exit)", tot.outA + tot.outB, tot.outA, tot.outB);
+
+        host.innerHTML =
+          '<div class="prod-note">Production day <strong>' + dayLabel + "</strong> &nbsp;|&nbsp; Shift A: 08:01 AM &ndash; 08:00 PM &nbsp;|&nbsp; Shift B: 08:01 PM &ndash; 08:00 AM &nbsp;|&nbsp; Current: <strong>Shift " + curShift + "</strong></div>" +
+          '<div class="prod-layout"><div class="prod-summary">' + summaryHtml + '</div><div class="prod-detail">' +
+          '<table class="prod-table"><thead>' +
+          '<tr><th class="model-cell" rowspan="2">Model</th><th class="grp sep" colspan="3">LINE IN</th><th class="grp sep" colspan="3">LINE OFF</th></tr>' +
+          '<tr><th class="sep">Today</th><th class="' + cA.trim() + '">Shift A</th><th class="' + cB.trim() + '">Shift B</th>' +
+          '<th class="sep">Today</th><th class="' + cA.trim() + '">Shift A</th><th class="' + cB.trim() + '">Shift B</th></tr>' +
+          "</thead><tbody>" + body + "</tbody></table></div></div>";
+      }
+
       function renderStats() {
         var count = 0;
         for (var i = 0; i < line.length; i++) {
-          if (line[i]) count++;
+          if (line[i] && !isOfflineEntry(line[i])) count++;
         }
         activeCount.textContent = count + " / " + NUM_STATIONS;
         exitedCount.textContent = String(exitedList.length);
         statusBox.innerHTML = statusHtml;
+        var vehiclesOnLine = 0;
+        for (var v = 0; v < line.length; v++) {
+          if (isVehicleEntry(line[v])) vehiclesOnLine++;
+        }
+        document.getElementById("onLinePill").textContent = vehiclesOnLine + " on line";
+        holdCountPill.textContent = String(holdList.length);
+        renderProductionTable();
       }
 
       function renderAll() {
@@ -2246,6 +2904,7 @@
           renderZonePage(activePage);
         }
         renderHistory();
+        renderHoldPage();
         renderEditTab();
         renderStats();
         updateAuthUI();
@@ -2258,6 +2917,7 @@
           state: {
             line: line,
             exitedList: exitedList,
+            holdList: holdList,
             statusHtml: statusHtml,
             formInputs: formInputs
           }
@@ -2276,6 +2936,9 @@
           : new Array(NUM_STATIONS).fill(null);
         exitedList = Array.isArray(cloudState.exitedList)
           ? cloudState.exitedList.map(function (item) { return cloneEntry(item); })
+          : [];
+        holdList = Array.isArray(cloudState.holdList)
+          ? cloudState.holdList.map(function (item) { return cloneHoldItem(item); })
           : [];
         if (cloudState.statusHtml) {
           statusHtml = cloudState.statusHtml;
@@ -2421,7 +3084,7 @@
           return;
         }
         if (vinExists(vin)) {
-          errBox.textContent = "VIN already exists on the line or in exit history.";
+          errBox.textContent = "VIN already exists on the line, in exit history, or in the hold list.";
           return;
         }
 
@@ -2457,10 +3120,270 @@
         syncToCloud();
       });
 
+      // ---- CSV export: Current Line In units and Line Off (exit) units, shift-wise ----
+      function csvCell(v) {
+        var t = (v === null || v === undefined) ? "" : String(v);
+        if (/[",\r\n]/.test(t)) t = '"' + t.replace(/"/g, '""') + '"';
+        return t;
+      }
+
+      function downloadCsv(filename, header, rows) {
+        var lines = [header.map(csvCell).join(",")];
+        rows.forEach(function (r) { lines.push(r.map(csvCell).join(",")); });
+        var blob = new Blob(["\uFEFF" + lines.join("\r\n") + "\r\n"], { type: "text/csv;charset=utf-8;" });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+      }
+
+      function pad2(n) { return String(n).padStart(2, "0"); }
+
+      function dateLabel(d) {
+        return d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate());
+      }
+
+      // Production day (starts 08:01 AM) and shift for any date-time
+      function prodInfo(dt) {
+        if (!dt) return { day: "", shift: "" };
+        var start = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate(), 8, 1, 0);
+        if (dt < start) start.setDate(start.getDate() - 1);
+        var mid = new Date(start.getFullYear(), start.getMonth(), start.getDate(), 20, 1, 0);
+        return { day: dateLabel(start), shift: dt < mid ? "A" : "B" };
+      }
+
+      function entryDetails(entry) {
+        var mv = splitModelAndVariant(entry.model);
+        return {
+          brand: entry.brand || inferBrandFromModel(entry.model) || "",
+          model: mv.model === "-" ? "" : mv.model,
+          variant: mv.variant === "-" ? "" : mv.variant
+        };
+      }
+
+      function fileStamp() {
+        var n = new Date();
+        return dateLabel(n) + "_" + pad2(n.getHours()) + pad2(n.getMinutes());
+      }
+
+      function setExportMsg(text) {
+        var el = document.getElementById("exportMsg");
+        if (el) el.textContent = text || "";
+      }
+
+      function exportLineIn() {
+        var rows = [];
+        for (var i = 0; i < NUM_STATIONS; i++) {
+          var e = line[i];
+          if (!isVehicleEntry(e)) continue;
+          var d = entryDetails(e);
+          var pi = prodInfo(parseStamp(e.entryDate, e.entryTime));
+          rows.push([
+            i + 1, getStationName(i + 1), e.vin, d.brand, d.model, d.variant,
+            e.extLabel, e.intLabel, e.entryDate, e.entryTime, pi.day, pi.shift ? "Shift " + pi.shift : ""
+          ]);
+        }
+        if (!rows.length) { setExportMsg("No units are currently on the line."); return; }
+        downloadCsv("Current_Line_In_Units_" + fileStamp() + ".csv",
+          ["Station No", "Station", "VIN", "Brand", "Model", "Variant", "Exterior Color", "Interior Color", "Entry Date", "Entry Time", "Production Day (Entry)", "Shift (Entry)"],
+          rows);
+        setExportMsg("Exported " + rows.length + " units currently on the line.");
+      }
+
+      function exportLineOff() {
+        var shiftSel = document.getElementById("exportShiftSelect").value;
+        var daySel = document.getElementById("exportDaySelect").value;
+        var curDay = prodInfo(new Date()).day;
+        var items = [];
+        for (var i = 0; i < exitedList.length; i++) {
+          var e = exitedList[i];
+          if (!e || e.isGap) continue;
+          var pi = prodInfo(parseStamp(e.exitDate, e.exitTime));
+          if (shiftSel !== "ALL" && pi.shift !== shiftSel) continue;
+          if (daySel === "CURRENT" && pi.day !== curDay) continue;
+          items.push({ idx: i, e: e, pi: pi });
+        }
+        items.sort(function (a, b) {
+          if (a.pi.day !== b.pi.day) return a.pi.day < b.pi.day ? -1 : 1;
+          if (a.pi.shift !== b.pi.shift) return a.pi.shift < b.pi.shift ? -1 : 1;
+          return a.idx - b.idx;
+        });
+        if (!items.length) { setExportMsg("No Line Off units found for the selected shift / day."); return; }
+        var rows = items.map(function (it) {
+          var e = it.e;
+          var d = entryDetails(e);
+          return [
+            it.pi.day, it.pi.shift ? "Shift " + it.pi.shift : "", it.idx + 1, e.vin, d.brand, d.model, d.variant,
+            e.extLabel, e.intLabel, e.entryDate, e.entryTime, e.exitDate, e.exitTime, e.remarks || ""
+          ];
+        });
+        var shiftTag = shiftSel === "ALL" ? "AllShifts" : "Shift" + shiftSel;
+        var dayTag = daySel === "CURRENT" ? curDay : "AllDays";
+        downloadCsv("Line_Off_Units_" + shiftTag + "_" + dayTag + "_" + fileStamp() + ".csv",
+          ["Production Day (Exit)", "Shift (Exit)", "FIFO No", "VIN", "Brand", "Model", "Variant", "Exterior Color", "Interior Color", "Entry Date", "Entry Time", "Exit Date", "Exit Time", "Remarks"],
+          rows);
+        setExportMsg("Exported " + rows.length + " Line Off units.");
+      }
+
+      document.getElementById("exportLineInBtn").addEventListener("click", exportLineIn);
+      document.getElementById("exportLineOffBtn").addEventListener("click", exportLineOff);
+
+      // Full screen: show only the line stations (Main line view, or the Trim / Chassis / Final page)
+      var linePanel = document.getElementById("linePanel");
+      var zonePagePanel = document.getElementById("zonePagePanel");
+      var fullscreenBtn = document.getElementById("fullscreenBtn");
+      var zoneFullscreenBtn = document.getElementById("zoneFullscreenBtn");
+      var fsRealRequested = false;
+      var fsPanel = null; // the panel currently in full screen
+
+      function fsButtonFor(panel) {
+        return panel === zonePagePanel ? zoneFullscreenBtn : fullscreenBtn;
+      }
+
+      function setFsState(on, panel) {
+        panel = panel || fsPanel || linePanel;
+        panel.classList.toggle("fs-active", on);
+        document.body.style.overflow = on ? "hidden" : "";
+        fsButtonFor(panel).textContent = on ? "Exit Full Screen" : "Full Screen";
+        fsPanel = on ? panel : null;
+        hideStationTooltip();
+        // The tooltip must live inside the full screen element to stay visible
+        if (on) { panel.appendChild(stationHoverTooltip); }
+        else { document.body.appendChild(stationHoverTooltip); }
+      }
+
+      function enterFullscreen(panel) {
+        panel = panel || linePanel;
+        setFsState(true, panel);
+        fsRealRequested = false;
+        var req = panel.requestFullscreen || panel.webkitRequestFullscreen;
+        if (req) {
+          try {
+            fsRealRequested = true;
+            var pr = req.call(panel);
+            if (pr && pr.catch) pr.catch(function () { fsRealRequested = false; });
+          } catch (err) {
+            fsRealRequested = false;
+          }
+        }
+      }
+
+      function exitFullscreen() {
+        var fe = document.fullscreenElement || document.webkitFullscreenElement;
+        if (fe) {
+          var ex = document.exitFullscreen || document.webkitExitFullscreen;
+          try { ex.call(document); } catch (err) {}
+        }
+        fsRealRequested = false;
+        if (fsPanel) setFsState(false, fsPanel);
+      }
+
+      fullscreenBtn.addEventListener("click", function () {
+        if (fsPanel === linePanel) exitFullscreen(); else enterFullscreen(linePanel);
+      });
+      zoneFullscreenBtn.addEventListener("click", function () {
+        if (fsPanel === zonePagePanel) exitFullscreen(); else enterFullscreen(zonePagePanel);
+      });
+
+      var FS_PAGE_ORDER = ["main", "trim", "chassis", "final"];
+      function goToNextPageInFullscreen() {
+        var idx = FS_PAGE_ORDER.indexOf(activePage);
+        var nextPage = FS_PAGE_ORDER[(idx + 1) % FS_PAGE_ORDER.length];
+        var nextPanel = nextPage === "main" ? linePanel : zonePagePanel;
+        var prevPanel = fsPanel;
+        var wasNativeFs = Boolean(document.fullscreenElement || document.webkitFullscreenElement);
+
+        setActivePage(nextPage, true);
+
+        if (prevPanel && prevPanel !== nextPanel) {
+          prevPanel.classList.remove("fs-active");
+          fsButtonFor(prevPanel).textContent = "Full Screen";
+        }
+        setFsState(true, nextPanel);
+
+        if (wasNativeFs && prevPanel !== nextPanel) {
+          var req = nextPanel.requestFullscreen || nextPanel.webkitRequestFullscreen;
+          if (req) {
+            try {
+              fsRealRequested = true;
+              var pr = req.call(nextPanel);
+              if (pr && pr.catch) pr.catch(function () { fsRealRequested = false; });
+            } catch (err) {
+              fsRealRequested = false;
+            }
+          }
+        }
+      }
+
+      document.getElementById("mainFsNextPageBtn").addEventListener("click", goToNextPageInFullscreen);
+      document.getElementById("zoneFsNextPageBtn").addEventListener("click", goToNextPageInFullscreen);
+
+      function onFsChange() {
+        var fe = document.fullscreenElement || document.webkitFullscreenElement;
+        if (!fe && fsRealRequested && fsPanel) {
+          fsRealRequested = false;
+          setFsState(false, fsPanel);
+        }
+      }
+      document.addEventListener("fullscreenchange", onFsChange);
+      document.addEventListener("webkitfullscreenchange", onFsChange);
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape" && fsPanel && !(document.fullscreenElement || document.webkitFullscreenElement)) {
+          exitFullscreen();
+        }
+      });
+
+      // Sample Entry: adds 5 random vehicles to the line
+      function randPick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+      sampleBtn.addEventListener("click", function () {
+        errBox.textContent = "";
+        if (!canEdit()) {
+          errBox.textContent = "Read-only guest mode: sign in as an operator to add vehicles.";
+          return;
+        }
+        var interiors = ["Black", "Beige", "Grey", "Brown", "Tan"];
+        var added = [];
+        for (var n = 0; n < 5; n++) {
+          var vin;
+          var guard = 0;
+          do {
+            vin = String(Math.floor(100000 + Math.random() * 900000));
+            guard++;
+          } while (vinExists(vin) && guard < 50);
+          if (vinExists(vin)) continue;
+
+          var brand = randPick(["Hyundai", "OJ"]);
+          var model = randPick(BRAND_MODELS[brand]);
+          var variants = getVariantsForModel(model);
+          var variant = variants.length ? randPick(variants) : "";
+          var ext = randPick(EXT_PRESETS);
+
+          pushVehicleToLine({
+            vin: vin,
+            brand: brand,
+            model: composeDisplayModel(model, variant),
+            extHex: resolveColorHex(ext, "#3b82f6"),
+            extLabel: ext,
+            intHex: "transparent",
+            intLabel: randPick(interiors)
+          });
+          added.push(vin);
+        }
+        statusHtml = "Added <strong>" + added.length + "</strong> sample vehicles (" + added.join(", ") + ") at <strong>" + getStationName(1) + "</strong>.";
+        renderAll();
+        syncToCloud();
+      });
+
       // Reset Line with Password Re-Authentication
       function executeLineReset() {
         line = new Array(NUM_STATIONS).fill(null);
         exitedList = [];
+        holdList = [];
         formInputs = { vin: "", brand: "", model: "", variant: "", exterior: "", interior: "" };
         vinField.value = "";
         brandField.value = "";
@@ -2471,7 +3394,7 @@
         exteriorManualField.classList.add("hidden");
         interiorField.value = "";
         errBox.textContent = "";
-        statusHtml = "Line reset verified and executed. All " + NUM_STATIONS + " stations and exit history are cleared.";
+        statusHtml = "Line reset verified and executed. All " + NUM_STATIONS + " stations, exit history and hold list are cleared.";
         renderAll();
         syncToCloud();
       }
@@ -2551,7 +3474,364 @@
         executeLineReset();
       });
 
-      // Page / Tab Switching Logic ('main', 'trim', 'chassis', 'final', 'edit')
+      // ---- HOLD: take a vehicle off the conveyor (password authorization required) ----
+      function findStationIndexByVin(vin) {
+        if (!vin) return -1;
+        for (var i = 0; i < line.length; i++) {
+          if (isVehicleEntry(line[i]) && line[i].vin === vin) return i;
+        }
+        return -1;
+      }
+
+      function openHoldAuthModal(stIdx) {
+        if (!canEdit() || !currentUser) return;
+        var entry = line[stIdx];
+        if (!isVehicleEntry(entry)) return;
+        hideStationTooltip();
+        pendingHold = { index: stIdx, vin: entry.vin };
+        var stName = getStationName(stIdx + 1);
+        var brand = entry.brand || inferBrandFromModel(entry.model) || "-";
+        holdModalTitle.textContent = "Hold Vehicle at " + stName;
+        holdVehicleSummary.innerHTML =
+          '<div><span class="tt-label">Station:</span> <strong>' + escapeHtml(stName) + "</strong></div>" +
+          '<div><span class="tt-label">VIN:</span> <strong style="font-family:monospace;">' + escapeHtml(entry.vin) + "</strong></div>" +
+          '<div><span class="tt-label">Vehicle:</span> ' + escapeHtml(brand + " • " + (entry.model || "-")) + "</div>" +
+          '<div><span class="tt-label">Colors:</span> Ext ' + escapeHtml(entry.extLabel || "-") + " | Int " + escapeHtml(entry.intLabel || "-") + "</div>";
+        holdAuthErrBox.textContent = "";
+        holdReasonField.value = "";
+        holdPasswordField.value = "";
+        holdOperatorEmailDisplay.value = currentUser.email || "";
+        // Keep the modal visible above the full screen line panel
+        var fsEl = document.fullscreenElement || document.webkitFullscreenElement;
+        (fsEl || document.body).appendChild(holdAuthModal);
+        holdAuthModal.classList.remove("hidden");
+        setTimeout(function () { holdReasonField.focus(); }, 30);
+      }
+
+      function closeHoldAuthModal() {
+        holdAuthModal.classList.add("hidden");
+        holdPasswordField.value = "";
+        holdAuthErrBox.textContent = "";
+        pendingHold = null;
+        if (holdAuthModal.parentNode !== document.body) document.body.appendChild(holdAuthModal);
+      }
+
+      function executeHold(stIdx, reason) {
+        var entry = line[stIdx];
+        if (!isVehicleEntry(entry)) return false;
+        var stamp = currentDateTime();
+        var stName = getStationName(stIdx + 1);
+        var holdId = "H" + Date.now() + "-" + Math.floor(Math.random() * 1000);
+
+        var held = cloneHoldItem(entry);
+        held.holdId = holdId;
+        held.holdStationNo = stIdx + 1;
+        held.holdStation = stName;
+        held.holdDate = stamp.date;
+        held.holdTime = stamp.time;
+        held.holdBy = (currentUser && currentUser.email) || "";
+        held.holdReason = reason || "";
+        holdList.push(held);
+
+        // The bay stays on the conveyor, empty, flagged OFFLINE
+        line[stIdx] = {
+          isOffline: true,
+          isGap: false,
+          vin: null,
+          holdId: holdId,
+          offlineVin: entry.vin,
+          offlineModel: entry.model || "",
+          holdStation: stName,
+          holdDate: stamp.date,
+          holdTime: stamp.time,
+          entryDate: stamp.date,
+          entryTime: stamp.time
+        };
+
+        statusHtml =
+          "Vehicle <strong>" + escapeHtml(entry.vin) + "</strong> put on <strong>HOLD</strong> at <strong>" + escapeHtml(stName) +
+          "</strong> (" + stamp.date + " " + stamp.time + ") and taken off the conveyor. Bay is now OFFLINE.";
+        return true;
+      }
+
+      function onHoldButtonClick(e) {
+        var btn = e.target.closest(".station-hold-btn");
+        if (!btn) return;
+        e.stopPropagation();
+        var idx = parseInt(btn.getAttribute("data-st-index"), 10);
+        if (isNaN(idx)) return;
+        openHoldAuthModal(idx);
+      }
+      stationsContainer.addEventListener("click", onHoldButtonClick);
+      zoneStackedContainer.addEventListener("click", onHoldButtonClick);
+
+      cancelHoldModalBtn.addEventListener("click", closeHoldAuthModal);
+      holdAuthModal.addEventListener("click", function (e) {
+        if (e.target === holdAuthModal) closeHoldAuthModal();
+      });
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape" && !holdAuthModal.classList.contains("hidden")) closeHoldAuthModal();
+      });
+
+      holdAuthForm.addEventListener("submit", async function (e) {
+        e.preventDefault();
+        holdAuthErrBox.textContent = "";
+        if (!pendingHold) { closeHoldAuthModal(); return; }
+        if (!canEdit() || !currentUser || !currentUser.email) {
+          holdAuthErrBox.textContent = "Operator session expired. Please sign in again.";
+          return;
+        }
+        if (!db) {
+          holdAuthErrBox.textContent = "Supabase client is not initialized.";
+          return;
+        }
+        var reason = holdReasonField.value.trim();
+        if (!reason) {
+          holdAuthErrBox.textContent = "Please enter a reason for the hold.";
+          holdReasonField.focus();
+          return;
+        }
+        var enteredPassword = holdPasswordField.value;
+        if (!enteredPassword) {
+          holdAuthErrBox.textContent = "Please enter your password to authorize the hold.";
+          return;
+        }
+
+        confirmHoldModalBtn.disabled = true;
+        cancelHoldModalBtn.disabled = true;
+        confirmHoldModalBtn.textContent = "Verifying...";
+
+        var verifyRes = await db.auth.signInWithPassword({
+          email: currentUser.email,
+          password: enteredPassword
+        });
+
+        confirmHoldModalBtn.disabled = false;
+        cancelHoldModalBtn.disabled = false;
+        confirmHoldModalBtn.textContent = "Verify & Hold Vehicle";
+
+        if (verifyRes.error) {
+          holdAuthErrBox.textContent = "Authorization failed: " + verifyRes.error.message;
+          holdPasswordField.select();
+          return;
+        }
+        currentUser = (verifyRes.data && verifyRes.data.user) || currentUser;
+
+        // The line may have moved while the modal was open: locate the vehicle by VIN
+        var idx = (isVehicleEntry(line[pendingHold.index]) && line[pendingHold.index].vin === pendingHold.vin)
+          ? pendingHold.index
+          : findStationIndexByVin(pendingHold.vin);
+        if (idx === -1) {
+          holdAuthErrBox.textContent = "Vehicle " + pendingHold.vin + " is no longer on the line.";
+          return;
+        }
+
+        closeHoldAuthModal();
+        if (executeHold(idx, reason)) {
+          renderAll();
+          syncToCloud();
+        }
+      });
+
+      // ---- RELEASE: put a held vehicle back on the conveyor ----
+      var releaseModal = document.getElementById("releaseModal");
+      var releaseForm = document.getElementById("releaseForm");
+      var releaseModalTitle = document.getElementById("releaseModalTitle");
+      var releaseVehicleSummary = document.getElementById("releaseVehicleSummary");
+      var releaseStationSelect = document.getElementById("releaseStationSelect");
+      var releaseConfirmText = document.getElementById("releaseConfirmText");
+      var releaseErrBox = document.getElementById("releaseErrBox");
+      var cancelReleaseBtn = document.getElementById("cancelReleaseBtn");
+      var confirmReleaseBtn = document.getElementById("confirmReleaseBtn");
+      var pendingReleaseId = null;
+
+      function findHoldIndexById(holdId) {
+        for (var i = 0; i < holdList.length; i++) {
+          if (holdList[i] && holdList[i].holdId === holdId) return i;
+        }
+        return -1;
+      }
+
+      // A bay can take a released vehicle when it is empty or OFFLINE
+      function isBayAvailable(idx) {
+        return !line[idx] || isOfflineEntry(line[idx]);
+      }
+
+      function updateReleaseConfirmText() {
+        var hIdx = findHoldIndexById(pendingReleaseId);
+        var stIdx = parseInt(releaseStationSelect.value, 10);
+        if (hIdx === -1 || isNaN(stIdx)) {
+          releaseConfirmText.innerHTML = "No available station selected.";
+          confirmReleaseBtn.disabled = true;
+          return;
+        }
+        var h = holdList[hIdx];
+        var bay = line[stIdx];
+        var bayState = !bay ? "Empty bay" : "OFFLINE bay" + (bay.offlineVin ? " (left by VIN " + escapeHtml(bay.offlineVin) + ")" : "");
+        releaseConfirmText.innerHTML =
+          "Vehicle <strong>" + escapeHtml(h.vin) + "</strong> will be put at station <strong>" +
+          escapeHtml(getStationName(stIdx + 1)) + "</strong> (#" + (stIdx + 1) + ").<br><span style=\"color:#86efac;\">" + bayState + "</span>";
+        confirmReleaseBtn.disabled = false;
+        confirmReleaseBtn.textContent = "Confirm Release to " + getStationName(stIdx + 1);
+      }
+
+      function openReleaseModal(holdId) {
+        if (!canEdit()) return;
+        var hIdx = findHoldIndexById(holdId);
+        if (hIdx === -1) return;
+        var h = holdList[hIdx];
+        pendingReleaseId = holdId;
+        releaseErrBox.textContent = "";
+
+        var brand = h.brand || inferBrandFromModel(h.model) || "-";
+        releaseModalTitle.textContent = "Release Vehicle " + h.vin;
+        releaseVehicleSummary.innerHTML =
+          '<div><span class="tt-label">VIN:</span> <strong style="font-family:monospace;">' + escapeHtml(h.vin) + "</strong></div>" +
+          '<div><span class="tt-label">Vehicle:</span> ' + escapeHtml(brand + " \u2022 " + (h.model || "-")) + "</div>" +
+          '<div><span class="tt-label">Held From:</span> ' + escapeHtml(h.holdStation || "-") + " (" + escapeHtml(((h.holdDate || "") + " " + (h.holdTime || "")).trim()) + ")</div>" +
+          '<div><span class="tt-label">Reason:</span> ' + escapeHtml(h.holdReason || "-") + "</div>";
+
+        // Suggest the vehicle's own OFFLINE bay (wherever it has moved to), else the first available bay
+        var ownBay = -1;
+        var opts = "";
+        for (var i = 0; i < NUM_STATIONS; i++) {
+          if (!isBayAvailable(i)) continue;
+          var bay = line[i];
+          var own = isOfflineEntry(bay) && bay.holdId === h.holdId;
+          if (own) ownBay = i;
+          var tag = !bay ? "Empty" : (own ? "OFFLINE \u2013 this vehicle's bay" : "OFFLINE");
+          opts += '<option value="' + i + '">' + escapeHtml(getStationName(i + 1)) + " (#" + (i + 1) + ") \u2013 " + tag + "</option>";
+        }
+        if (!opts) {
+          releaseStationSelect.innerHTML = '<option value="">No empty or OFFLINE station available</option>';
+          releaseErrBox.textContent = "All 40 stations are occupied. Free a bay before releasing this vehicle.";
+        } else {
+          releaseStationSelect.innerHTML = opts;
+          if (ownBay !== -1) releaseStationSelect.value = String(ownBay);
+        }
+        updateReleaseConfirmText();
+        releaseModal.classList.remove("hidden");
+        setTimeout(function () { releaseStationSelect.focus(); }, 30);
+      }
+
+      function closeReleaseModal() {
+        releaseModal.classList.add("hidden");
+        releaseErrBox.textContent = "";
+        pendingReleaseId = null;
+      }
+
+      releaseStationSelect.addEventListener("change", updateReleaseConfirmText);
+      cancelReleaseBtn.addEventListener("click", closeReleaseModal);
+      releaseModal.addEventListener("click", function (e) {
+        if (e.target === releaseModal) closeReleaseModal();
+      });
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape" && !releaseModal.classList.contains("hidden")) closeReleaseModal();
+      });
+
+      holdTableBody.addEventListener("click", function (e) {
+        var btn = e.target.closest(".hold-release-btn");
+        if (!btn) return;
+        openReleaseModal(btn.getAttribute("data-hold-id"));
+      });
+
+      releaseForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        releaseErrBox.textContent = "";
+        if (!canEdit()) {
+          releaseErrBox.textContent = "Operator login is required to release vehicles.";
+          return;
+        }
+        var hIdx = findHoldIndexById(pendingReleaseId);
+        if (hIdx === -1) {
+          releaseErrBox.textContent = "This vehicle is no longer on hold.";
+          return;
+        }
+        var stIdx = parseInt(releaseStationSelect.value, 10);
+        if (isNaN(stIdx) || stIdx < 0 || stIdx >= NUM_STATIONS) {
+          releaseErrBox.textContent = "Please select a station.";
+          return;
+        }
+        // The line may have moved while the pop-up was open
+        if (!isBayAvailable(stIdx)) {
+          releaseErrBox.textContent = getStationName(stIdx + 1) + " is no longer free. Please choose another station.";
+          openReleaseModal(pendingReleaseId);
+          return;
+        }
+
+        var h = holdList[hIdx];
+        var stamp = currentDateTime();
+        var vehicle = cloneEntry(h); // keeps original VIN, model, colours and line entry time
+        line[stIdx] = vehicle;
+        holdList.splice(hIdx, 1);
+
+        var stName = getStationName(stIdx + 1);
+        statusHtml =
+          "Vehicle <strong>" + escapeHtml(h.vin) + "</strong> <strong>RELEASED</strong> from hold and put at <strong>" +
+          escapeHtml(stName) + "</strong> (" + stamp.date + " " + stamp.time + ").";
+        closeReleaseModal();
+        renderAll();
+        syncToCloud();
+      });
+
+      // ---- Hold Vehicles page ----
+      function renderHoldPage() {
+        holdTotalCount.textContent = String(holdList.length);
+        document.getElementById("holdActionHead").textContent = canEdit() ? "Action" : "Action (Operator)";
+        var q = (holdSearchField && holdSearchField.value ? holdSearchField.value : "").trim().toLowerCase();
+        if (holdList.length === 0) {
+          holdTableBody.innerHTML = '<tr><td colspan="12" style="text-align:center; color:#a1a1aa;">No vehicles on hold.</td></tr>';
+          return;
+        }
+        var html = "";
+        for (var i = holdList.length - 1; i >= 0; i--) {
+          var h = holdList[i];
+          var brand = h.brand || inferBrandFromModel(h.model) || "-";
+          var hay = [h.vin, brand, h.model, h.extLabel, h.intLabel, h.holdStation, h.holdReason, h.holdBy, h.holdDate].join(" ").toLowerCase();
+          if (q && hay.indexOf(q) === -1) continue;
+          var entryStamp = ((h.entryDate || "") + " " + (h.entryTime || "")).trim() || "-";
+          var holdStamp = ((h.holdDate || "") + " " + (h.holdTime || "")).trim() || "-";
+          html +=
+            "<tr>" +
+            "<td>" + (i + 1) + "</td>" +
+            '<td style="font-family:monospace; font-weight:bold;">' + escapeHtml(h.vin) + "</td>" +
+            "<td>" + escapeHtml(brand) + "</td>" +
+            "<td>" + escapeHtml(h.model) + "</td>" +
+            '<td><span class="color-chip" style="background:' + escapeHtml(h.extHex) + '"></span>' + escapeHtml(h.extLabel) + "</td>" +
+            "<td>" + escapeHtml(h.intLabel) + "</td>" +
+            '<td style="font-family:monospace;">' + escapeHtml(entryStamp) + "</td>" +
+            '<td><strong style="color:#fdba74;">' + escapeHtml(h.holdStation || "-") + "</strong></td>" +
+            '<td style="font-family:monospace;">' + escapeHtml(holdStamp) + "</td>" +
+            "<td>" + escapeHtml(h.holdBy || "-") + "</td>" +
+            "<td>" + escapeHtml(h.holdReason || "-") + "</td>" +
+            (canEdit()
+              ? '<td><button type="button" class="btn-release hold-release-btn" data-hold-id="' + escapeHtml(h.holdId) + '">Release</button></td>'
+              : '<td style="color:#71717a;">-</td>') +
+            "</tr>";
+        }
+        holdTableBody.innerHTML = html || '<tr><td colspan="12" style="text-align:center; color:#a1a1aa;">No matching held vehicles.</td></tr>';
+      }
+
+      if (holdSearchField) {
+        holdSearchField.addEventListener("input", renderHoldPage);
+      }
+
+      document.getElementById("exportHoldBtn").addEventListener("click", function () {
+        var msgEl = document.getElementById("holdExportMsg");
+        if (!holdList.length) { msgEl.textContent = "No vehicles on hold."; return; }
+        var rows = holdList.map(function (h, i) {
+          var d = entryDetails(h);
+          return [i + 1, h.vin, d.brand, d.model, d.variant, h.extLabel, h.intLabel, h.entryDate, h.entryTime,
+            h.holdStationNo || "", h.holdStation, h.holdDate, h.holdTime, h.holdBy, h.holdReason];
+        });
+        downloadCsv("Hold_Vehicles_" + fileStamp() + ".csv",
+          ["No", "VIN", "Brand", "Model", "Variant", "Exterior Color", "Interior Color", "Entry Date", "Entry Time",
+            "Held From Station No", "Held From Station", "Hold Date", "Hold Time", "Held By", "Hold Reason"],
+          rows);
+        msgEl.textContent = "Exported " + rows.length + " held vehicles.";
+      });
+
+      // Page / Tab Switching Logic ('main', 'trim', 'chassis', 'final', 'hold', 'edit')
       var editLoginPrompt = document.getElementById("editLoginPrompt");
       var editTabLoginBtn = document.getElementById("editTabLoginBtn");
       var editEntryForm = document.getElementById("editEntryForm");
@@ -2573,7 +3853,22 @@
       var editErrBox = document.getElementById("editErrBox");
       var editEntriesTableBody = document.getElementById("editEntriesTableBody");
 
-      function setActivePage(pageName) {
+      // On the Main page the page tabs sit below the Vehicle Entry box; on other pages they stay at the top
+      var pageTabBar = document.getElementById("pageTabBar");
+      var pageTabHome = document.createComment("page tabs home");
+      pageTabBar.parentNode.insertBefore(pageTabHome, pageTabBar);
+      function placePageTabs() {
+        var mainWrapEl = document.querySelector("#mainPageView .main-wrap");
+        var lp = document.getElementById("linePanel");
+        if (activePage === "main" && mainWrapEl && lp && lp.parentNode === mainWrapEl) {
+          if (pageTabBar.nextElementSibling !== lp) mainWrapEl.insertBefore(pageTabBar, lp);
+        } else if (pageTabHome.nextSibling !== pageTabBar) {
+          pageTabHome.parentNode.insertBefore(pageTabBar, pageTabHome.nextSibling);
+        }
+      }
+      placePageTabs();
+
+      function setActivePage(pageName, keepFullscreen) {
         if (pageName === "edit" && !canEdit()) {
           isGuestMode = false;
           authErrBox.textContent = "Please sign in as an operator to access the Edit Entries tab.";
@@ -2584,11 +3879,15 @@
 
         activePage = pageName;
         hideStationTooltip();
+        if (fsPanel && !keepFullscreen) exitFullscreen();
+        placePageTabs();
 
         pageMainBtn.classList.toggle("active", pageName === "main");
         pageTrimBtn.classList.toggle("active", pageName === "trim");
         pageChassisBtn.classList.toggle("active", pageName === "chassis");
         pageFinalBtn.classList.toggle("active", pageName === "final");
+        pageHoldBtn.classList.toggle("active", pageName === "hold");
+        holdPageView.classList.toggle("hidden", pageName !== "hold");
         tabEditBtn.classList.toggle("active", pageName === "edit");
         tabEditBtn.setAttribute("aria-selected", String(pageName === "edit"));
 
@@ -2600,6 +3899,8 @@
           renderZonePage(pageName);
         } else if (pageName === "edit") {
           renderEditTab();
+        } else if (pageName === "hold") {
+          renderHoldPage();
         }
       }
 
@@ -2608,6 +3909,7 @@
       pageChassisBtn.addEventListener("click", function () { setActivePage("chassis"); });
       pageFinalBtn.addEventListener("click", function () { setActivePage("final"); });
       tabEditBtn.addEventListener("click", function () { setActivePage("edit"); });
+      pageHoldBtn.addEventListener("click", function () { setActivePage("hold"); });
 
       editTabLoginBtn.addEventListener("click", function () {
         isGuestMode = false;
@@ -2652,6 +3954,9 @@
           if (parsedTarget && parsedTarget.kind === "exited" && parsedTarget.index === j) continue;
           if (exitedList[j] && exitedList[j].vin && exitedList[j].vin.toUpperCase() === targetVin) return true;
         }
+        for (var h = 0; h < holdList.length; h++) {
+          if (holdList[h] && holdList[h].vin && holdList[h].vin.toUpperCase() === targetVin) return true;
+        }
         return false;
       }
 
@@ -2661,6 +3966,9 @@
         var parsed = parseSourceKey(editSourceSelect.value);
         var isExitedEntry = parsed && parsed.kind === "exited";
         editRemarksFieldWrap.classList.toggle("hidden", !isExitedEntry);
+
+        // An OFFLINE bay is empty: edit it like an empty bay
+        if (isOfflineEntry(entry)) entry = null;
 
         if (!entry) {
           editTypeSelect.value = "vehicle";
@@ -2721,7 +4029,9 @@
           var stLabel = getStationName(i + 1);
           var stEntry = line[i];
           var summary = "Empty";
-          if (stEntry) {
+          if (isOfflineEntry(stEntry)) {
+            summary = "OFFLINE - Taken off the conveyor";
+          } else if (stEntry) {
             summary = stEntry.isGap ? "Null (Gap)" : (stEntry.vin + " - " + stEntry.model);
           }
           optsHtml += '<option value="st:' + i + '">' + escapeHtml(stLabel) + " (" + escapeHtml(summary) + ")</option>";
@@ -2750,7 +4060,16 @@
         for (var s = 0; s < NUM_STATIONS; s++) {
           var sEntry = line[s];
           var sLoc = getStationName(s + 1);
-          if (!sEntry) {
+          if (isOfflineEntry(sEntry)) {
+            if (matchesFilter([sLoc, "offline", "hold", "empty", sEntry.offlineVin || ""])) {
+              rowsHtml +=
+                "<tr>" +
+                "<td><strong>" + escapeHtml(sLoc) + "</strong></td>" +
+                '<td colspan="4" style="color:#fdba74;">OFFLINE (Taken off the conveyor)' + (sEntry.offlineVin ? " &ndash; held VIN " + escapeHtml(sEntry.offlineVin) : "") + "</td>" +
+                '<td><button type="button" class="btn-gray btn-sm edit-row-btn" data-key="st:' + s + '">Edit</button></td>' +
+                "</tr>";
+            }
+          } else if (!sEntry) {
             if (matchesFilter([sLoc, "empty", "empty bay"])) {
               rowsHtml +=
                 "<tr>" +
@@ -3001,13 +4320,18 @@
       }
 
       var clockValueEl = document.getElementById("ClockValue");
+      var liveClockEls = document.querySelectorAll(".live-clock-value");
       function updateLiveClock() {
-        if (!clockValueEl) return;
         var dt = currentDateTime();
-        clockValueEl.textContent = dt.date + "  |  " + dt.time;
+        var text = dt.date + "  |  " + dt.time;
+        if (clockValueEl) clockValueEl.textContent = text;
+        for (var c = 0; c < liveClockEls.length; c++) {
+          liveClockEls[c].textContent = text;
+        }
       }
       updateLiveClock();
       setInterval(updateLiveClock, 1000);
+      setInterval(renderProductionTable, 30000);
 
       // Render UI immediately
       renderAll();

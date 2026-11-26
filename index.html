@@ -739,8 +739,12 @@
     .line-row .st-badge { background: transparent; border: none; padding: 0; color: #bfe0ff; }
     .line-row .bay-empty { border: none; color: #e2e8f0; }
     .line-row .station-box.tinted .car-box { background: transparent; border: none; padding: 4px 4px 2px; }
+    .line-row .car-ext,
+    .line-row .car-int { font-size: 12px; font-weight: 600; line-height: 1.15; opacity: 0.92; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .line-row .station-box.tinted .car-vin,
-    .line-row .station-box.tinted .car-model { color: inherit; }
+    .line-row .station-box.tinted .car-model,
+    .line-row .station-box.tinted .car-ext,
+    .line-row .station-box.tinted .car-int { color: inherit; }
     /* Full screen: line stations only, fitted to the screen */
     .line-panel.fs-active { position: fixed; inset: 0; z-index: 9000; margin: 0; border: none; border-radius: 0; min-width: 0; padding: 1.2vh 1.2vw; display: flex; flex-direction: column; overflow: hidden; box-sizing: border-box; }
     .line-panel.fs-active .fs-hide { display: none !important; }
@@ -760,8 +764,10 @@
     .line-panel.fs-active .line-row-label { font-size: min(2.1vh, 1.45vw); padding: 0.3vh 0.3vw; }
     .line-panel.fs-active .line-row .st-badge { font-size: min(1.45vh, 0.95vw); }
     .line-panel.fs-active .line-row .arrow-txt { font-size: min(1.35vh, 0.9vw); }
-    .line-panel.fs-active .line-row .car-vin { font-size: min(2.2vh, 1.5vw); line-height: 1.1; }
-    .line-panel.fs-active .line-row .car-model { font-size: min(1.45vh, 0.95vw); line-height: 1.1; }
+    .line-panel.fs-active .line-row .car-vin { font-size: min(1.9vh, 1.35vw); line-height: 1.05; }
+    .line-panel.fs-active .line-row .car-model { font-size: min(1.25vh, 0.85vw); line-height: 1.05; }
+    .line-panel.fs-active .line-row .car-ext,
+    .line-panel.fs-active .line-row .car-int { font-size: min(1.15vh, 0.8vw); line-height: 1.05; }
     .line-panel.fs-active .line-row .gap-title { font-size: min(2.2vh, 1.5vw); line-height: 1.1; }
     .line-panel.fs-active .line-row .bay-empty { flex: 1 1 0; font-size: min(1.7vh, 1.1vw); min-height: 0; }
     /* CSV export bar */
@@ -1108,8 +1114,10 @@
     .line-panel.fs-active #zoneStackedContainer .station-box { padding: 0.8vh 0.6vw; }
     .line-panel.fs-active #zoneStackedContainer .st-badge { font-size: min(2.4vh, calc(12vw / var(--zone-cols, 10))); }
     .line-panel.fs-active #zoneStackedContainer .arrow-txt { font-size: min(2.2vh, calc(11vw / var(--zone-cols, 10))); }
-    .line-panel.fs-active #zoneStackedContainer .car-vin { font-size: min(4.4vh, calc(16vw / var(--zone-cols, 10))); }
-    .line-panel.fs-active #zoneStackedContainer .car-model { font-size: min(2.8vh, calc(11vw / var(--zone-cols, 10))); }
+    .line-panel.fs-active #zoneStackedContainer .car-vin { font-size: min(3.8vh, calc(15vw / var(--zone-cols, 10))); }
+    .line-panel.fs-active #zoneStackedContainer .car-model { font-size: min(2.4vh, calc(10vw / var(--zone-cols, 10))); }
+    .line-panel.fs-active #zoneStackedContainer .car-ext,
+    .line-panel.fs-active #zoneStackedContainer .car-int { font-size: min(2.1vh, calc(9vw / var(--zone-cols, 10))); }
     .line-panel.fs-active #zoneStackedContainer .gap-title { font-size: min(4.4vh, calc(16vw / var(--zone-cols, 10))); }
     .line-panel.fs-active #zoneStackedContainer .bay-empty { font-size: min(2.8vh, calc(12vw / var(--zone-cols, 10))); }
     .line-panel.fs-active #zoneStackedContainer .bay-offline { font-size: min(2.6vh, calc(11vw / var(--zone-cols, 10))); }
@@ -1147,6 +1155,30 @@
       transition: opacity 0.18s ease, background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease, transform 0.15s ease;
     }
     .line-row .station-hold-row .btn-hold:hover:not(:disabled) {
+      opacity: 1;
+      background: #c2410c;
+      color: #ffffff;
+      border-color: #fb923c;
+      transform: scale(1.08);
+    }
+    .history-panel .exited-hold-btn {
+      width: 16px;
+      height: 16px;
+      min-width: 0;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0;
+      padding: 0;
+      border-radius: 3px;
+      line-height: 14px;
+      text-align: center;
+      background: rgba(113, 113, 122, 0.25);
+      color: rgba(244, 244, 245, 0.45);
+      border: 1px solid rgba(161, 161, 170, 0.25);
+      opacity: 0.35;
+      transition: opacity 0.18s ease, background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease, transform 0.15s ease;
+    }
+    .history-panel .exited-hold-btn:hover:not(:disabled) {
       opacity: 1;
       background: #c2410c;
       color: #ffffff;
@@ -1212,6 +1244,83 @@
     .hold-vehicle-summary { background: #141416; border: 1px solid #2e2e32; border-radius: 6px; padding: 8px 10px; font-size: 13px; margin-bottom: 10px; line-height: 1.5; }
     .btn-release { background: #15803d; color: #ffffff; border: 1px solid #22c55e; font-size: 12px; padding: 5px 12px; border-radius: 4px; }
     .btn-release:hover:not(:disabled) { background: #166534; }
+    .supply-count-pill {
+      display: inline-block;
+      min-width: 18px;
+      margin-left: 6px;
+      padding: 1px 6px;
+      border-radius: 999px;
+      background: #dc2626;
+      color: #ffffff;
+      font-size: 11px;
+      text-align: center;
+    }
+    .supply-panel {
+      background: rgba(24, 24, 27, 0.92);
+      border: 1px solid #2e2e32;
+      border-radius: 8px;
+      padding: 14px;
+      overflow-x: auto;
+    }
+    .supply-form-card {
+      background: #141416;
+      border: 1px solid #2e2e32;
+      border-radius: 6px;
+      padding: 12px;
+      margin-bottom: 14px;
+    }
+    .supply-form-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      gap: 10px;
+    }
+    .supply-form-row .field {
+      margin-bottom: 0;
+      flex: 1 1 160px;
+      min-width: 140px;
+    }
+    .supply-form-row .field-qty {
+      flex: 0 1 120px;
+      min-width: 100px;
+    }
+    .supply-form-row .btn-add {
+      width: auto;
+      margin-top: 0;
+      padding: 7px 14px;
+      white-space: nowrap;
+    }
+    .supply-panel table { font-size: 15px; }
+    .supply-panel th { font-size: 12px; padding: 10px 8px; }
+    .supply-panel td { padding: 10px 8px; vertical-align: middle; }
+    .btn-acknowledge {
+      background: #dc2626;
+      color: #ffffff;
+      border: 1px solid #f87171;
+      font-size: 12px;
+      font-weight: bold;
+      letter-spacing: 0.4px;
+      padding: 6px 12px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .btn-acknowledge:hover:not(:disabled) {
+      background: #b91c1c;
+    }
+    .btn-acknowledged {
+      background: #16a34a;
+      color: #ffffff;
+      border: 1px solid #4ade80;
+      font-size: 12px;
+      font-weight: bold;
+      letter-spacing: 0.4px;
+      padding: 6px 12px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      white-space: nowrap;
+      cursor: default;
+    }
     .release-confirm-text { font-size: 13px; color: #bbf7d0; background: rgba(21, 128, 61, 0.18); border: 1px solid #15803d; border-radius: 6px; padding: 8px 10px; margin-top: 4px; line-height: 1.45; }
     #releaseStationSelect { width: 100%; box-sizing: border-box; padding: 7px 8px; border-radius: 6px; border: 1px solid #3f3f46; background: #121212; color: #fafafa; font-size: 13px; }
     .hidden { display: none !important; }
@@ -1277,6 +1386,7 @@
         <button type="button" id="pageChassisBtn" class="page-btn" data-page="chassis">Chassis</button>
         <button type="button" id="pageFinalBtn" class="page-btn" data-page="final">Final</button>
         <button type="button" id="pageHoldBtn" class="page-btn" data-page="hold">Hold Vehicles<span id="holdCountPill" class="hold-count-pill">0</span></button>
+        <button type="button" id="pageSupplyBtn" class="page-btn" data-page="supply">Supply<span id="supplyPendingPill" class="supply-count-pill">0</span></button>
       </div>
       <div class="tab-group" role="tablist" aria-label="Editor Mode">
         <button type="button" id="tabEditBtn" class="tab-btn" role="tab" aria-selected="false">Edit Entries (Login Required)</button>
@@ -1505,6 +1615,84 @@
       </div>
     </div>
 
+    <!-- SUPPLY PAGE -->
+    <div id="supplyPageView" class="hidden">
+      <div class="supply-panel">
+        <div class="zone-header">
+          <div>
+            <h2 style="font-size:16px; margin:0 0 4px 0;">Supply Part Requests</h2>
+            <div class="flow-note" style="margin:0;">
+              Submit part supply requests by station. Entries are listed in LIFO order (latest request on top). Only <strong>supply.tcf@hnmpl.com</strong> can acknowledge requests.
+            </div>
+          </div>
+          <div class="zone-summary-badges">
+            <span class="zone-badge"><strong>Total Requests:</strong> <span id="supplyTotalCount">0</span></span>
+            <span class="zone-badge"><strong>Pending:</strong> <span id="supplyPendingCount">0</span></span>
+            <span class="zone-badge"><strong>Acknowledged:</strong> <span id="supplyAckCount">0</span></span>
+          </div>
+        </div>
+
+        <div id="supplyFormCard" class="supply-form-card">
+          <form id="supplyForm">
+            <div class="supply-form-row">
+              <div class="field">
+                <label for="supplyModelField">i. Model</label>
+                <select id="supplyModelField" required></select>
+              </div>
+              <div class="field">
+                <label for="supplyVariantField">ii. Variant</label>
+                <select id="supplyVariantField"></select>
+              </div>
+              <div class="field">
+                <label for="supplyPartNameField">iii. Part Name</label>
+                <input type="text" id="supplyPartNameField" placeholder="Enter Part Name" required />
+              </div>
+              <div class="field">
+                <label for="supplyPartNumberField">iv. Part Number (Optional)</label>
+                <input type="text" id="supplyPartNumberField" placeholder="Enter Part Number (Optional)" />
+              </div>
+              <div class="field field-qty">
+                <label for="supplyReqQtyField">v. Req. Qty</label>
+                <input type="number" id="supplyReqQtyField" placeholder="Qty" min="1" step="1" required />
+              </div>
+              <div class="field">
+                <label for="supplyStationField">vi. Station</label>
+                <select id="supplyStationField" required></select>
+              </div>
+              <button type="submit" id="submitSupplyBtn" class="btn-add">Add Supply Request</button>
+            </div>
+            <div id="supplyErrBox" class="err" style="margin-top:6px;"></div>
+          </form>
+        </div>
+
+        <div class="hold-toolbar">
+          <input type="text" id="supplySearchField" placeholder="Filter by Model, Variant, Part Name, Part Number, Station, or status..." style="flex:1; min-width:220px; max-width:360px; padding:6px 8px; border-radius:6px; border:1px solid #3f3f46; background:#121212; color:#fafafa; font-size:12px;" />
+          <button type="button" id="exportSupplyBtn" class="btn-fs">Export CSV</button>
+          <span id="supplyExportMsg" class="export-msg"></span>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Sr# (LIFO)</th>
+              <th>Model</th>
+              <th>Variant</th>
+              <th>Part Name</th>
+              <th>Part Number</th>
+              <th>Req. Qty</th>
+              <th>Station</th>
+              <th>Requested Date &amp; Time</th>
+              <th>Requested By</th>
+              <th>Status / Action</th>
+            </tr>
+          </thead>
+          <tbody id="supplyTableBody">
+            <tr><td colspan="10" style="text-align:center; color:#a1a1aa;">No supply requests yet.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
     <!-- EDIT ENTRIES TAB -->
     <div id="editEntriesTab" class="hidden">
       <div class="edit-panel">
@@ -1680,13 +1868,13 @@
     </div>
   </div>
 
-  <!-- Release Confirmation Modal -->
+  <!-- Release Authorization Modal -->
   <div id="releaseModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="releaseModalTitle">
     <div class="modal-card">
-      <div class="brand-tag">Confirm Release</div>
+      <div class="brand-tag">Authorization Required</div>
       <h2 id="releaseModalTitle" style="font-size:16px; margin:0 0 8px 0; color:#fafafa;">Release Vehicle</h2>
       <div class="flow-note" style="margin-bottom:10px;">
-        The vehicle will be removed from the Hold list and put back on the conveyor at the station selected below.
+        The vehicle will be removed from the Hold list and put back on the conveyor at the station selected below. Re-enter your operator password to authorize.
       </div>
       <div id="releaseVehicleSummary" class="hold-vehicle-summary"></div>
       <form id="releaseForm">
@@ -1694,11 +1882,19 @@
           <label for="releaseStationSelect">Put Vehicle At Station</label>
           <select id="releaseStationSelect" required></select>
         </div>
-        <div id="releaseConfirmText" class="release-confirm-text"></div>
+        <div id="releaseConfirmText" class="release-confirm-text" style="margin-bottom:10px;"></div>
+        <div class="field">
+          <label for="releaseOperatorEmailDisplay">Signed-In Operator</label>
+          <input type="text" id="releaseOperatorEmailDisplay" readonly style="color:#a1a1aa; background:#141416;" />
+        </div>
+        <div class="field">
+          <label for="releasePasswordField">Operator Password</label>
+          <input type="password" id="releasePasswordField" placeholder="Enter your password" required autocomplete="current-password" />
+        </div>
         <div id="releaseErrBox" class="err" style="margin-top:4px; margin-bottom:8px;"></div>
         <div class="btn-row">
           <button type="button" id="cancelReleaseBtn" class="btn-gray">Cancel</button>
-          <button type="submit" id="confirmReleaseBtn" class="btn-green" style="flex:1;">Confirm Release</button>
+          <button type="submit" id="confirmReleaseBtn" class="btn-green" style="flex:1;">Verify &amp; Release</button>
         </div>
       </form>
     </div>
@@ -1732,7 +1928,7 @@
 
       var MODEL_VARIANTS = {
         "AD": ["1.6", "2.0"],
-        "CN7": [],
+        "CN7": ["NNB", "SSS"],
         "TM HEV": ["S3", "S5", "S6"],
         "NX4": ["S1", "S2"],
         "DN8": ["2.0", "2.5", "FL"],
@@ -1766,6 +1962,8 @@
       var line = new Array(NUM_STATIONS).fill(null);
       var exitedList = [];
       var holdList = []; // vehicles taken off the conveyor via Hold
+      var supplyList = []; // part supply requests (stored chronologically; rendered LIFO)
+      var SUPPLY_ACK_EMAIL = "supply.tcf@hnmpl.com";
       var statusHtml = "System ready. Add a vehicle or gap to place it in <strong>TRIM 01</strong> and shift existing entries forward.";
       var formInputs = { vin: "", brand: "", model: "", variant: "", exterior: "", interior: "" };
 
@@ -1819,6 +2017,24 @@
 
       // Hold Vehicles page / modal elements
       var pageHoldBtn = document.getElementById("pageHoldBtn");
+      var pageSupplyBtn = document.getElementById("pageSupplyBtn");
+      var supplyPageView = document.getElementById("supplyPageView");
+      var supplyPendingPill = document.getElementById("supplyPendingPill");
+      var supplyTotalCount = document.getElementById("supplyTotalCount");
+      var supplyPendingCount = document.getElementById("supplyPendingCount");
+      var supplyAckCount = document.getElementById("supplyAckCount");
+      var supplyFormCard = document.getElementById("supplyFormCard");
+      var supplyForm = document.getElementById("supplyForm");
+      var supplyModelField = document.getElementById("supplyModelField");
+      var supplyVariantField = document.getElementById("supplyVariantField");
+      var supplyPartNameField = document.getElementById("supplyPartNameField");
+      var supplyPartNumberField = document.getElementById("supplyPartNumberField");
+      var supplyReqQtyField = document.getElementById("supplyReqQtyField");
+      var supplyStationField = document.getElementById("supplyStationField");
+      var submitSupplyBtn = document.getElementById("submitSupplyBtn");
+      var supplyErrBox = document.getElementById("supplyErrBox");
+      var supplySearchField = document.getElementById("supplySearchField");
+      var supplyTableBody = document.getElementById("supplyTableBody");
       var holdPageView = document.getElementById("holdPageView");
       var holdCountPill = document.getElementById("holdCountPill");
       var holdTotalCount = document.getElementById("holdTotalCount");
@@ -1896,8 +2112,88 @@
         errBox.textContent = "Supabase client library failed to load.";
       }
 
+      function updateSupplyVariantOptions(selectedModel) {
+        if (!supplyVariantField) return;
+        if (!selectedModel) {
+          supplyVariantField.innerHTML = '<option value="" selected>Select Model First</option>';
+          supplyVariantField.required = false;
+          return;
+        }
+        var variants = getVariantsForModel(selectedModel);
+        if (!variants || variants.length === 0) {
+          supplyVariantField.innerHTML = '<option value="" selected>No Variant (N/A)</option>';
+          supplyVariantField.required = false;
+          return;
+        }
+        var vOpts = '<option value="" disabled selected>Select Variant</option>';
+        for (var v = 0; v < variants.length; v++) {
+          vOpts += '<option value="' + escapeHtml(variants[v]) + '">' + escapeHtml(variants[v]) + '</option>';
+        }
+        supplyVariantField.innerHTML = vOpts;
+        supplyVariantField.required = true;
+      }
+
+      (function initSupplyDropdowns() {
+        if (supplyModelField) {
+          var allModels = [].concat(BRAND_MODELS.Hyundai || [], BRAND_MODELS.OJ || []);
+          var mOpts = '<option value="" disabled selected>Select Model</option>';
+          for (var m = 0; m < allModels.length; m++) {
+            mOpts += '<option value="' + escapeHtml(allModels[m]) + '">' + escapeHtml(allModels[m]) + '</option>';
+          }
+          supplyModelField.innerHTML = mOpts;
+          updateSupplyVariantOptions("");
+          supplyModelField.addEventListener("change", function () {
+            updateSupplyVariantOptions(supplyModelField.value);
+          });
+        }
+        if (supplyStationField) {
+          var supplyExtraStations = [
+            "IP S/A",
+            "RR Bumper S/A",
+            "RR Axle S/A",
+            "FRT Axle/Engine S/A",
+            "FRT Bumper S/A",
+            "FEM S/A",
+            "Spoiler S/A",
+            "Fusion Welding",
+            "Tire S/A",
+            "Seat S/A",
+            "Door Module S/A"
+          ];
+          var opts = '<option value="" disabled selected>Select Station</option>';
+          for (var s = 0; s < NUM_STATIONS; s++) {
+            var stLabel = getStationName(s + 1);
+            opts += '<option value="' + escapeHtml(stLabel) + '">' + escapeHtml(stLabel) + '</option>';
+          }
+          for (var x = 0; x < supplyExtraStations.length; x++) {
+            var extraLabel = supplyExtraStations[x];
+            opts += '<option value="' + escapeHtml(extraLabel) + '">' + escapeHtml(extraLabel) + '</option>';
+          }
+          supplyStationField.innerHTML = opts;
+        }
+      })();
+
+      function isSupplyUser() {
+        return Boolean(
+          currentUser &&
+          currentUser.email &&
+          currentUser.email.trim().toLowerCase() === SUPPLY_ACK_EMAIL
+        );
+      }
+
+      // Line/production operator authority: excludes supply.tcf@hnmpl.com
       function canEdit() {
-        return Boolean(currentUser);
+        return Boolean(currentUser) && !isSupplyUser();
+      }
+
+      // Supply acknowledgement authority: strictly supply.tcf@hnmpl.com only
+      function canAcknowledgeSupply() {
+        return isSupplyUser();
+      }
+
+      // Any signed-in account that may write to cloud state (line operator or supply user)
+      function canWriteCloud() {
+        return canEdit() || canAcknowledgeSupply();
       }
 
       function escapeHtml(str) {
@@ -1922,8 +2218,17 @@
         appScreen.classList.remove("hidden");
 
         var editable = canEdit();
-        // Guests are read-only: hide all data entry controls
+        var supplyOnly = isSupplyUser();
+        // Guests and supply-only users cannot access line data entry, hold, release, or edit controls
         document.getElementById("entryFormPanel").classList.toggle("hidden", !editable);
+        if (supplyFormCard) supplyFormCard.classList.toggle("hidden", !editable);
+        if (supplyModelField) supplyModelField.disabled = !editable;
+        if (supplyVariantField) supplyVariantField.disabled = !editable;
+        if (supplyPartNameField) supplyPartNameField.disabled = !editable;
+        if (supplyPartNumberField) supplyPartNumberField.disabled = !editable;
+        if (supplyReqQtyField) supplyReqQtyField.disabled = !editable;
+        if (supplyStationField) supplyStationField.disabled = !editable;
+        if (submitSupplyBtn) submitSupplyBtn.disabled = !editable;
         tabEditBtn.classList.toggle("hidden", !editable);
         resetBtn.classList.toggle("hidden", !editable);
         if (!editable && activePage === "edit") {
@@ -1950,6 +2255,11 @@
           roleBadge.textContent = "Operator: " + (currentUser.email || "Signed In");
           authActionBtn.textContent = "Sign Out";
           editLoginPrompt.classList.add("hidden");
+        } else if (supplyOnly) {
+          roleBadge.textContent = "Supply Ack Only: " + currentUser.email;
+          authActionBtn.textContent = "Sign Out";
+          errBox.textContent = "";
+          editLoginPrompt.classList.remove("hidden");
         } else {
           roleBadge.textContent = "Guest (Read-Only)";
           authActionBtn.textContent = "Operator Sign In";
@@ -2020,6 +2330,26 @@
       // A real vehicle on the line (not a gap, not an empty/offline bay)
       function isVehicleEntry(entry) {
         return Boolean(entry && !entry.isGap && !entry.isOffline);
+      }
+
+      function cloneSupplyItem(item) {
+        if (!item) return null;
+        return {
+          id: item.id || ("SUP-" + Date.now() + "-" + Math.floor(Math.random() * 1000)),
+          model: item.model || "",
+          variant: item.variant || "",
+          partName: item.partName || "",
+          partNumber: item.partNumber || "",
+          reqQty: Number(item.reqQty) || 1,
+          station: item.station || "",
+          reqDate: item.reqDate || "",
+          reqTime: item.reqTime || "",
+          reqBy: item.reqBy || "",
+          acknowledged: Boolean(item.acknowledged),
+          ackDate: item.ackDate || "",
+          ackTime: item.ackTime || "",
+          ackBy: item.ackBy || ""
+        };
       }
 
       function cloneHoldItem(item) {
@@ -2520,10 +2850,18 @@
               '<div class="car-model">Null</div>' +
               "</div>";
           } else {
+            var extLineHtml = entry.extLabel
+              ? '<div class="car-ext">' + escapeHtml(entry.extLabel) + "</div>"
+              : "";
+            var intLineHtml = entry.intLabel
+              ? '<div class="car-int">' + escapeHtml(entry.intLabel) + "</div>"
+              : "";
             inner +=
               '<div class="car-box">' +
               '<div class="car-vin">' + escapeHtml(entry.vin) + "</div>" +
               '<div class="car-model">' + escapeHtml(entry.model) + "</div>" +
+              extLineHtml +
+              intLineHtml +
               "</div>";
           }
         } else {
@@ -2689,11 +3027,15 @@
 
           var remarksCellHtml = "";
           if (editable) {
+            var exitedHoldBtnHtml = (!item.isGap && item.vin)
+              ? '<button type="button" class="btn-hold exited-hold-btn" data-ex-index="' + i + '" title="Hold exited vehicle" aria-label="Hold exited vehicle">H</button>'
+              : "";
             remarksCellHtml =
               '<td>' +
                 '<div class="remarks-cell-wrap">' +
                   '<input type="text" class="remarks-input history-remark-input" data-ex-index="' + i + '" value="' + escapeHtml(remarkVal) + '" placeholder="Add remarks..." maxlength="200" />' +
                   '<button type="button" class="btn-gray btn-sm history-remark-save-btn" data-ex-index="' + i + '">Save</button>' +
+                  exitedHoldBtnHtml +
                 "</div>" +
               "</td>";
           } else {
@@ -2894,6 +3236,11 @@
         }
         document.getElementById("onLinePill").textContent = vehiclesOnLine + " on line";
         holdCountPill.textContent = String(holdList.length);
+        var pendingSupply = 0;
+        for (var sp = 0; sp < supplyList.length; sp++) {
+          if (supplyList[sp] && !supplyList[sp].acknowledged) pendingSupply++;
+        }
+        if (supplyPendingPill) supplyPendingPill.textContent = String(pendingSupply);
         renderProductionTable();
       }
 
@@ -2905,19 +3252,21 @@
         }
         renderHistory();
         renderHoldPage();
+        renderSupplyPage();
         renderEditTab();
         renderStats();
         updateAuthUI();
       }
 
       async function syncToCloud() {
-        if (!db || !canEdit()) return;
+        if (!db || !canWriteCloud()) return;
         var res = await db.from("live_data").upsert({
           id: ROW_ID,
           state: {
             line: line,
             exitedList: exitedList,
             holdList: holdList,
+            supplyList: supplyList,
             statusHtml: statusHtml,
             formInputs: formInputs
           }
@@ -2939,6 +3288,9 @@
           : [];
         holdList = Array.isArray(cloudState.holdList)
           ? cloudState.holdList.map(function (item) { return cloneHoldItem(item); })
+          : [];
+        supplyList = Array.isArray(cloudState.supplyList)
+          ? cloudState.supplyList.map(function (item) { return cloneSupplyItem(item); }).filter(Boolean)
           : [];
         if (cloudState.statusHtml) {
           statusHtml = cloudState.statusHtml;
@@ -3017,6 +3369,9 @@
         isGuestMode = false;
         currentUser = res.data.user || null;
         passwordField.value = "";
+        if (isSupplyUser()) {
+          setActivePage("supply");
+        }
         renderAll();
       });
 
@@ -3474,11 +3829,19 @@
         executeLineReset();
       });
 
-      // ---- HOLD: take a vehicle off the conveyor (password authorization required) ----
+      // ---- HOLD: take a station or exited vehicle onto the Hold list (password authorization required) ----
       function findStationIndexByVin(vin) {
         if (!vin) return -1;
         for (var i = 0; i < line.length; i++) {
           if (isVehicleEntry(line[i]) && line[i].vin === vin) return i;
+        }
+        return -1;
+      }
+
+      function findExitedIndexByVin(vin) {
+        if (!vin) return -1;
+        for (var i = 0; i < exitedList.length; i++) {
+          if (exitedList[i] && !exitedList[i].isGap && exitedList[i].vin === vin) return i;
         }
         return -1;
       }
@@ -3488,7 +3851,7 @@
         var entry = line[stIdx];
         if (!isVehicleEntry(entry)) return;
         hideStationTooltip();
-        pendingHold = { index: stIdx, vin: entry.vin };
+        pendingHold = { source: "station", index: stIdx, vin: entry.vin };
         var stName = getStationName(stIdx + 1);
         var brand = entry.brand || inferBrandFromModel(entry.model) || "-";
         holdModalTitle.textContent = "Hold Vehicle at " + stName;
@@ -3502,6 +3865,30 @@
         holdPasswordField.value = "";
         holdOperatorEmailDisplay.value = currentUser.email || "";
         // Keep the modal visible above the full screen line panel
+        var fsEl = document.fullscreenElement || document.webkitFullscreenElement;
+        (fsEl || document.body).appendChild(holdAuthModal);
+        holdAuthModal.classList.remove("hidden");
+        setTimeout(function () { holdReasonField.focus(); }, 30);
+      }
+
+      function openExitedHoldAuthModal(exIdx) {
+        if (!canEdit() || !currentUser) return;
+        var entry = exitedList[exIdx];
+        if (!entry || entry.isGap || !entry.vin) return;
+        hideStationTooltip();
+        pendingHold = { source: "exited", index: exIdx, vin: entry.vin };
+        var fifoLabel = "Exited FIFO #" + (exIdx + 1);
+        var brand = entry.brand || inferBrandFromModel(entry.model) || "-";
+        holdModalTitle.textContent = "Hold Exited Vehicle (" + fifoLabel + ")";
+        holdVehicleSummary.innerHTML =
+          '<div><span class="tt-label">Source:</span> <strong>' + escapeHtml(fifoLabel) + "</strong></div>" +
+          '<div><span class="tt-label">VIN:</span> <strong style="font-family:monospace;">' + escapeHtml(entry.vin) + "</strong></div>" +
+          '<div><span class="tt-label">Vehicle:</span> ' + escapeHtml(brand + " • " + (entry.model || "-")) + "</div>" +
+          '<div><span class="tt-label">Colors:</span> Ext ' + escapeHtml(entry.extLabel || "-") + " | Int " + escapeHtml(entry.intLabel || "-") + "</div>";
+        holdAuthErrBox.textContent = "";
+        holdReasonField.value = "";
+        holdPasswordField.value = "";
+        holdOperatorEmailDisplay.value = currentUser.email || "";
         var fsEl = document.fullscreenElement || document.webkitFullscreenElement;
         (fsEl || document.body).appendChild(holdAuthModal);
         holdAuthModal.classList.remove("hidden");
@@ -3554,6 +3941,31 @@
         return true;
       }
 
+      function executeExitedHold(exIdx, reason) {
+        var entry = exitedList[exIdx];
+        if (!entry || entry.isGap || !entry.vin) return false;
+        var stamp = currentDateTime();
+        var fifoLabel = "Exited FIFO #" + (exIdx + 1);
+        var holdId = "H" + Date.now() + "-" + Math.floor(Math.random() * 1000);
+
+        var held = cloneHoldItem(entry);
+        held.holdId = holdId;
+        held.holdStationNo = null;
+        held.holdStation = fifoLabel;
+        held.holdDate = stamp.date;
+        held.holdTime = stamp.time;
+        held.holdBy = (currentUser && currentUser.email) || "";
+        held.holdReason = reason || "";
+        holdList.push(held);
+
+        exitedList.splice(exIdx, 1);
+
+        statusHtml =
+          "Exited vehicle <strong>" + escapeHtml(entry.vin) + "</strong> (<strong>" + escapeHtml(fifoLabel) +
+          "</strong>) moved to <strong>HOLD</strong> (" + stamp.date + " " + stamp.time + ").";
+        return true;
+      }
+
       function onHoldButtonClick(e) {
         var btn = e.target.closest(".station-hold-btn");
         if (!btn) return;
@@ -3564,6 +3976,15 @@
       }
       stationsContainer.addEventListener("click", onHoldButtonClick);
       zoneStackedContainer.addEventListener("click", onHoldButtonClick);
+
+      historyBody.addEventListener("click", function (e) {
+        var btn = e.target.closest(".exited-hold-btn");
+        if (!btn) return;
+        e.stopPropagation();
+        var idx = parseInt(btn.getAttribute("data-ex-index"), 10);
+        if (isNaN(idx)) return;
+        openExitedHoldAuthModal(idx);
+      });
 
       cancelHoldModalBtn.addEventListener("click", closeHoldAuthModal);
       holdAuthModal.addEventListener("click", function (e) {
@@ -3617,6 +4038,22 @@
         }
         currentUser = (verifyRes.data && verifyRes.data.user) || currentUser;
 
+        if (pendingHold.source === "exited") {
+          var exIdx = (exitedList[pendingHold.index] && !exitedList[pendingHold.index].isGap && exitedList[pendingHold.index].vin === pendingHold.vin)
+            ? pendingHold.index
+            : findExitedIndexByVin(pendingHold.vin);
+          if (exIdx === -1) {
+            holdAuthErrBox.textContent = "Vehicle " + pendingHold.vin + " is no longer in exit history.";
+            return;
+          }
+          closeHoldAuthModal();
+          if (executeExitedHold(exIdx, reason)) {
+            renderAll();
+            syncToCloud();
+          }
+          return;
+        }
+
         // The line may have moved while the modal was open: locate the vehicle by VIN
         var idx = (isVehicleEntry(line[pendingHold.index]) && line[pendingHold.index].vin === pendingHold.vin)
           ? pendingHold.index
@@ -3633,13 +4070,15 @@
         }
       });
 
-      // ---- RELEASE: put a held vehicle back on the conveyor ----
+      // ---- RELEASE: put a held vehicle back on the conveyor (password authorization required) ----
       var releaseModal = document.getElementById("releaseModal");
       var releaseForm = document.getElementById("releaseForm");
       var releaseModalTitle = document.getElementById("releaseModalTitle");
       var releaseVehicleSummary = document.getElementById("releaseVehicleSummary");
       var releaseStationSelect = document.getElementById("releaseStationSelect");
       var releaseConfirmText = document.getElementById("releaseConfirmText");
+      var releaseOperatorEmailDisplay = document.getElementById("releaseOperatorEmailDisplay");
+      var releasePasswordField = document.getElementById("releasePasswordField");
       var releaseErrBox = document.getElementById("releaseErrBox");
       var cancelReleaseBtn = document.getElementById("cancelReleaseBtn");
       var confirmReleaseBtn = document.getElementById("confirmReleaseBtn");
@@ -3652,9 +4091,10 @@
         return -1;
       }
 
-      // A bay can take a released vehicle when it is empty or OFFLINE
+      // A hold vehicle can be shifted to any station on the line except one occupied by another active vehicle
       function isBayAvailable(idx) {
-        return !line[idx] || isOfflineEntry(line[idx]);
+        var e = line[idx];
+        return !e || isOfflineEntry(e) || Boolean(e.isGap);
       }
 
       function updateReleaseConfirmText() {
@@ -3667,21 +4107,27 @@
         }
         var h = holdList[hIdx];
         var bay = line[stIdx];
-        var bayState = !bay ? "Empty bay" : "OFFLINE bay" + (bay.offlineVin ? " (left by VIN " + escapeHtml(bay.offlineVin) + ")" : "");
+        var bayState = !bay
+          ? "Empty bay"
+          : bay.isGap
+            ? "GAP / Null bay (will be replaced by held vehicle)"
+            : "OFFLINE bay" + (bay.offlineVin ? " (left by VIN " + escapeHtml(bay.offlineVin) + ")" : "");
         releaseConfirmText.innerHTML =
           "Vehicle <strong>" + escapeHtml(h.vin) + "</strong> will be put at station <strong>" +
           escapeHtml(getStationName(stIdx + 1)) + "</strong> (#" + (stIdx + 1) + ").<br><span style=\"color:#86efac;\">" + bayState + "</span>";
         confirmReleaseBtn.disabled = false;
-        confirmReleaseBtn.textContent = "Confirm Release to " + getStationName(stIdx + 1);
+        confirmReleaseBtn.textContent = "Verify & Release to " + getStationName(stIdx + 1);
       }
 
       function openReleaseModal(holdId) {
-        if (!canEdit()) return;
+        if (!canEdit() || !currentUser) return;
         var hIdx = findHoldIndexById(holdId);
         if (hIdx === -1) return;
         var h = holdList[hIdx];
         pendingReleaseId = holdId;
         releaseErrBox.textContent = "";
+        releasePasswordField.value = "";
+        releaseOperatorEmailDisplay.value = currentUser.email || "";
 
         var brand = h.brand || inferBrandFromModel(h.model) || "-";
         releaseModalTitle.textContent = "Release Vehicle " + h.vin;
@@ -3699,7 +4145,11 @@
           var bay = line[i];
           var own = isOfflineEntry(bay) && bay.holdId === h.holdId;
           if (own) ownBay = i;
-          var tag = !bay ? "Empty" : (own ? "OFFLINE \u2013 this vehicle's bay" : "OFFLINE");
+          var tag = !bay
+            ? "Empty"
+            : bay.isGap
+              ? "GAP / Null"
+              : (own ? "OFFLINE \u2013 this vehicle's bay" : "OFFLINE");
           opts += '<option value="' + i + '">' + escapeHtml(getStationName(i + 1)) + " (#" + (i + 1) + ") \u2013 " + tag + "</option>";
         }
         if (!opts) {
@@ -3711,11 +4161,12 @@
         }
         updateReleaseConfirmText();
         releaseModal.classList.remove("hidden");
-        setTimeout(function () { releaseStationSelect.focus(); }, 30);
+        setTimeout(function () { releasePasswordField.focus(); }, 30);
       }
 
       function closeReleaseModal() {
         releaseModal.classList.add("hidden");
+        releasePasswordField.value = "";
         releaseErrBox.textContent = "";
         pendingReleaseId = null;
       }
@@ -3735,11 +4186,15 @@
         openReleaseModal(btn.getAttribute("data-hold-id"));
       });
 
-      releaseForm.addEventListener("submit", function (e) {
+      releaseForm.addEventListener("submit", async function (e) {
         e.preventDefault();
         releaseErrBox.textContent = "";
-        if (!canEdit()) {
-          releaseErrBox.textContent = "Operator login is required to release vehicles.";
+        if (!canEdit() || !currentUser || !currentUser.email) {
+          releaseErrBox.textContent = "Operator session expired. Please sign in again.";
+          return;
+        }
+        if (!db) {
+          releaseErrBox.textContent = "Supabase client is not initialized.";
           return;
         }
         var hIdx = findHoldIndexById(pendingReleaseId);
@@ -3752,7 +4207,39 @@
           releaseErrBox.textContent = "Please select a station.";
           return;
         }
-        // The line may have moved while the pop-up was open
+        var enteredPassword = releasePasswordField.value;
+        if (!enteredPassword) {
+          releaseErrBox.textContent = "Please enter your password to authorize the release.";
+          return;
+        }
+
+        confirmReleaseBtn.disabled = true;
+        cancelReleaseBtn.disabled = true;
+        var prevBtnText = confirmReleaseBtn.textContent;
+        confirmReleaseBtn.textContent = "Verifying...";
+
+        var verifyRes = await db.auth.signInWithPassword({
+          email: currentUser.email,
+          password: enteredPassword
+        });
+
+        confirmReleaseBtn.disabled = false;
+        cancelReleaseBtn.disabled = false;
+        confirmReleaseBtn.textContent = prevBtnText;
+
+        if (verifyRes.error) {
+          releaseErrBox.textContent = "Authorization failed: " + verifyRes.error.message;
+          releasePasswordField.select();
+          return;
+        }
+        currentUser = (verifyRes.data && verifyRes.data.user) || currentUser;
+
+        // Re-check index and bay availability after async auth check
+        hIdx = findHoldIndexById(pendingReleaseId);
+        if (hIdx === -1) {
+          releaseErrBox.textContent = "This vehicle is no longer on hold.";
+          return;
+        }
         if (!isBayAvailable(stIdx)) {
           releaseErrBox.textContent = getStationName(stIdx + 1) + " is no longer free. Please choose another station.";
           openReleaseModal(pendingReleaseId);
@@ -3761,6 +4248,7 @@
 
         var h = holdList[hIdx];
         var stamp = currentDateTime();
+        var wasGap = Boolean(line[stIdx] && line[stIdx].isGap);
         var vehicle = cloneEntry(h); // keeps original VIN, model, colours and line entry time
         line[stIdx] = vehicle;
         holdList.splice(hIdx, 1);
@@ -3768,7 +4256,8 @@
         var stName = getStationName(stIdx + 1);
         statusHtml =
           "Vehicle <strong>" + escapeHtml(h.vin) + "</strong> <strong>RELEASED</strong> from hold and put at <strong>" +
-          escapeHtml(stName) + "</strong> (" + stamp.date + " " + stamp.time + ").";
+          escapeHtml(stName) + "</strong>" + (wasGap ? " (replacing <strong>GAP / Null</strong>)" : "") +
+          " (" + stamp.date + " " + stamp.time + ").";
         closeReleaseModal();
         renderAll();
         syncToCloud();
@@ -3815,6 +4304,202 @@
       if (holdSearchField) {
         holdSearchField.addEventListener("input", renderHoldPage);
       }
+
+      // ---- SUPPLY PAGE LOGIC (LIFO + supply.tcf@hnmpl.com Acknowledgement) ----
+      function renderSupplyPage() {
+        if (!supplyTableBody) return;
+        var total = supplyList.length;
+        var ackCount = 0;
+        for (var i = 0; i < total; i++) {
+          if (supplyList[i] && supplyList[i].acknowledged) ackCount++;
+        }
+        var pendingCount = total - ackCount;
+        if (supplyTotalCount) supplyTotalCount.textContent = String(total);
+        if (supplyPendingCount) supplyPendingCount.textContent = String(pendingCount);
+        if (supplyAckCount) supplyAckCount.textContent = String(ackCount);
+
+        var q = (supplySearchField && supplySearchField.value ? supplySearchField.value : "").trim().toLowerCase();
+        if (total === 0) {
+          supplyTableBody.innerHTML = '<tr><td colspan="10" style="text-align:center; color:#a1a1aa;">No supply requests yet.</td></tr>';
+          return;
+        }
+
+        var canAck = canAcknowledgeSupply();
+        var html = "";
+        var lifoSr = 0;
+        for (var idx = total - 1; idx >= 0; idx--) {
+          var item = supplyList[idx];
+          if (!item) continue;
+          lifoSr++;
+          var statusText = item.acknowledged ? "acknowledged" : "pending";
+          var hay = [item.model, item.variant, item.partName, item.partNumber, item.reqQty, item.station, item.reqBy, item.ackBy, statusText].join(" ").toLowerCase();
+          if (q && hay.indexOf(q) === -1) continue;
+
+          var reqStamp = ((item.reqDate || "") + " " + (item.reqTime || "")).trim() || "-";
+          var actionCell = "";
+          if (item.acknowledged) {
+            var ackStamp = ((item.ackDate || "") + " " + (item.ackTime || "")).trim();
+            var ackTitle = ackStamp ? ("Acknowledged by " + (item.ackBy || SUPPLY_ACK_EMAIL) + " at " + ackStamp) : "Acknowledged";
+            actionCell =
+              '<button type="button" class="btn-acknowledged" disabled title="' + escapeHtml(ackTitle) + '">ACKNOWLEDGED</button>' +
+              (ackStamp ? '<div style="font-size:11px; color:#86efac; margin-top:3px; font-family:monospace;">' + escapeHtml(ackStamp) + "</div>" : "");
+          } else {
+            var disAttr = canAck ? "" : ' disabled title="Only supply.tcf@hnmpl.com can acknowledge supply requests"';
+            actionCell =
+              '<button type="button" class="btn-acknowledge supply-ack-btn" data-supply-id="' + escapeHtml(item.id) + '"' + disAttr + ">ACKNOWLEDGE</button>";
+          }
+
+          html +=
+            "<tr>" +
+            "<td><strong>" + lifoSr + "</strong></td>" +
+            "<td><strong>" + escapeHtml(item.model || "-") + "</strong></td>" +
+            "<td>" + escapeHtml(item.variant || "-") + "</td>" +
+            "<td>" + escapeHtml(item.partName) + "</td>" +
+            '<td style="font-family:monospace; font-weight:bold;">' + escapeHtml(item.partNumber || "-") + "</td>" +
+            '<td style="font-weight:bold;">' + escapeHtml(String(item.reqQty)) + "</td>" +
+            '<td><span class="st-badge" style="font-size:12px; padding:2px 6px;">' + escapeHtml(item.station) + "</span></td>" +
+            '<td style="font-family:monospace;">' + escapeHtml(reqStamp) + "</td>" +
+            "<td>" + escapeHtml(item.reqBy || "-") + "</td>" +
+            "<td>" + actionCell + "</td>" +
+            "</tr>";
+        }
+        supplyTableBody.innerHTML = html || '<tr><td colspan="10" style="text-align:center; color:#a1a1aa;">No matching supply requests.</td></tr>';
+      }
+
+      if (supplyForm) {
+        supplyForm.addEventListener("submit", function (e) {
+          e.preventDefault();
+          supplyErrBox.textContent = "";
+          if (!canEdit()) {
+            supplyErrBox.textContent = "Line operator login is required to submit a supply request.";
+            return;
+          }
+          var model = supplyModelField ? supplyModelField.value.trim() : "";
+          var variant = supplyVariantField ? supplyVariantField.value.trim() : "";
+          var partName = supplyPartNameField.value.trim();
+          var partNumber = supplyPartNumberField.value.trim();
+          var reqQty = parseInt(supplyReqQtyField.value, 10);
+          var station = supplyStationField.value.trim();
+
+          if (!model) {
+            supplyErrBox.textContent = "Please select a Model.";
+            if (supplyModelField) supplyModelField.focus();
+            return;
+          }
+          var availableVariants = getVariantsForModel(model);
+          if (availableVariants.length > 0 && !variant) {
+            supplyErrBox.textContent = "Please select a Variant.";
+            if (supplyVariantField) supplyVariantField.focus();
+            return;
+          }
+          if (!partName) {
+            supplyErrBox.textContent = "Please enter Part Name.";
+            supplyPartNameField.focus();
+            return;
+          }
+          if (isNaN(reqQty) || reqQty <= 0) {
+            supplyErrBox.textContent = "Please enter a valid Req. Qty (1 or more).";
+            supplyReqQtyField.focus();
+            return;
+          }
+          if (!station) {
+            supplyErrBox.textContent = "Please select a Station.";
+            supplyStationField.focus();
+            return;
+          }
+
+          var stamp = currentDateTime();
+          supplyList.push({
+            id: "SUP-" + Date.now() + "-" + Math.floor(Math.random() * 10000),
+            model: model,
+            variant: variant || "-",
+            partName: partName,
+            partNumber: partNumber || "-",
+            reqQty: reqQty,
+            station: station,
+            reqDate: stamp.date,
+            reqTime: stamp.time,
+            reqBy: (currentUser && currentUser.email) || "",
+            acknowledged: false,
+            ackDate: "",
+            ackTime: "",
+            ackBy: ""
+          });
+
+          if (supplyModelField) supplyModelField.value = "";
+          updateSupplyVariantOptions("");
+          supplyPartNameField.value = "";
+          supplyPartNumberField.value = "";
+          supplyReqQtyField.value = "";
+          supplyStationField.value = "";
+
+          var mvDisplay = variant && variant !== "-" ? (model + " " + variant) : model;
+          var partNumText = partNumber ? (escapeHtml(partNumber) + ", ") : "";
+          statusHtml =
+            "Supply request added for <strong>" + escapeHtml(mvDisplay) + "</strong> &mdash; <strong>" +
+            escapeHtml(partName) + "</strong> (" + partNumText +
+            "Qty: <strong>" + reqQty + "</strong>) at <strong>" + escapeHtml(station) + "</strong>.";
+          renderAll();
+          syncToCloud();
+          if (supplyModelField) supplyModelField.focus();
+        });
+      }
+
+      if (supplyTableBody) {
+        supplyTableBody.addEventListener("click", function (e) {
+          var btn = e.target.closest(".supply-ack-btn");
+          if (!btn) return;
+          if (!canAcknowledgeSupply()) {
+            supplyErrBox.textContent = "Only user " + SUPPLY_ACK_EMAIL + " can acknowledge supply requests.";
+            return;
+          }
+          var supId = btn.getAttribute("data-supply-id");
+          for (var i = 0; i < supplyList.length; i++) {
+            if (supplyList[i] && supplyList[i].id === supId) {
+              if (supplyList[i].acknowledged) return;
+              var stamp = currentDateTime();
+              supplyList[i].acknowledged = true;
+              supplyList[i].ackDate = stamp.date;
+              supplyList[i].ackTime = stamp.time;
+              supplyList[i].ackBy = currentUser.email;
+              var ackPartNum = (supplyList[i].partNumber && supplyList[i].partNumber !== "-") ? (" (" + escapeHtml(supplyList[i].partNumber) + ")") : "";
+              statusHtml =
+                "Supply request for <strong>" + escapeHtml(supplyList[i].partName) + "</strong>" +
+                ackPartNum + " at <strong>" + escapeHtml(supplyList[i].station) +
+                "</strong> <strong>ACKNOWLEDGED</strong> by " + escapeHtml(currentUser.email) + ".";
+              renderAll();
+              syncToCloud();
+              return;
+            }
+          }
+        });
+      }
+
+      if (supplySearchField) {
+        supplySearchField.addEventListener("input", renderSupplyPage);
+      }
+
+      document.getElementById("exportSupplyBtn").addEventListener("click", function () {
+        var msgEl = document.getElementById("supplyExportMsg");
+        if (!supplyList.length) { msgEl.textContent = "No supply requests to export."; return; }
+        var rows = [];
+        var lifoSr = 0;
+        for (var i = supplyList.length - 1; i >= 0; i--) {
+          var item = supplyList[i];
+          if (!item) continue;
+          lifoSr++;
+          rows.push([
+            lifoSr, item.model || "", item.variant || "", item.partName, item.partNumber, item.reqQty, item.station,
+            item.reqDate, item.reqTime, item.reqBy,
+            item.acknowledged ? "ACKNOWLEDGED" : "PENDING",
+            item.ackDate, item.ackTime, item.ackBy
+          ]);
+        }
+        downloadCsv("Supply_Requests_" + fileStamp() + ".csv",
+          ["Sr# (LIFO)", "Model", "Variant", "Part Name", "Part Number", "Req. Qty", "Station", "Request Date", "Request Time", "Requested By", "Status", "Acknowledged Date", "Acknowledged Time", "Acknowledged By"],
+          rows);
+        msgEl.textContent = "Exported " + rows.length + " supply requests.";
+      });
 
       document.getElementById("exportHoldBtn").addEventListener("click", function () {
         var msgEl = document.getElementById("holdExportMsg");
@@ -3888,6 +4573,8 @@
         pageFinalBtn.classList.toggle("active", pageName === "final");
         pageHoldBtn.classList.toggle("active", pageName === "hold");
         holdPageView.classList.toggle("hidden", pageName !== "hold");
+        pageSupplyBtn.classList.toggle("active", pageName === "supply");
+        supplyPageView.classList.toggle("hidden", pageName !== "supply");
         tabEditBtn.classList.toggle("active", pageName === "edit");
         tabEditBtn.setAttribute("aria-selected", String(pageName === "edit"));
 
@@ -3901,6 +4588,8 @@
           renderEditTab();
         } else if (pageName === "hold") {
           renderHoldPage();
+        } else if (pageName === "supply") {
+          renderSupplyPage();
         }
       }
 
@@ -3910,6 +4599,7 @@
       pageFinalBtn.addEventListener("click", function () { setActivePage("final"); });
       tabEditBtn.addEventListener("click", function () { setActivePage("edit"); });
       pageHoldBtn.addEventListener("click", function () { setActivePage("hold"); });
+      pageSupplyBtn.addEventListener("click", function () { setActivePage("supply"); });
 
       editTabLoginBtn.addEventListener("click", function () {
         isGuestMode = false;
